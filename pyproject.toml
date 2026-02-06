@@ -1,0 +1,9 @@
+[project]
+name = "dyana"
+version = "0.0.0"
+description = "DYadic Annotation of Naturalistic Audio"
+requires-python = ">=3.10"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
