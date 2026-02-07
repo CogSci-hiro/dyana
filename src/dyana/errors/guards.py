@@ -61,9 +61,13 @@ def guard(
             return
     """
     try:
-        with step(step_name, reporter, context=context):
-            return fn()
-    except BaseException:  # noqa
-        # debug mode re-raises before we get here
+        result = fn()
+    except BaseException as exc:
+        reporter.mark_failed(step_name=step_name, exc=exc, context=context)
+        if reporter.cfg.mode == "debug":
+            raise
         return default
+    else:
+        reporter.mark_ok(step_name)
+        return result
 
