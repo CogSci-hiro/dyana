@@ -64,11 +64,14 @@ class Pipeline:
 
     # =============================================================================
     #                     ########################################
-    #                     #              EXECUTION                #
+    #                     #              EXECUTION               #
     #                     ########################################
     # =============================================================================
 
     def run(self) -> Dict[str, Any]:
+        results: Dict[str, Any] = {}
+        remaining: Set[str] = set(self._steps.keys())
+        executed_or_decided: Set[str] = set()
         """
         Execute the pipeline.
 
@@ -88,22 +91,25 @@ class Pipeline:
             results = pipe.run()
             model = results["fit"]
         """
-        results: Dict[str, Any] = {}
-        remaining: Set[str] = set(self._steps.keys())
-        executed_or_decided: Set[str] = set()
 
-        # Simple topological-ish loop with skip propagation
+        def _max_failures_reached() -> bool:
+            if self._reporter.cfg.mode != "run":
+                return False
+            mf = self._reporter.cfg.max_failures
+            return mf is not None and self._reporter.failures_count() >= mf
+
+        def _skip_all_remaining(*, caused_by: str) -> None:
+            for n in sorted(remaining):
+                if self._reporter.status(n) is None:
+                    self._reporter.mark_skipped(step_name=n, caused_by=caused_by, context=self._steps[n].context)
+
         while remaining:
             progressed = False
 
-            # Stop scheduling if failure threshold reached (run mode only)
-            if self._reporter.cfg.mode == "run" and self._reporter.cfg.max_failures is not None:
-                if self._reporter.failures_count() >= self._reporter.cfg.max_failures:
-                    # Mark all remaining as skipped due to "max_failures"
-                    for name in sorted(remaining):
-                        if self._reporter.status(name) is None:
-                            self._reporter.mark_skipped(step_name=name, caused_by="max_failures", context=self._steps[name].context)
-                    break
+            # If threshold already reached before entering this pass, skip everything left.
+            if _max_failures_reached():
+                _skip_all_remaining(caused_by="max_failures")
+                break
 
             for name in sorted(list(remaining)):
                 sdef = self._steps[name]
@@ -119,6 +125,10 @@ class Pipeline:
                     remaining.remove(name)
                     executed_or_decided.add(name)
                     progressed = True
+
+                    if _max_failures_reached():
+                        _skip_all_remaining(caused_by="max_failures")
+                        remaining.clear()
                     continue
 
                 # All deps OK -> run
@@ -130,8 +140,13 @@ class Pipeline:
                 executed_or_decided.add(name)
                 progressed = True
 
-            if not progressed:
-                # Cycle or missing dependency definition
+                # IMPORTANT: enforce max_failures immediately after a step completes
+                if _max_failures_reached():
+                    _skip_all_remaining(caused_by="max_failures")
+                    remaining.clear()
+                    break
+
+            if not progressed and remaining:
                 unresolved = ", ".join(sorted(remaining))
                 raise RuntimeError(
                     "Pipeline could not make progress (cycle or undefined deps). "
@@ -139,3 +154,4 @@ class Pipeline:
                 )
 
         return results
+
