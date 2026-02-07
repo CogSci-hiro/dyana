@@ -60,6 +60,10 @@ def guard(
         if audio is None:
             return
     """
-    with step(step_name, reporter, context=context):
-        return fn()
-    return default
+    try:
+        with step(step_name, reporter, context=context):
+            return fn()
+    except BaseException:  # noqa
+        # debug mode re-raises before we get here
+        return default
+
