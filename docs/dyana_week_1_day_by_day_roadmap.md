@@ -19,7 +19,7 @@
 - Define and validate evidence data structures
 
 ### Checklist
-- [ ] Define `TimeBase` (frame ↔ time mapping)
+- [✅] Define `TimeBase` (frame ↔ time mapping)
 - [ ] Enforce 10 ms global hop (`t = frame_idx * 0.01`)
 - [ ] Implement upsampling (e.g. 20 ms → 10 ms)
 - [ ] Implement downsampling with explicit aggregation (max / mean)
