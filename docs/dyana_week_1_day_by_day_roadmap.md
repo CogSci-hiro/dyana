@@ -29,7 +29,7 @@
 - [ ] Enforce 10 ms global hop (`t = frame_idx * 0.01`)
 - [ ] Implement upsampling (e.g. 20 ms → 10 ms)
 - [ ] Implement downsampling with explicit aggregation (max / mean)
-- [🔄] Implement `EvidenceTrack`
+- [✅] Implement `EvidenceTrack`
   - [ ] shape validation
   - [ ] explicit semantics (probability / score / logit)
   - [ ] optional confidence
