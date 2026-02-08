@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 
 from dyana.core.timebase import TimeBase
-from dyana.core.evidence import EvidenceTrack
+from dyana.evidence.base import EvidenceTrack
 
 def test_accepts_vector_values() -> None:
     tb = TimeBase(hop_s=0.01)

@@ -1,5 +1,11 @@
 # DYANA — Week 1 Day-by-Day Roadmap (Checklist)
 
+✅ done 
+⌛running/slow 
+🚫paused 
+⏱️needs review 
+🔄in progress
+
 **Start date:** Monday **2026-02-09**  
 **End date:** Friday **2026-02-13**  
 **Goal:** Build the *spine* of DYANA — a deterministic, end-to-end pipeline from audio to IPUs with metrics.
@@ -23,7 +29,7 @@
 - [ ] Enforce 10 ms global hop (`t = frame_idx * 0.01`)
 - [ ] Implement upsampling (e.g. 20 ms → 10 ms)
 - [ ] Implement downsampling with explicit aggregation (max / mean)
-- [ ] Implement `EvidenceTrack`
+- [🔄] Implement `EvidenceTrack`
   - [ ] shape validation
   - [ ] explicit semantics (probability / score / logit)
   - [ ] optional confidence
