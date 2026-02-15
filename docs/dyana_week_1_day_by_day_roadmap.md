@@ -55,16 +55,16 @@
 - Encode conversational constraints
 
 ### Checklist
-- [ ] Define states: `SIL`, `A`, `B`, `OVL`, `LEAK`
-- [ ] Implement framewise state score interface
-- [ ] Implement Viterbi-style DP
-- [ ] Add transition penalties:
-  - [ ] state persistence cheap
-  - [ ] speaker switch expensive
-  - [ ] minimum IPU duration
-  - [ ] minimum silence duration
-- [ ] Enforce: **LEAK cannot initiate IPUs**
-- [ ] Run decoder using fake / random evidence
+- [✅] Define states: `SIL`, `A`, `B`, `OVL`, `LEAK`
+- [✅] Implement framewise state score interface
+- [✅] Implement Viterbi-style DP
+- [✅] Add transition penalties:
+  - [✅] state persistence cheap
+  - [✅] speaker switch expensive
+  - [✅] minimum IPU duration
+  - [✅] minimum silence duration
+- [✅] Enforce: **LEAK cannot initiate IPUs**
+- [✅] Run decoder using fake / random evidence
 
 **Exit criteria:**
 - Decoder runs deterministically
@@ -83,16 +83,16 @@
 - Export all cues as independent EvidenceTracks
 
 ### Checklist
-- [ ] Energy / RMS envelope per frame
-- [ ] Smoothed energy envelope (50–100 ms)
-- [ ] WebRTC VAD integration
-  - [ ] exported as *soft* likelihood
-  - [ ] never binary
-- [ ] Minimal prosodic cues:
-  - [ ] voiced / unvoiced flag
-  - [ ] energy slope
-- [ ] Each cue exported as its own EvidenceTrack
-- [ ] Evidence caching enabled
+- [✅] Energy / RMS envelope per frame
+- [✅] Smoothed energy envelope (50–100 ms)
+- [✅] WebRTC VAD integration
+  - [✅] exported as *soft* likelihood
+  - [✅] never binary
+- [✅] Minimal prosodic cues:
+  - [✅] voiced / unvoiced flag
+  - [✅] energy slope
+- [✅] Each cue exported as its own EvidenceTrack
+- [✅] Evidence caching enabled
 
 **Exit criteria:**
 - Removing any single evidence track does not crash decoding

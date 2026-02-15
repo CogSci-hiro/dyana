@@ -41,6 +41,9 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+filterwarnings = [
+  "ignore:pkg_resources is deprecated as an API:DeprecationWarning:webrtcvad",
+]
 
 [tool.ruff]
 line-length = 100
