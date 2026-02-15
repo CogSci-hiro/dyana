@@ -1,7 +1,9 @@
 import numpy as np
 import pytest
 
-from dyana.core.timebase import TimeBase
+from pathlib import Path
+
+from dyana.core.timebase import CANONICAL_HOP_S, TimeBase
 from dyana.evidence.base import EvidenceBundle, EvidenceTrack
 
 def test_accepts_vector_values() -> None:
@@ -101,6 +103,69 @@ def test_confidence_non_float_raises() -> None:
             semantics="score",
             confidence=confidence,
         )
+
+
+def test_to_canonical_requires_agg_on_downsample() -> None:
+    tb = TimeBase(hop_s=0.005)
+    values = np.ones(4, dtype=np.float32)
+
+    track = EvidenceTrack(name="prob", timebase=tb, values=values, semantics="probability")
+    with pytest.raises(ValueError):
+        _ = track.to_canonical()
+
+    ds = track.to_canonical(downsample_agg="mean")
+    assert ds.timebase.hop_s == CANONICAL_HOP_S
+    assert ds.values.shape[0] == 2
+
+
+def test_bundle_merge_and_missing_tracks() -> None:
+    tb = TimeBase.canonical()
+    t1 = EvidenceTrack(
+        name="a",
+        timebase=tb,
+        values=np.ones(2, dtype=np.float32),
+        semantics="score",
+    )
+    t2 = EvidenceTrack(
+        name="b",
+        timebase=tb,
+        values=np.zeros(2, dtype=np.float32),
+        semantics="score",
+    )
+    b1 = EvidenceBundle(timebase=tb)
+    b1.add(t1)
+    b2 = EvidenceBundle(timebase=tb)
+    b2.add(t2)
+
+    merged = b1.merge(b2)
+    assert merged.get("a") is t1
+    assert merged.get("b") is t2
+    assert merged.get("missing") is None
+
+
+def test_serialization_roundtrip(tmp_path: Path) -> None:
+    tb = TimeBase.canonical()
+    track = EvidenceTrack(
+        name="vad",
+        timebase=tb,
+        values=np.array([0.1, 0.2], dtype=np.float32),
+        semantics="probability",
+        confidence=np.array([0.9, 0.8], dtype=np.float32),
+        metadata={"source": "unit"},
+    )
+    bundle = EvidenceBundle(timebase=tb)
+    bundle.add(track)
+
+    out_dir = tmp_path / "bundle"
+    bundle.to_directory(out_dir)
+
+    loaded = EvidenceBundle.from_directory(out_dir)
+    loaded_track = loaded.get("vad")
+    assert loaded_track is not None
+    assert np.allclose(loaded_track.values, track.values)
+    assert np.allclose(loaded_track.confidence, track.confidence)
+    assert loaded_track.metadata == track.metadata
+    assert loaded_track.timebase.hop_s == track.timebase.hop_s
 
 
 def test_bundle_add_get_iter_and_hop_validation() -> None:

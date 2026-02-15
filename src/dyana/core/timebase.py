@@ -4,10 +4,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import math
+from typing import Optional
+
 import numpy as np
 
 
 CANONICAL_HOP_S: float = 0.01
+_HOP_TOL: float = 1e-12
 
 
 @dataclass(frozen=True)
@@ -31,17 +34,78 @@ class TimeBase:
     """
 
     hop_s: float = CANONICAL_HOP_S
+    n_frames: Optional[int] = None
 
     def __post_init__(self) -> None:
         if self.hop_s <= 0:
             raise ValueError("hop_s must be positive")
+        if self.n_frames is not None:
+            if not isinstance(self.n_frames, int):
+                raise TypeError("n_frames must be an int when provided")
+            if self.n_frames < 0:
+                raise ValueError("n_frames must be non-negative when provided")
+
+        # Normalize exactly to canonical hop when within tolerance to avoid
+        # floating drift in downstream equality checks.
+        if math.isclose(self.hop_s, CANONICAL_HOP_S, rel_tol=0.0, abs_tol=_HOP_TOL):
+            object.__setattr__(self, "hop_s", CANONICAL_HOP_S)
 
     @classmethod
-    def canonical(cls) -> "TimeBase":
+    def canonical(cls, n_frames: Optional[int] = None) -> "TimeBase":
         """
         Construct the canonical 10 ms timebase.
+
+        Parameters
+        ----------
+        n_frames
+            Optional number of frames to bind to this timebase. Validation
+            will enforce matching length when present.
+
+        Usage example
+        -------------
+            tb = TimeBase.canonical()
+            tb_frames = TimeBase.canonical(n_frames=500)
         """
-        return cls(hop_s=CANONICAL_HOP_S)
+
+        return cls(hop_s=CANONICAL_HOP_S, n_frames=n_frames)
+
+    @classmethod
+    def from_hop_seconds(cls, hop_seconds: float, n_frames: Optional[int] = None) -> "TimeBase":
+        """
+        Construct a timebase from an explicit hop size in seconds.
+
+        Notes
+        -----
+        - This helper is explicit about non-canonical hops. Use
+          :meth:`canonical` for the global 10 ms grid.
+
+        Parameters
+        ----------
+        hop_seconds
+            Frame hop in seconds. Must be positive.
+        n_frames
+            Optional frame count bound to this timebase.
+
+        Usage example
+        -------------
+            tb = TimeBase.from_hop_seconds(0.02)
+        """
+
+        return cls(hop_s=hop_seconds, n_frames=n_frames)
+
+    @property
+    def is_canonical(self) -> bool:
+        """Whether this timebase matches the canonical 10 ms hop."""
+
+        return math.isclose(self.hop_s, CANONICAL_HOP_S, rel_tol=0.0, abs_tol=_HOP_TOL)
+
+    def require_canonical(self) -> None:
+        """Raise a ValueError if the timebase is not canonical."""
+
+        if not self.is_canonical:
+            raise ValueError(
+                f"TimeBase is not canonical: hop_s={self.hop_s} (expected {CANONICAL_HOP_S})."
+            )
 
     @property
     def hop_ms(self) -> float:
