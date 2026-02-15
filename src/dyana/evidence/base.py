@@ -1,4 +1,4 @@
-# src/dyana/evidence/base.py
+"""Base evidence track types and serialization utilities."""
 
 from dataclasses import dataclass, field
 import json

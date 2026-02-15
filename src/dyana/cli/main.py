@@ -11,6 +11,7 @@ from dyana.cli.commands import decode, evidence, iterate, run
 CommandModule = ModuleType
 CommandRunner = Callable[[argparse.Namespace], None]
 
+# Map CLI subcommands to their implementation modules.
 _COMMANDS: dict[str, CommandModule] = {
     "run": run,
     "decode": decode,

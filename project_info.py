@@ -1,5 +1,18 @@
 #!/usr/bin/env python3
 
+"""Generate a lightweight project snapshot markdown report.
+
+This script is intended for quick reproducibility/debugging snapshots. It gathers:
+- Environment info (Python/platform/cwd)
+- Git state (HEAD + dirty file list)
+- A shallow scan of Snakemake rule names (if present)
+- A size-sorted repository file summary (excluding common caches)
+- An optional inventory of output artifacts (derived from config)
+- Optional best-effort probes of known artifact formats
+
+The output is written as a single Markdown file (default: `project_snapshot.md`).
+"""
+
 import argparse
 import json
 import os
@@ -21,6 +34,7 @@ import yaml
 # ##################################################################################################
 
 def _run(cmd: list[str], cwd: Optional[Path] = None) -> tuple[int, str, str]:
+    """Run a subprocess command and return (returncode, stdout, stderr)."""
     proc = subprocess.run(
         cmd,
         cwd=str(cwd) if cwd else None,
@@ -32,15 +46,18 @@ def _run(cmd: list[str], cwd: Optional[Path] = None) -> tuple[int, str, str]:
 
 
 def _now_iso() -> str:
+    """Current local time as an ISO-8601 string (seconds precision)."""
     return datetime.now().astimezone().isoformat(timespec="seconds")
 
 
 def _read_text(path: Path, max_chars: int = 200_000) -> str:
+    """Read UTF-8 text (lossy) and truncate to `max_chars`."""
     txt = path.read_text(encoding="utf-8", errors="replace")
     return txt[:max_chars]
 
 
 def _safe_rel(path: Path, root: Path) -> str:
+    """Best-effort relative path for display; falls back to absolute on failure."""
     try:
         return str(path.relative_to(root))
     except Exception:
@@ -48,6 +65,7 @@ def _safe_rel(path: Path, root: Path) -> str:
 
 
 def _human_bytes(n: int) -> str:
+    """Format bytes as a short human-readable string."""
     units = ["B", "KB", "MB", "GB", "TB"]
     x = float(n)
     for u in units:
@@ -58,7 +76,7 @@ def _human_bytes(n: int) -> str:
 
 
 def _is_probably_binary(path: Path) -> bool:
-    # Cheap heuristic: if it contains NUL in first chunk, treat as binary.
+    """Return True if `path` likely contains binary data (NUL-byte heuristic)."""
     try:
         chunk = path.read_bytes()[:2048]
     except Exception:
@@ -71,6 +89,7 @@ def _is_probably_binary(path: Path) -> bool:
 # ##################################################################################################
 
 def _load_yaml(path: Path) -> dict[str, Any]:
+    """Load a YAML mapping from `path`."""
     raw = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(raw, dict):
         raise ValueError("Config must be a YAML mapping at top level.")
@@ -78,7 +97,8 @@ def _load_yaml(path: Path) -> dict[str, Any]:
 
 
 def _get_out_dir(cfg: dict[str, Any]) -> Optional[Path]:
-    # Prefer your real schema location: io.out_dir
+    """Extract an output directory from a config dict (best-effort)."""
+    # Prefer the schema location: io.out_dir
     io = cfg.get("io", {})
     if isinstance(io, dict) and "out_dir" in io:
         return Path(str(io["out_dir"]))
@@ -96,6 +116,7 @@ def _get_out_dir(cfg: dict[str, Any]) -> Optional[Path]:
 _RULE_RE = re.compile(r"^\s*rule\s+([A-Za-z0-9_]+)\s*:", re.MULTILINE)
 
 def _find_snakemake_rules(workflow_dir: Path) -> list[str]:
+    """Return a sorted list of rule names found under a Snakemake workflow dir."""
     rules: set[str] = set()
 
     candidates: list[Path] = []
@@ -127,6 +148,7 @@ class TreeItem:
     size_bytes: int
 
 def _tree_summary(root: Path, max_items: int = 200) -> list[TreeItem]:
+    """Return up to `max_items` largest files under `root` (excluding caches)."""
     items: list[TreeItem] = []
     for p in root.rglob("*"):
         if p.is_dir():
@@ -153,6 +175,7 @@ class ArtifactItem:
     size_bytes: int
 
 def _artifact_inventory(out_dir: Path, max_items: int = 500) -> list[ArtifactItem]:
+    """Return an alphabetized inventory of output artifacts under `out_dir`."""
     if not out_dir.exists():
         return []
     items: list[ArtifactItem] = []
@@ -173,6 +196,7 @@ def _artifact_inventory(out_dir: Path, max_items: int = 500) -> list[ArtifactIte
 # ##################################################################################################
 
 def _probe_mne_evokeds(path: Path) -> Optional[dict[str, Any]]:
+    """Probe an MNE evoked `.fif` file if `mne` is installed (best-effort)."""
     try:
         import mne  # type: ignore
     except Exception:
@@ -200,6 +224,7 @@ def _probe_mne_evokeds(path: Path) -> Optional[dict[str, Any]]:
 # ##################################################################################################
 
 def main() -> None:
+    """Parse CLI args and write the snapshot report."""
     parser = argparse.ArgumentParser(description="Collect project snapshot for reproducibility/debugging.")
     parser.add_argument("--root", type=str, default=".", help="Project root (default: .)")
     parser.add_argument("--config", type=str, default="workflow/config.yaml", help="Path to config.yaml")
@@ -253,7 +278,8 @@ def main() -> None:
     # Probing (optional)
     probes: dict[str, Any] = {}
     if args.probe and cfg:
-        # Example: probe ERP timecourse files if present in config
+        # Example probe: ERP timecourse files if present in config.
+        # Keep probes conservative (optional, best-effort) to avoid hard failures.
         viz = cfg.get("viz", {})
         if isinstance(viz, dict):
             erp_tc = viz.get("erp_timecourse", {})
@@ -294,7 +320,8 @@ def main() -> None:
 
     lines.append("## Key Config Excerpts\n")
     if cfg:
-        # show only top-level keys to avoid dumping secrets/huge configs
+        # Keep the snapshot compact and reduce the risk of leaking secrets
+        # by avoiding full config dumps.
         lines.append(f"- Top-level keys: `{sorted(cfg.keys())}`\n")
         if out_dir is not None:
             lines.append(f"- Resolved out_dir: `{out_dir}`\n")

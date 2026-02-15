@@ -1,4 +1,4 @@
-# src/dyana/evidence/bundle.py
+"""EvidenceBundle container for collections of evidence tracks."""
 
 from __future__ import annotations
 

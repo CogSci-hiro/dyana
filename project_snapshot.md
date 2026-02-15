@@ -1,6 +1,6 @@
 # Project Snapshot
 
-- Generated: `2026-02-15T08:48:48+01:00`
+- Generated: `2026-02-15T10:10:10+01:00`
 
 - Root: `/Users/hiro/PycharmProjects/dyana`
 
@@ -19,14 +19,13 @@
 
 ## Git
 
-- HEAD: `7ddf6e4bb0780c5cc498193ab8d961dbe39ff8de`
+- HEAD: `b2cf327602293db23fd1475289de027da92735d8`
 
-- Dirty files: `74`
+- Dirty files: `64`
 
 ```text
-M  project_snapshot.md
- M src/dyana/__pycache__/__init__.cpython-311.pyc
-AM src/dyana/__pycache__/version.cpython-311.pyc
+M src/dyana/__pycache__/__init__.cpython-311.pyc
+A  src/dyana/__pycache__/version.cpython-311.pyc
  M src/dyana/cli/__pycache__/__init__.cpython-311.pyc
  M src/dyana/cli/__pycache__/main.cpython-311.pyc
  M src/dyana/cli/commands/__pycache__/__init__.cpython-311.pyc
@@ -35,17 +34,15 @@ AM src/dyana/__pycache__/version.cpython-311.pyc
  M src/dyana/cli/commands/__pycache__/iterate.cpython-311.pyc
  M src/dyana/cli/commands/__pycache__/run.cpython-311.pyc
  M src/dyana/core/__pycache__/__init__.cpython-311.pyc
-AM src/dyana/core/__pycache__/cache.cpython-311.pyc
-AM src/dyana/core/__pycache__/calibrate.cpython-311.pyc
+A  src/dyana/core/__pycache__/cache.cpython-311.pyc
+A  src/dyana/core/__pycache__/calibrate.cpython-311.pyc
  M src/dyana/core/__pycache__/resample.cpython-311.pyc
  M src/dyana/core/__pycache__/timebase.cpython-311.pyc
-AM src/dyana/core/__pycache__/types.cpython-311.pyc
-M  src/dyana/core/resample.py
-M  src/dyana/core/timebase.py
+A  src/dyana/core/__pycache__/types.cpython-311.pyc
  M src/dyana/decode/__pycache__/__init__.cpython-311.pyc
  M src/dyana/decode/__pycache__/constraints.cpython-311.pyc
-AM src/dyana/decode/__pycache__/decoder.cpython-311.pyc
-AM src/dyana/decode/__pycache__/fusion.cpython-311.pyc
+A  src/dyana/decode/__pycache__/decoder.cpython-311.pyc
+A  src/dyana/decode/__pycache__/fusion.cpython-311.pyc
  M src/dyana/decode/__pycache__/ipu.cpython-311.pyc
  M src/dyana/decode/__pycache__/state_space.cpython-311.pyc
  M src/dyana/errors/__pycache__/__init__.cpython-311.pyc
@@ -55,49 +52,42 @@ AM src/dyana/decode/__pycache__/fusion.cpython-311.pyc
  M src/dyana/errors/__pycache__/pipeline.cpython-311.pyc
  M src/dyana/errors/__pycache__/reporter.cpython-311.pyc
  M src/dyana/errors/__pycache__/types.cpython-311.pyc
-M  src/dyana/evidence/__init__.py
  M src/dyana/evidence/__pycache__/__init__.cpython-311.pyc
  M src/dyana/evidence/__pycache__/base.cpython-311.pyc
-AM src/dyana/evidence/__pycache__/bundle.cpython-311.pyc
-AM src/dyana/evidence/__pycache__/diarization.cpython-311.pyc
-AM src/dyana/evidence/__pycache__/linguistic_hints.cpython-311.pyc
-AM src/dyana/evidence/__pycache__/mic_priors.cpython-311.pyc
-AM src/dyana/evidence/__pycache__/prosody.cpython-311.pyc
-AM src/dyana/evidence/__pycache__/separation.cpython-311.pyc
-AM src/dyana/evidence/__pycache__/vad.cpython-311.pyc
-M  src/dyana/evidence/base.py
-A  src/dyana/evidence/bundle.py
-AM src/dyana/io/__pycache__/__init__.cpython-311.pyc
-AM src/dyana/io/__pycache__/artifacts.cpython-311.pyc
-AM src/dyana/io/__pycache__/audio.cpython-311.pyc
-AM src/dyana/io/__pycache__/bids_like.cpython-311.pyc
-AM src/dyana/io/__pycache__/praat_textgrid.cpython-311.pyc
-AM src/dyana/iterate/__pycache__/__init__.cpython-311.pyc
-AM src/dyana/iterate/__pycache__/invariants.cpython-311.pyc
-AM src/dyana/iterate/__pycache__/loop.cpython-311.pyc
-AM src/dyana/iterate/__pycache__/policy.cpython-311.pyc
-AM src/dyana/iterate/__pycache__/uncertainty.cpython-311.pyc
-AM tests/cli/commands/__pycache__/test_decode.cpython-311.pyc
-AM tests/cli/commands/__pycache__/test_evidence.cpython-311.pyc
-AM tests/cli/commands/__pycache__/test_iterate.cpython-311.pyc
-AM tests/cli/commands/__pycache__/test_run.cpython-311.pyc
-AM tests/core/__pycache__/test_evidence_bundle.cpython-311-pytest-9.0.2.pyc
+A  src/dyana/evidence/__pycache__/bundle.cpython-311.pyc
+A  src/dyana/evidence/__pycache__/diarization.cpython-311.pyc
+A  src/dyana/evidence/__pycache__/linguistic_hints.cpython-311.pyc
+A  src/dyana/evidence/__pycache__/mic_priors.cpython-311.pyc
+A  src/dyana/evidence/__pycache__/prosody.cpython-311.pyc
+A  src/dyana/evidence/__pycache__/separation.cpython-311.pyc
+A  src/dyana/evidence/__pycache__/vad.cpython-311.pyc
+A  src/dyana/io/__pycache__/__init__.cpython-311.pyc
+A  src/dyana/io/__pycache__/artifacts.cpython-311.pyc
+A  src/dyana/io/__pycache__/audio.cpython-311.pyc
+A  src/dyana/io/__pycache__/bids_like.cpython-311.pyc
+A  src/dyana/io/__pycache__/praat_textgrid.cpython-311.pyc
+A  src/dyana/iterate/__pycache__/__init__.cpython-311.pyc
+A  src/dyana/iterate/__pycache__/invariants.cpython-311.pyc
+A  src/dyana/iterate/__pycache__/loop.cpython-311.pyc
+A  src/dyana/iterate/__pycache__/policy.cpython-311.pyc
+A  src/dyana/iterate/__pycache__/uncertainty.cpython-311.pyc
+A  tests/cli/commands/__pycache__/test_decode.cpython-311.pyc
+A  tests/cli/commands/__pycache__/test_evidence.cpython-311.pyc
+A  tests/cli/commands/__pycache__/test_iterate.cpython-311.pyc
+A  tests/cli/commands/__pycache__/test_run.cpython-311.pyc
+A  tests/core/__pycache__/test_evidence_bundle.cpython-311-pytest-9.0.2.pyc
  M tests/core/__pycache__/test_evidence_track.cpython-311-pytest-9.0.2.pyc
-AM tests/core/__pycache__/test_evidence_track.cpython-311.pyc
+A  tests/core/__pycache__/test_evidence_track.cpython-311.pyc
  M tests/core/__pycache__/test_resample.cpython-311-pytest-9.0.2.pyc
-AM tests/core/__pycache__/test_resample.cpython-311.pyc
+A  tests/core/__pycache__/test_resample.cpython-311.pyc
  M tests/core/__pycache__/test_timebase.cpython-311-pytest-9.0.2.pyc
-AM tests/core/__pycache__/test_timebase.cpython-311.pyc
-A  tests/core/test_evidence_bundle.py
-M  tests/core/test_evidence_track.py
-M  tests/core/test_resample.py
-M  tests/core/test_timebase.py
-AM tests/errors/__pycache__/test_config.cpython-311.pyc
-AM tests/errors/__pycache__/test_guards.cpython-311.pyc
-AM tests/errors/__pycache__/test_logging.cpython-311.pyc
-AM tests/errors/__pycache__/test_pipeline.cpython-311.pyc
-AM tests/errors/__pycache__/test_reporter.cpython-311.pyc
-AM tests/errors/__pycache__/test_types.cpython-311.pyc
+A  tests/core/__pycache__/test_timebase.cpython-311.pyc
+A  tests/errors/__pycache__/test_config.cpython-311.pyc
+A  tests/errors/__pycache__/test_guards.cpython-311.pyc
+A  tests/errors/__pycache__/test_logging.cpython-311.pyc
+A  tests/errors/__pycache__/test_pipeline.cpython-311.pyc
+A  tests/errors/__pycache__/test_reporter.cpython-311.pyc
+A  tests/errors/__pycache__/test_types.cpython-311.pyc
 ```
 
 ## Snakemake Rules
@@ -115,34 +105,34 @@ Top 96 files by size (excluding .git/.venv/__pycache__/.snakemake):
 | file | size |
 |---|---:|
 | `.idea/workspace.xml` | 14.5 KB |
+| `src/dyana/evidence/base.py` | 12.1 KB |
 | `project_info.py` | 11.7 KB |
 | `project_snapshot.md` | 9.2 KB |
-| `src/dyana/evidence/base.py` | 9.0 KB |
+| `tests/core/test_evidence_track.py` | 7.9 KB |
 | `docs/DYANA_WEEK2_PLAN.md` | 6.8 KB |
+| `src/dyana/evidence/bundle.py` | 6.4 KB |
+| `.pytest_cache/v/cache/nodeids` | 6.1 KB |
 | `docs/DYANA_WEEK1_PLAN.md` | 6.0 KB |
 | `src/dyana/errors/reporter.py` | 5.9 KB |
-| `tests/core/test_evidence_track.py` | 5.7 KB |
-| `.pytest_cache/v/cache/nodeids` | 5.5 KB |
-| `src/dyana/evidence/bundle.py` | 4.9 KB |
+| `src/dyana/core/resample.py` | 5.7 KB |
 | `src/dyana/core/timebase.py` | 4.9 KB |
 | `docs/DYANA_ROADMAP.md` | 4.8 KB |
 | `docs/dyana_week_1_day_by_day_roadmap.md` | 4.8 KB |
 | `src/dyana/errors/pipeline.py` | 4.7 KB |
-| `src/dyana/core/resample.py` | 4.6 KB |
 | `tests/errors/test_pipeline.py` | 4.5 KB |
 | `src/dyana/errors/logging.py` | 4.2 KB |
+| `tests/core/test_evidence_bundle.py` | 3.6 KB |
 | `src/dyana/errors/config.py` | 3.6 KB |
 | `.idea/inspectionProfiles/Project_Default.xml` | 3.3 KB |
 | `tests/errors/test_reporter.py` | 3.2 KB |
 | `tests/errors/test_guards.py` | 3.2 KB |
 | `tests/errors/test_logging.py` | 2.9 KB |
-| `tests/core/test_evidence_bundle.py` | 2.5 KB |
+| `tests/core/test_resample.py` | 2.2 KB |
 | `tests/errors/test_config.py` | 2.1 KB |
 | `tests/test_cli_main.py` | 1.7 KB |
 | `src/dyana/errors/guards.py` | 1.7 KB |
 | `tests/core/test_timebase.py` | 1.7 KB |
 | `src/dyana/cli/main.py` | 1.7 KB |
-| `tests/core/test_resample.py` | 1.7 KB |
 | `src/dyana/errors/types.py` | 1.2 KB |
 | `pyproject.toml` | 1.0 KB |
 | `src/dyana/errors/__init__.py` | 857.0 B |
