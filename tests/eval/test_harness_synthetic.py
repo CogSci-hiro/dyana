@@ -8,7 +8,7 @@ import pytest
 webrtcvad = pytest.importorskip("webrtcvad")
 
 from dyana.eval.harness import evaluate_manifest
-from dyana.eval.scorecard import write_scorecard
+from dyana.eval.scorecard import aggregate, write_scorecard
 
 
 def _make_audio(path: Path) -> None:
@@ -32,6 +32,6 @@ def test_harness_runs_and_writes_scorecard(tmp_path: Path) -> None:
     manifest_path.write_text(json.dumps(manifest))
 
     results = evaluate_manifest(manifest_path, out_dir=tmp_path / "out")
-    write_scorecard(results, tmp_path / "out")
+    write_scorecard(tmp_path / "out" / "scorecard.json", tmp_path / "out" / "scorecard.csv", results, aggregate(results))
     assert (tmp_path / "out" / "scorecard.json").exists()
     assert results[0]["id"] == "a"

@@ -8,6 +8,7 @@ import numpy as np
 
 from dyana.core.timebase import CANONICAL_HOP_SECONDS, TimeBase
 from dyana.decode import decoder, fusion
+from dyana.decode.params import DecodeTuningParams
 from dyana.decode.ipu import Segment, extract_ipus
 from dyana.eval.metrics import (
     boundary_f1,
@@ -70,9 +71,14 @@ def state_boundaries(states: Sequence[str], hop_s: float) -> np.ndarray:
     return np.array(boundaries, dtype=float)
 
 
-def evaluate_item(item: Dict[str, Any], out_dir: Path, cache_dir: Path | None = None) -> Dict[str, Any]:
+def evaluate_item(
+    item: Dict[str, Any],
+    out_dir: Path,
+    cache_dir: Path | None = None,
+    tuning_params: DecodeTuningParams | None = None,
+) -> Dict[str, Any]:
     audio_path = Path(item["audio_path"])
-    hyp_summary = run_pipeline(audio_path, out_dir=out_dir, cache_dir=cache_dir)
+    run_pipeline(audio_path, out_dir=out_dir, cache_dir=cache_dir, tuning_params=tuning_params)
 
     hyp_states = list(np.load(out_dir / "decode" / f"{audio_path.stem}_states.npy", allow_pickle=True))
     hop_s = CANONICAL_HOP_SECONDS
@@ -129,11 +135,16 @@ def evaluate_item(item: Dict[str, Any], out_dir: Path, cache_dir: Path | None = 
     }
 
 
-def evaluate_manifest(manifest_path: Path, out_dir: Path, cache_dir: Path | None = None) -> List[Dict[str, Any]]:
+def evaluate_manifest(
+    manifest_path: Path,
+    out_dir: Path,
+    cache_dir: Path | None = None,
+    tuning_params: DecodeTuningParams | None = None,
+) -> List[Dict[str, Any]]:
     manifest = json.loads(manifest_path.read_text())
     out_dir.mkdir(parents=True, exist_ok=True)
     results = []
     for item in manifest:
-        res = evaluate_item(item, out_dir / item["id"], cache_dir=cache_dir)
+        res = evaluate_item(item, out_dir / item["id"], cache_dir=cache_dir, tuning_params=tuning_params)
         results.append(res)
     return results

@@ -6,7 +6,7 @@ import argparse
 from pathlib import Path
 
 from dyana.eval.harness import evaluate_manifest
-from dyana.eval.scorecard import write_scorecard
+from dyana.eval.scorecard import aggregate, write_scorecard
 
 
 def add_subparser(subparsers: argparse._SubParsersAction) -> None:
@@ -24,4 +24,4 @@ def run(args: argparse.Namespace) -> None:
     out_dir = Path(args.out_dir)
     cache_dir = Path(args.cache_dir) if getattr(args, "cache_dir", None) else None
     results = evaluate_manifest(manifest_path, out_dir=out_dir, cache_dir=cache_dir)
-    write_scorecard(results, out_dir)
+    write_scorecard(out_dir / "scorecard.json", out_dir / "scorecard.csv", results, aggregate(results))

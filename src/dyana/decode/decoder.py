@@ -7,6 +7,7 @@ from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 import numpy as np
 
 from dyana.decode import constraints, state_space
+from dyana.decode.params import DecodeTuningParams
 
 
 # ---------- Viterbi core ----------
@@ -89,6 +90,7 @@ def decode_with_constraints(
     min_durations: Optional[Dict[str, int]] = None,
     transition: Optional[np.ndarray] = None,
     initial: Optional[np.ndarray] = None,
+    tuning_params: Optional[DecodeTuningParams] = None,
 ) -> List[str]:
     """
     Decode a path respecting transition penalties and minimum durations.
@@ -115,7 +117,11 @@ def decode_with_constraints(
         raise ValueError(f"log_scores second dim must be {len(base_names)} (base states)")
 
     min_durs = min_durations or constraints.default_min_durations()
-    base_trans = transition if transition is not None else constraints.base_transition_matrix(base_names)
+    base_trans = (
+        transition
+        if transition is not None
+        else constraints.base_transition_matrix(base_names, tuning_params=tuning_params)
+    )
     expanded_states, expanded_trans, collapse_map = constraints.expand_state_space(
         min_durs, base_states=base_names, base_transition=base_trans
     )

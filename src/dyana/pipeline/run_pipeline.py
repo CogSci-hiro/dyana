@@ -6,6 +6,7 @@ from typing import Any, Dict
 from dyana.core.timebase import TimeBase
 from dyana.decode import decoder, fusion
 from dyana.decode.ipu import count_ipu_starts_after_leak, extract_ipus
+from dyana.decode.params import DecodeTuningParams
 from dyana.evidence.bundle import EvidenceBundle
 from dyana.evidence.energy import (
     compute_energy_rms_track,
@@ -27,6 +28,7 @@ def run_pipeline(
     min_ipu_s: float = 0.2,
     min_sil_s: float = 0.1,
     seed: int = 0,
+    tuning_params: DecodeTuningParams | None = None,
 ) -> Dict[str, Any]:
     del seed  # deterministic; seed unused currently
 
@@ -42,7 +44,7 @@ def run_pipeline(
         bundle.add_track(tr.name, tr)
 
     scores = fusion.fuse_bundle_to_scores(bundle)
-    states = decoder.decode_with_constraints(scores)
+    states = decoder.decode_with_constraints(scores, tuning_params=tuning_params)
 
     ipus_a = extract_ipus(states, tb, "A", min_duration_s=min_ipu_s)
     ipus_b = extract_ipus(states, tb, "B", min_duration_s=min_ipu_s)

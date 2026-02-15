@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 from typing import Dict, List, Sequence, Tuple
 
+from dyana.decode.params import DecodeTuningParams
 from dyana.decode import state_space
 
 
@@ -27,8 +28,17 @@ MIN_IPU_FRAMES: int = 3  # A/B/OVL/LEAK
 MIN_SIL_FRAMES: int = 2
 
 
-def base_transition_matrix(states: Sequence[str] | None = None) -> np.ndarray:
+def base_transition_matrix(
+    states: Sequence[str] | None = None,
+    tuning_params: DecodeTuningParams | None = None,
+) -> np.ndarray:
     """Return the base (unexpanded) transition log-penalty matrix."""
+
+    params = tuning_params or DecodeTuningParams(
+        speaker_switch_penalty=SPEAKER_SWITCH_PENALTY,
+        leak_entry_bias=LEAK_ENTER_PENALTY,
+        ovl_transition_cost=GENERIC_SWITCH_PENALTY,
+    )
 
     names = list(states) if states is not None else state_space.STATE_NAMES
     S = len(names)
@@ -41,17 +51,22 @@ def base_transition_matrix(states: Sequence[str] | None = None) -> np.ndarray:
 
     a = name_to_idx["A"]
     b = name_to_idx["B"]
-    mat[a, b] = SPEAKER_SWITCH_PENALTY
-    mat[b, a] = SPEAKER_SWITCH_PENALTY
+    mat[a, b] = params.speaker_switch_penalty
+    mat[b, a] = params.speaker_switch_penalty
 
     sil = name_to_idx["SIL"]
     leak = name_to_idx["LEAK"]
     ovl = name_to_idx["OVL"]
     mat[sil, leak] = LEAK_FORBID
 
+    for other in ("SIL", "A", "B"):
+        idx = name_to_idx[other]
+        mat[ovl, idx] = params.ovl_transition_cost
+        mat[idx, ovl] = params.ovl_transition_cost
+
     # Leak transitions: silence-adjacent and non-initiating for speaker IPUs.
     for src_name in ("A", "B", "OVL"):
-        mat[name_to_idx[src_name], leak] = LEAK_ENTER_PENALTY
+        mat[name_to_idx[src_name], leak] = params.leak_entry_bias
     mat[leak, sil] = LEAK_EXIT_TO_SIL_PENALTY
     mat[leak, name_to_idx["A"]] = LEAK_TO_AB_FORBID
     mat[leak, name_to_idx["B"]] = LEAK_TO_AB_FORBID
