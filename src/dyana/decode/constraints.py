@@ -16,6 +16,10 @@ SPEAKER_SWITCH_PENALTY: float = -6.0  # A <-> B
 SIL_EXIT_PENALTY: float = -1.0
 SIL_ENTER_PENALTY: float = -0.5
 LEAK_FORBID: float = -np.inf  # forbid SIL -> LEAK
+LEAK_ENTER_PENALTY: float = -2.0  # cheaper than A<->B
+LEAK_EXIT_TO_SIL_PENALTY: float = -0.5
+LEAK_TO_AB_FORBID: float = -np.inf
+LEAK_TO_OVL_PENALTY: float = -5.0
 
 # ---------- Default minimum durations (frames) ----------
 
@@ -42,10 +46,23 @@ def base_transition_matrix(states: Sequence[str] | None = None) -> np.ndarray:
 
     sil = name_to_idx["SIL"]
     leak = name_to_idx["LEAK"]
+    ovl = name_to_idx["OVL"]
     mat[sil, leak] = LEAK_FORBID
+
+    # Leak transitions: silence-adjacent and non-initiating for speaker IPUs.
+    for src_name in ("A", "B", "OVL"):
+        mat[name_to_idx[src_name], leak] = LEAK_ENTER_PENALTY
+    mat[leak, sil] = LEAK_EXIT_TO_SIL_PENALTY
+    mat[leak, name_to_idx["A"]] = LEAK_TO_AB_FORBID
+    mat[leak, name_to_idx["B"]] = LEAK_TO_AB_FORBID
+    mat[leak, ovl] = LEAK_TO_OVL_PENALTY
+
     mat[sil, :] += SIL_EXIT_PENALTY
     mat[:, sil] += SIL_ENTER_PENALTY
     mat[sil, sil] = STAY_REWARD  # keep SIL self loop clean
+    mat[sil, leak] = LEAK_FORBID  # keep explicit hard rule after SIL penalties
+    mat[leak, name_to_idx["A"]] = LEAK_TO_AB_FORBID
+    mat[leak, name_to_idx["B"]] = LEAK_TO_AB_FORBID
     return mat
 
 

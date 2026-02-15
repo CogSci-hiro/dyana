@@ -124,6 +124,8 @@ def decode_with_constraints(
     # initial expanded: map base initial to first substate only
     if initial is None:
         init_base = np.zeros(len(base_names), dtype=float)
+        # LEAK cannot initiate IPUs at sequence start.
+        init_base[state_space.state_index("LEAK")] = -np.inf
     else:
         init_base = np.asarray(initial, dtype=float)
         if init_base.shape != (len(base_names),):
@@ -135,6 +137,36 @@ def decode_with_constraints(
 
     path_idx, _ = viterbi_decode(expanded_scores, expanded_trans, initial=init_expanded)
     return [collapse_map[i] for i in path_idx]
+
+
+def decode_diagnostics(states: Sequence[str]) -> Dict[str, int]:
+    """
+    Compute deterministic counters from decoded base-state sequence.
+
+    Returns
+    -------
+    dict
+        Contains ``ipu_start_after_leak_count``.
+    """
+
+    ipu_start_after_leak_count = 0
+    if not states:
+        return {"ipu_start_after_leak_count": 0}
+
+    run_starts: List[int] = [0]
+    for idx in range(1, len(states)):
+        if states[idx] != states[idx - 1]:
+            run_starts.append(idx)
+
+    for run_start in run_starts:
+        label = states[run_start]
+        if label == "SIL":
+            continue
+        prev_idx = run_start - 1
+        if prev_idx >= 0 and states[prev_idx] == "LEAK":
+            ipu_start_after_leak_count += 1
+
+    return {"ipu_start_after_leak_count": ipu_start_after_leak_count}
 
 
 # ---------- Deterministic evidence helpers ----------

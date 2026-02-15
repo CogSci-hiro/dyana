@@ -43,6 +43,7 @@ def run_pipeline(
 
     scores = fusion.fuse_bundle_to_scores(bundle)
     states = decoder.decode_with_constraints(scores)
+    diagnostics = decoder.decode_diagnostics(states)
 
     ipus_a = extract_ipus(states, tb, "A", min_duration_s=min_ipu_s)
     ipus_b = extract_ipus(states, tb, "B", min_duration_s=min_ipu_s)
@@ -62,6 +63,7 @@ def run_pipeline(
 
     artifacts.save_states(states, decode_dir / f"{stem}_states.npy")
     artifacts.save_json([seg.__dict__ for seg in ipus_a + ipus_b + ipus_ovl + ipus_leak], decode_dir / f"{stem}_ipus.json")
+    artifacts.save_json(diagnostics, decode_dir / f"{stem}_diagnostics.json")
 
     praat_textgrid.write_textgrid(
         out_dir / f"{stem}.TextGrid",
@@ -81,5 +83,6 @@ def run_pipeline(
             "OVL": len(ipus_ovl),
             "LEAK": len(ipus_leak),
         },
+        "diagnostics": diagnostics,
         "out_dir": str(out_dir),
     }
