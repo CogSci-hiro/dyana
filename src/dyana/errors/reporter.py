@@ -32,46 +32,43 @@ class ErrorReporter:
     event_logger: Optional[JsonlEventLogger] = None
 
     def __post_init__(self) -> None:
+        """Initialize run-scoped state."""
         self._run_id = self.cfg.resolved_run_id()
         self._records: list[FailureRecord] = []
         self._status: dict[str, StepStatus] = {}
 
-    # =============================================================================
-    #                     ########################################
-    #                     #            STATUS QUERIES             #
-    #                     ########################################
-    # =============================================================================
-
     def status(self, step_name: str) -> Optional[StepStatus]:
+        """Return the current status for a step, if present."""
         return self._status.get(step_name)
 
     def ok(self, step_name: str) -> bool:
+        """Return True if the step completed successfully."""
         return self._status.get(step_name) == StepStatus.OK
 
     def failed(self, step_name: str) -> bool:
+        """Return True if the step failed."""
         return self._status.get(step_name) == StepStatus.FAILED
 
     def skipped(self, step_name: str) -> bool:
+        """Return True if the step was skipped."""
         return self._status.get(step_name) == StepStatus.SKIPPED
 
     def failures_count(self) -> int:
+        """Return the total number of failed steps."""
         return sum(1 for s in self._status.values() if s == StepStatus.FAILED)
 
     def has_failures(self) -> bool:
+        """Return True when any step has failed."""
         return self.failures_count() > 0
 
-    # =============================================================================
-    #                     ########################################
-    #                     #            STATUS UPDATES             #
-    #                     ########################################
-    # =============================================================================
-
     def mark_ok(self, step_name: str) -> None:
+        """Record a successful step."""
         self._status[step_name] = StepStatus.OK
         if self.event_logger is not None:
             self.event_logger.write(event="step_ok", step=step_name, level="INFO")
 
     def mark_skipped(self, *, step_name: str, caused_by: str, context: Optional[Mapping[str, Any]] = None) -> None:
+        """Record a skipped step and its dependency cause."""
         self._status[step_name] = StepStatus.SKIPPED
         rec = FailureRecord(
             step_name=step_name,
@@ -92,6 +89,7 @@ class ErrorReporter:
             )
 
     def mark_failed(self, *, step_name: str, exc: BaseException, context: Optional[Mapping[str, Any]] = None) -> None:
+        """Record a failed step and associated exception details."""
         self._status[step_name] = StepStatus.FAILED
         rec = FailureRecord.from_exception(step_name=step_name, exc=exc, context=context)
         self._records.append(rec)
@@ -114,13 +112,8 @@ class ErrorReporter:
                 exc=exc,
             )
 
-    # =============================================================================
-    #                     ########################################
-    #                     #              RENDERING                #
-    #                     ########################################
-    # =============================================================================
-
     def render_summary(self) -> str:
+        """Render a human-readable summary with details and artifact paths."""
         ok_n = sum(1 for s in self._status.values() if s == StepStatus.OK)
         fail_n = sum(1 for s in self._status.values() if s == StepStatus.FAILED)
         skip_n = sum(1 for s in self._status.values() if s == StepStatus.SKIPPED)

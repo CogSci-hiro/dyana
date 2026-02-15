@@ -1,1 +1,1 @@
-# BIDS-like export helpers
+"""BIDS-like export helpers (to be implemented)."""

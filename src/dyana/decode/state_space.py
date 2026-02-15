@@ -1,1 +1,1 @@
-# State definitions
+"""Decoder state-space definitions (to be implemented)."""

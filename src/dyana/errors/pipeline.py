@@ -44,12 +44,6 @@ class Pipeline:
         self._reporter = reporter
         self._steps: Dict[str, _StepDef] = {}
 
-    # =============================================================================
-    #                     ########################################
-    #                     #              STEP SETUP               #
-    #                     ########################################
-    # =============================================================================
-
     def add(
         self,
         name: str,
@@ -58,22 +52,14 @@ class Pipeline:
         deps: Optional[List[str]] = None,
         context: Optional[Mapping[str, Any]] = None,
     ) -> None:
+        """Register a named step with optional dependencies."""
         if name in self._steps:
             raise ValueError(f"Duplicate step name: {name}")
         self._steps[name] = _StepDef(name=name, fn=fn, deps=tuple(deps or []), context=context)
 
-    # =============================================================================
-    #                     ########################################
-    #                     #              EXECUTION               #
-    #                     ########################################
-    # =============================================================================
-
     def run(self) -> Dict[str, Any]:
-        results: Dict[str, Any] = {}
-        remaining: Set[str] = set(self._steps.keys())
-        executed_or_decided: Set[str] = set()
         """
-        Execute the pipeline.
+        Execute the pipeline in dependency order.
 
         Returns
         -------
@@ -83,14 +69,11 @@ class Pipeline:
 
         Notes
         -----
-        If cfg.max_failures is set, pipeline will stop scheduling new work once reached.
-        Already-running steps do not exist here since this is single-threaded.
-
-        Usage example
-        -------------
-            results = pipe.run()
-            model = results["fit"]
+        If cfg.max_failures is set, pipeline stops scheduling new work once reached.
         """
+        results: Dict[str, Any] = {}
+        remaining: Set[str] = set(self._steps.keys())
+        executed_or_decided: Set[str] = set()
 
         def _max_failures_reached() -> bool:
             if self._reporter.cfg.mode != "run":
@@ -154,4 +137,3 @@ class Pipeline:
                 )
 
         return results
-

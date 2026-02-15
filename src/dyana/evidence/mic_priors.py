@@ -1,1 +1,1 @@
-# Mic / geometry priors
+"""Microphone and geometry priors (to be implemented)."""

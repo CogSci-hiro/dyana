@@ -142,3 +142,11 @@ def test_pipeline_max_failures_stops_scheduling_and_marks_remaining_skipped(tmp_
     assert reporter.status("B_ok") == StepStatus.SKIPPED
     assert reporter.status("C_ok") == StepStatus.SKIPPED
     assert reporter.failures_count() == 1
+
+
+def test_pipeline_rejects_duplicate_step_names(tmp_path: Path) -> None:
+    reporter = _make_reporter(tmp_path=tmp_path, mode="run")
+    pipe = Pipeline(reporter)
+    pipe.add("A", lambda: 1)
+    with pytest.raises(ValueError, match="Duplicate step name"):
+        pipe.add("A", lambda: 2)

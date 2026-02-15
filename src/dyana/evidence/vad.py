@@ -1,1 +1,1 @@
-# Speech activity evidence
+"""Speech activity evidence extraction (to be implemented)."""

@@ -1,1 +1,1 @@
-# Speaker identity evidence
+"""Speaker-identity evidence extraction (to be implemented)."""

@@ -1,6 +1,13 @@
 import pytest
 from dyana.core.timebase import TimeBase
 
+
+def test_canonical_timebase_has_expected_hop() -> None:
+    tb = TimeBase.canonical()
+    assert tb.hop_s == 0.01
+    assert tb.hop_ms == 10.0
+
+
 def test_timebase_roundtrip_floor_semantics() -> None:
     tb = TimeBase(hop_s=0.01)
 
@@ -31,3 +38,18 @@ def test_negative_inputs_raise() -> None:
 
     with pytest.raises(ValueError):
         _ = tb.num_frames(-1.0)
+
+
+def test_frame_times_shape_and_values() -> None:
+    tb = TimeBase(hop_s=0.02)
+    out = tb.frame_times(4)
+    assert out.tolist() == [0.0, 0.02, 0.04, 0.06]
+
+
+def test_invalid_hop_and_frame_count_raise() -> None:
+    with pytest.raises(ValueError):
+        _ = TimeBase(hop_s=0.0)
+
+    tb = TimeBase(hop_s=0.01)
+    with pytest.raises(ValueError):
+        _ = tb.frame_times(-1)

@@ -1,1 +1,1 @@
-# Structured decoder
+"""Structured decoder (to be implemented)."""

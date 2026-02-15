@@ -1,1 +1,1 @@
-# Artifact saving
+"""Artifact writing utilities (to be implemented)."""

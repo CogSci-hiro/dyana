@@ -4,7 +4,7 @@ import json
 import pytest
 
 from dyana.errors import ErrorHandlingConfig, configure_logging, ErrorReporter
-from dyana.errors.guards import guard
+from dyana.errors.guards import guard, step
 from dyana.errors.types import StepStatus
 
 
@@ -70,3 +70,31 @@ def test_guard_writes_jsonl_events_if_enabled(tmp_path: Path) -> None:
     assert payload["run_id"] == "testrun"
     assert payload["event"] in {"step_ok"}  # could include other initial events in future
     assert payload["step"] == "step_ok"
+
+
+def test_step_context_marks_ok_on_success(tmp_path: Path) -> None:
+    reporter = _make_reporter(tmp_path=tmp_path, mode="run")
+
+    with step("cm_ok", reporter):
+        _ = 1 + 1
+
+    assert reporter.status("cm_ok") == StepStatus.OK
+
+
+def test_step_context_run_mode_suppresses_and_records_failure(tmp_path: Path) -> None:
+    reporter = _make_reporter(tmp_path=tmp_path, mode="run")
+
+    with step("cm_fail", reporter):
+        raise ValueError("bad")
+
+    assert reporter.status("cm_fail") == StepStatus.FAILED
+
+
+def test_step_context_debug_mode_reraises(tmp_path: Path) -> None:
+    reporter = _make_reporter(tmp_path=tmp_path, mode="debug")
+
+    with pytest.raises(RuntimeError, match="boom"):
+        with step("cm_fail", reporter):
+            raise RuntimeError("boom")
+
+    assert reporter.status("cm_fail") == StepStatus.FAILED

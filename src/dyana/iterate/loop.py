@@ -1,1 +1,1 @@
-# Iterative loop
+"""Iterative decoding loop (to be implemented)."""

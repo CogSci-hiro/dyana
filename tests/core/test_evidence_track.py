@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 
 from dyana.core.timebase import TimeBase
-from dyana.evidence.base import EvidenceTrack
+from dyana.evidence.base import EvidenceBundle, EvidenceTrack
 
 def test_accepts_vector_values() -> None:
     tb = TimeBase(hop_s=0.01)
@@ -71,3 +71,61 @@ def test_probability_bounds_enforced() -> None:
 
     with pytest.raises(ValueError):
         _ = EvidenceTrack(name="vad", timebase=tb, values=values, semantics="probability")
+
+
+def test_confidence_k_mismatch_raises() -> None:
+    tb = TimeBase(hop_s=0.01)
+    values = np.random.rand(8, 3).astype(np.float32)
+    confidence = np.random.rand(8, 2).astype(np.float32)
+
+    with pytest.raises(ValueError):
+        _ = EvidenceTrack(
+            name="vad",
+            timebase=tb,
+            values=values,
+            semantics="score",
+            confidence=confidence,
+        )
+
+
+def test_confidence_non_float_raises() -> None:
+    tb = TimeBase(hop_s=0.01)
+    values = np.random.rand(5).astype(np.float32)
+    confidence = np.array([1, 2, 3, 4, 5], dtype=np.int32)
+
+    with pytest.raises(TypeError):
+        _ = EvidenceTrack(
+            name="vad",
+            timebase=tb,
+            values=values,
+            semantics="score",
+            confidence=confidence,
+        )
+
+
+def test_bundle_add_get_iter_and_hop_validation() -> None:
+    tb = TimeBase.canonical()
+    track = EvidenceTrack(
+        name="vad",
+        timebase=tb,
+        values=np.random.rand(4).astype(np.float32),
+        semantics="probability",
+    )
+    bundle = EvidenceBundle(timebase=tb, require_canonical=True)
+    bundle.add(track)
+
+    assert bundle.get("vad") is track
+    assert list(bundle) == [track]
+
+    non_canonical_tb = TimeBase(hop_s=0.02)
+    with pytest.raises(ValueError):
+        _ = EvidenceBundle(timebase=non_canonical_tb, require_canonical=True)
+
+    wrong_hop_track = EvidenceTrack(
+        name="bad",
+        timebase=non_canonical_tb,
+        values=np.random.rand(4).astype(np.float32),
+        semantics="score",
+    )
+    with pytest.raises(ValueError):
+        bundle.add(wrong_hop_track)

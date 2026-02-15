@@ -1,1 +1,1 @@
-# Praat TextGrid IO
+"""Praat TextGrid I/O helpers (to be implemented)."""
