@@ -7,7 +7,7 @@ from typing import Literal
 import numpy as np
 from numpy.typing import NDArray
 
-from dyana.core.timebase import CANONICAL_HOP_S
+from dyana.core.timebase import CANONICAL_HOP_SECONDS
 
 
 AggKind = Literal["mean", "max"]
@@ -21,7 +21,8 @@ def _validate_factor(src_hop_s: float, target_hop_s: float) -> int:
     rounded = int(round(factor))
     if abs(factor - rounded) > 1e-12:
         raise ValueError(
-            f"Resampling requires integer factor; got src_hop={src_hop_s}, target_hop={target_hop_s}."
+            "Resampling requires an integer ratio between hops; "
+            f"got src_hop={src_hop_s}, target_hop={target_hop_s}, ratio={factor:.6f}."
         )
     if rounded <= 0:
         raise ValueError("Invalid resampling factor computed")
@@ -128,6 +129,46 @@ def downsample(values: NDArray[np.floating], src_hop_s: float, target_hop_s: flo
     return result
 
 
+def resample(
+    values: NDArray[np.floating],
+    src_hop_s: float,
+    target_hop_s: float,
+    *,
+    agg: AggKind | None = None,
+) -> NDArray[np.floating]:
+    """
+    Resample 1-D or 2-D arrays between hops using zero-order hold for upsampling
+    and explicit aggregation for downsampling.
+
+    Parameters
+    ----------
+    values
+        Array of shape (T,) or (T, K).
+    src_hop_s
+        Source hop in seconds.
+    target_hop_s
+        Target hop in seconds.
+    agg
+        Aggregation to use for downsampling ("mean" or "max"). Required when
+        ``target_hop_s`` is coarser than ``src_hop_s``.
+
+    Returns
+    -------
+    ndarray
+        Resampled array with the same dimensionality as ``values``.
+    """
+
+    if src_hop_s == target_hop_s:
+        return np.array(values, copy=True)
+
+    if src_hop_s > target_hop_s:
+        return upsample_hold_last(values, src_hop_s, target_hop_s)
+
+    if agg is None:
+        raise ValueError("Downsampling requires agg to be provided (mean|max).")
+    return downsample(values, src_hop_s, target_hop_s, agg=agg)
+
+
 def to_canonical_grid(
     values: NDArray[np.floating],
     src_hop_s: float,
@@ -159,13 +200,12 @@ def to_canonical_grid(
         out = to_canonical_grid(values, 0.02, semantics="probability")
     """
 
-    if src_hop_s == CANONICAL_HOP_S:
+    if src_hop_s == CANONICAL_HOP_SECONDS:
         return np.array(values, copy=True)
 
-    if src_hop_s > CANONICAL_HOP_S:
-        return upsample_hold_last(values, src_hop_s, CANONICAL_HOP_S)
+    if src_hop_s > CANONICAL_HOP_SECONDS:
+        return upsample_hold_last(values, src_hop_s, CANONICAL_HOP_SECONDS)
 
     if downsample_agg is None:
         raise ValueError("downsample_agg must be provided when downsampling to canonical grid")
-    return downsample(values, src_hop_s, CANONICAL_HOP_S, agg=downsample_agg)
-
+    return downsample(values, src_hop_s, CANONICAL_HOP_SECONDS, agg=downsample_agg)

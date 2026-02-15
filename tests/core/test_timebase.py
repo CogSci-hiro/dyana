@@ -1,18 +1,19 @@
 import pytest
-from dyana.core.timebase import CANONICAL_HOP_S, TimeBase
+from dyana.core.timebase import CANONICAL_HOP_SECONDS, TimeBase
 
 
 def test_canonical_timebase_has_expected_hop() -> None:
     tb = TimeBase.canonical()
-    assert tb.hop_s == CANONICAL_HOP_S
+    assert tb.hop_s == CANONICAL_HOP_SECONDS
     assert tb.hop_ms == 10.0
 
 
 def test_canonical_frame_mapping_exact() -> None:
     tb = TimeBase.canonical()
     assert tb.frame_to_time(0) == 0.0
-    assert tb.frame_to_time(1) == CANONICAL_HOP_S
+    assert tb.frame_to_time(1) == CANONICAL_HOP_SECONDS
     assert tb.frame_to_time(42) == 0.42
+    assert tb.frame_to_time(10) == 0.10
 
 
 def test_timebase_roundtrip_floor_semantics() -> None:
@@ -60,3 +61,9 @@ def test_invalid_hop_and_frame_count_raise() -> None:
     tb = TimeBase(hop_s=0.01)
     with pytest.raises(ValueError):
         _ = tb.frame_times(-1)
+
+
+def test_require_canonical_raises_for_non_canonical() -> None:
+    tb = TimeBase.from_hop_seconds(0.02)
+    with pytest.raises(ValueError):
+        tb.require_canonical()

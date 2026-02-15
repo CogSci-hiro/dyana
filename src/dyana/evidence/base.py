@@ -1,16 +1,15 @@
 # src/dyana/evidence/base.py
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, Iterable, Literal, Mapping, Optional
-
 import json
 from pathlib import Path
+from typing import Any, Dict, Literal, Mapping, Optional
 
 import numpy as np
 from numpy.typing import NDArray
 
-from dyana.core.resample import AggKind, downsample, to_canonical_grid, upsample_hold_last
-from dyana.core.timebase import CANONICAL_HOP_S, TimeBase
+from dyana.core.resample import AggKind, downsample, resample, to_canonical_grid, upsample_hold_last
+from dyana.core.timebase import CANONICAL_HOP_SECONDS, TimeBase
 
 
 Semantics = Literal["probability", "logit", "score"]
@@ -89,11 +88,17 @@ class EvidenceTrack:
                     f"EvidenceTrack.confidence T mismatch for '{self.name}': "
                     f"values has T={values.shape[0]}, confidence has T={confidence.shape[0]}."
                 )
-            if values.ndim == 2 and confidence.ndim == 2 and confidence.shape[1] != values.shape[1]:
-                raise ValueError(
-                    f"EvidenceTrack.confidence K mismatch for '{self.name}': "
-                    f"values has K={values.shape[1]}, confidence has K={confidence.shape[1]}."
-                )
+            if values.ndim == 2:
+                if confidence.ndim != 2 or confidence.shape[1] != values.shape[1]:
+                    raise ValueError(
+                        f"EvidenceTrack.confidence K mismatch for '{self.name}': "
+                        f"values has shape {values.shape}, confidence has shape {confidence.shape}."
+                    )
+            else:
+                if confidence.ndim != 1:
+                    raise ValueError(
+                        f"EvidenceTrack.confidence for 1-D values must be 1-D, got shape {confidence.shape}."
+                    )
             if not np.issubdtype(confidence.dtype, np.floating):
                 raise TypeError(f"EvidenceTrack.confidence must be a floating dtype for '{self.name}'.")
             if not np.isfinite(confidence).all():
@@ -126,12 +131,19 @@ class EvidenceTrack:
         """Evidence dimensionality (1 for (T,), else K for (T, K))."""
         return 1 if self.values.ndim == 1 else int(self.values.shape[1])
 
-    def to_canonical(self, *, downsample_agg: Optional[AggKind] = None) -> "EvidenceTrack":
+    def to_canonical(
+        self,
+        target_timebase: Optional[TimeBase] = None,
+        *,
+        downsample_agg: Optional[AggKind] = None,
+    ) -> "EvidenceTrack":
         """
         Return an EvidenceTrack on the canonical 10 ms grid.
 
         Parameters
         ----------
+        target_timebase
+            Target timebase (must be canonical). If None, uses global canonical.
         downsample_agg
             Aggregation to use if downsampling is required (``"mean"`` or ``"max"``).
 
@@ -145,7 +157,14 @@ class EvidenceTrack:
             canonical = track.to_canonical(downsample_agg="mean")
         """
 
-        if self.timebase.is_canonical:
+        target = target_timebase or TimeBase.canonical()
+        target.require_canonical()
+
+        if self.timebase.hop_s == target.hop_s:
+            if target.n_frames is not None and target.n_frames != self.T:
+                raise ValueError(
+                    f"Target timebase expects n_frames={target.n_frames} but track has {self.T}."
+                )
             return self
 
         values_resamp = to_canonical_grid(
@@ -157,14 +176,20 @@ class EvidenceTrack:
 
         confidence_resamp = None
         if self.confidence is not None:
-            if self.timebase.hop_s > CANONICAL_HOP_S:
-                confidence_resamp = upsample_hold_last(self.confidence, self.timebase.hop_s, CANONICAL_HOP_S)
+            if self.timebase.hop_s > target.hop_s:
+                confidence_resamp = upsample_hold_last(self.confidence, self.timebase.hop_s, target.hop_s)
             else:
                 if downsample_agg is None:
                     raise ValueError("downsample_agg required to resample confidence")
-                confidence_resamp = downsample(self.confidence, self.timebase.hop_s, CANONICAL_HOP_S, agg=downsample_agg)
+                confidence_resamp = downsample(self.confidence, self.timebase.hop_s, target.hop_s, agg=downsample_agg)
 
-        canonical_tb = TimeBase.canonical(n_frames=values_resamp.shape[0])
+        n_frames = target.n_frames if target.n_frames is not None else values_resamp.shape[0]
+        if n_frames != values_resamp.shape[0]:
+            raise ValueError(
+                f"Resampled length {values_resamp.shape[0]} does not match target n_frames={target.n_frames}."
+            )
+
+        canonical_tb = TimeBase.canonical(n_frames=n_frames)
 
         return EvidenceTrack(
             name=self.name,
@@ -172,6 +197,63 @@ class EvidenceTrack:
             values=values_resamp,
             semantics=self.semantics,
             confidence=confidence_resamp,
+            metadata=self.metadata,
+        )
+
+    def resample_to(
+        self,
+        target_timebase: TimeBase,
+        *,
+        agg: AggKind | None = None,
+    ) -> "EvidenceTrack":
+        """
+        Resample this track onto ``target_timebase``.
+
+        Parameters
+        ----------
+        target_timebase
+            Desired timebase. If identical to the current one (hop and optional
+            ``n_frames``), returns self.
+        agg
+            Aggregation for downsampling (``\"mean\"`` or ``\"max\"``). Required
+            when ``target_timebase.hop_s`` is coarser than ``self.timebase.hop_s``.
+        """
+
+        if (
+            self.timebase.hop_s == target_timebase.hop_s
+            and (target_timebase.n_frames is None or target_timebase.n_frames == self.T)
+        ):
+            return self
+
+        values_rs = resample(
+            self.values,
+            src_hop_s=self.timebase.hop_s,
+            target_hop_s=target_timebase.hop_s,
+            agg=agg,
+        )
+
+        confidence_rs = None
+        if self.confidence is not None:
+            confidence_rs = resample(
+                self.confidence,
+                src_hop_s=self.timebase.hop_s,
+                target_hop_s=target_timebase.hop_s,
+                agg=agg,
+            )
+
+        if target_timebase.n_frames is not None and values_rs.shape[0] != target_timebase.n_frames:
+            raise ValueError(
+                f"Resampled track length {values_rs.shape[0]} does not match target n_frames={target_timebase.n_frames}."
+            )
+
+        tb = TimeBase.from_hop_seconds(target_timebase.hop_s, n_frames=values_rs.shape[0] if target_timebase.n_frames is None else target_timebase.n_frames)
+
+        return EvidenceTrack(
+            name=self.name,
+            timebase=tb,
+            values=values_rs,
+            semantics=self.semantics,
+            confidence=confidence_rs,
             metadata=self.metadata,
         )
 
@@ -192,6 +274,16 @@ class EvidenceTrack:
         arrays = {"values": np.asarray(self.values)}
         if self.confidence is not None:
             arrays["confidence"] = np.asarray(self.confidence)
+
+        meta = {
+            "name": self.name,
+            "semantics": self.semantics,
+            "timebase": {"hop_s": self.timebase.hop_s, "n_frames": self.timebase.n_frames},
+            "metadata": dict(self.metadata),
+            "has_confidence": self.confidence is not None,
+        }
+        arrays["metadata_json"] = np.array(json.dumps(meta))
+
         np.savez_compressed(path, **arrays)
 
     def to_manifest(self) -> Dict[str, Any]:
@@ -206,10 +298,33 @@ class EvidenceTrack:
         }
 
     @staticmethod
+    def from_npz(path: Path) -> "EvidenceTrack":
+        """Load an EvidenceTrack serialized with :meth:`to_npz`."""
+
+        with np.load(path, allow_pickle=False) as data:
+            if "metadata_json" not in data:
+                raise ValueError(f"NPZ at {path} missing metadata_json for EvidenceTrack.")
+            meta = json.loads(str(data["metadata_json"]))
+            values = data["values"]
+            confidence = data["confidence"] if "confidence" in data.files else None
+
+        tb_info = meta["timebase"]
+        timebase = TimeBase.from_hop_seconds(tb_info["hop_s"], n_frames=tb_info.get("n_frames"))
+
+        return EvidenceTrack(
+            name=meta["name"],
+            timebase=timebase,
+            values=values,
+            semantics=meta["semantics"],
+            confidence=confidence,
+            metadata=meta.get("metadata", {}),
+        )
+
+    @staticmethod
     def from_files(name: str, npz_path: Path, manifest_entry: Mapping[str, Any]) -> "EvidenceTrack":
         """Load an EvidenceTrack from NPZ + manifest entry."""
 
-        with np.load(npz_path) as data:
+        with np.load(npz_path, allow_pickle=False) as data:
             values = data["values"]
             confidence = data["confidence"] if "confidence" in data else None
 
@@ -224,108 +339,3 @@ class EvidenceTrack:
             confidence=confidence,
             metadata=manifest_entry.get("metadata", {}),
         )
-
-
-@dataclass
-class EvidenceBundle:
-    """
-    Named collection of EvidenceTracks sharing a single timebase.
-
-    Parameters
-    ----------
-    timebase
-        Bundle timebase. All tracks must match this hop.
-    require_canonical
-        If True, enforce that bundle timebase hop equals canonical 10 ms hop.
-        This is the Week 1 default and satisfies the checklist.
-
-    Usage example
-    -------------
-        tb = TimeBase.canonical()
-        bundle = EvidenceBundle(timebase=tb, require_canonical=True)
-        bundle.add(vad_track)
-    """
-
-    timebase: TimeBase
-    require_canonical: bool = True
-    tracks: Dict[str, EvidenceTrack] = field(default_factory=dict)
-
-    def __post_init__(self) -> None:
-        if self.require_canonical and abs(self.timebase.hop_s - CANONICAL_HOP_S) > 1e-12:
-            raise ValueError(
-                f"EvidenceBundle requires canonical hop {CANONICAL_HOP_S}, got {self.timebase.hop_s}."
-            )
-
-    def add(self, track: EvidenceTrack) -> None:
-        """
-        Add a track (replaces any existing track with the same name).
-        """
-        if abs(track.timebase.hop_s - self.timebase.hop_s) > 1e-12:
-            raise ValueError(
-                f"Track '{track.name}' has hop {track.timebase.hop_s}, "
-                f"bundle hop is {self.timebase.hop_s}."
-            )
-        self.tracks[track.name] = track
-
-    def get(self, name: str) -> Optional[EvidenceTrack]:
-        """Return a track by name, or None if missing."""
-        return self.tracks.get(name)
-
-    def __iter__(self) -> Iterable[EvidenceTrack]:
-        return iter(self.tracks.values())
-
-    def merge(self, other: "EvidenceBundle") -> "EvidenceBundle":
-        """
-        Merge another bundle; other tracks override duplicates.
-        """
-
-        if abs(other.timebase.hop_s - self.timebase.hop_s) > 1e-12:
-            raise ValueError(
-                f"Cannot merge bundles with different hops: {self.timebase.hop_s} vs {other.timebase.hop_s}."
-            )
-
-        merged = dict(self.tracks)
-        merged.update(other.tracks)
-        return EvidenceBundle(timebase=self.timebase, require_canonical=self.require_canonical, tracks=merged)
-
-    def to_directory(self, path: Path) -> None:
-        """
-        Serialize bundle to a directory with manifest and per-track NPZ files.
-
-        Structure
-        ---------
-        - manifest.json: lists track metadata and filenames
-        - <name>.npz: arrays for each track
-        """
-
-        path.mkdir(parents=True, exist_ok=True)
-        manifest = {
-            "timebase": {"hop_s": self.timebase.hop_s, "n_frames": self.timebase.n_frames},
-            "tracks": {},
-        }
-
-        for name, track in self.tracks.items():
-            track_path = path / f"{name}.npz"
-            track.to_npz(track_path)
-            manifest["tracks"][name] = track.to_manifest()
-            manifest["tracks"][name]["file"] = track_path.name
-
-        manifest_path = path / "manifest.json"
-        manifest_path.write_text(json.dumps(manifest, indent=2))
-
-    @staticmethod
-    def from_directory(path: Path) -> "EvidenceBundle":
-        """Load a bundle from directory created by :meth:`to_directory`."""
-
-        manifest_path = path / "manifest.json"
-        manifest = json.loads(manifest_path.read_text())
-
-        tb_info = manifest["timebase"]
-        timebase = TimeBase.from_hop_seconds(tb_info["hop_s"], n_frames=tb_info.get("n_frames"))
-
-        tracks: Dict[str, EvidenceTrack] = {}
-        for name, entry in manifest["tracks"].items():
-            npz_path = path / entry["file"]
-            tracks[name] = EvidenceTrack.from_files(name, npz_path, entry)
-
-        return EvidenceBundle(timebase=timebase, require_canonical=False, tracks=tracks)
