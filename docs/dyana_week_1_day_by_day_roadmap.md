@@ -140,14 +140,14 @@
 - Run evaluation on multiple dataset tiers
 
 ### Checklist
-- [ ] Boundary F1 implementation
-  - [ ] ±20 ms tolerance
-  - [ ] ±50 ms tolerance
-- [ ] Framewise IoU (speech vs silence, per speaker)
-- [ ] Structural metrics:
-  - [ ] micro-IPUs / min
-  - [ ] speaker switches / min
-  - [ ] rapid alternations
+- [✅] Boundary F1 implementation
+  - [✅] ±20 ms tolerance
+  - [✅] ±50 ms tolerance
+- [✅] Framewise IoU (speech vs silence, per speaker)
+- [✅] Structural metrics:
+  - [✅] micro-IPUs / min
+  - [✅] speaker switches / min
+  - [✅] rapid alternations
 - [ ] Evaluation on:
   - [ ] synthetic / semi-synthetic data
   - [ ] easy real segment
