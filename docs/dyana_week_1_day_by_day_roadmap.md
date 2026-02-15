@@ -26,17 +26,17 @@
 
 ### Checklist
 - [✅] Define `TimeBase` (frame ↔ time mapping)
-- [ ] Enforce 10 ms global hop (`t = frame_idx * 0.01`)
-- [ ] Implement upsampling (e.g. 20 ms → 10 ms)
-- [ ] Implement downsampling with explicit aggregation (max / mean)
+- [✅] Enforce 10 ms global hop (`t = frame_idx * 0.01`)
+- [✅] Implement upsampling (e.g. 20 ms → 10 ms)
+- [✅] Implement downsampling with explicit aggregation (max / mean)
 - [✅] Implement `EvidenceTrack`
-  - [ ] shape validation
-  - [ ] explicit semantics (probability / score / logit)
-  - [ ] optional confidence
-- [ ] Implement `EvidenceBundle`
-  - [ ] order-independent
-  - [ ] missing tracks allowed
-- [ ] Serialization to disk (NPZ / JSON)
+  - [✅] shape validation
+  - [✅] explicit semantics (probability / score / logit)
+  - [✅] optional confidence
+- [✅] Implement `EvidenceBundle`
+  - [✅] order-independent
+  - [✅] missing tracks allowed
+- [✅] Serialization to disk (NPZ / JSON)
 
 **Exit criteria:**
 - Any evidence track can be resampled onto the canonical grid
