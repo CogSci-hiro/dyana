@@ -5,7 +5,7 @@ from typing import Any, Dict
 
 from dyana.core.timebase import TimeBase
 from dyana.decode import decoder, fusion
-from dyana.decode.ipu import extract_ipus
+from dyana.decode.ipu import count_ipu_starts_after_leak, extract_ipus
 from dyana.evidence.bundle import EvidenceBundle
 from dyana.evidence.energy import (
     compute_energy_rms_track,
@@ -43,12 +43,17 @@ def run_pipeline(
 
     scores = fusion.fuse_bundle_to_scores(bundle)
     states = decoder.decode_with_constraints(scores)
-    diagnostics = decoder.decode_diagnostics(states)
 
     ipus_a = extract_ipus(states, tb, "A", min_duration_s=min_ipu_s)
     ipus_b = extract_ipus(states, tb, "B", min_duration_s=min_ipu_s)
     ipus_ovl = extract_ipus(states, tb, "OVL", min_duration_s=min_ipu_s)
     ipus_leak = extract_ipus(states, tb, "LEAK", min_duration_s=min_ipu_s)
+    total_ipus = len(ipus_a) + len(ipus_b) + len(ipus_ovl)
+    diagnostics = {
+        "ipu_starts_after_leak": count_ipu_starts_after_leak(states),
+        "total_ipus": total_ipus,
+        "total_leak_segments": len(ipus_leak),
+    }
 
     stem = audio_path.stem
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -63,7 +68,7 @@ def run_pipeline(
 
     artifacts.save_states(states, decode_dir / f"{stem}_states.npy")
     artifacts.save_json([seg.__dict__ for seg in ipus_a + ipus_b + ipus_ovl + ipus_leak], decode_dir / f"{stem}_ipus.json")
-    artifacts.save_json(diagnostics, decode_dir / f"{stem}_diagnostics.json")
+    artifacts.dump_diagnostics(out_dir, stem, diagnostics)
 
     praat_textgrid.write_textgrid(
         out_dir / f"{stem}.TextGrid",

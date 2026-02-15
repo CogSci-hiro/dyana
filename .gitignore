@@ -1,2 +1,6 @@
 .idea
 project_snapshot.md
+__pycache__/
+*.pyc
+.pytest_cache/
+tmp.wav

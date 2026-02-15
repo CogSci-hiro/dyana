@@ -60,12 +60,12 @@ the 10 ms grid.
 
 ### Checklist
 
--   [ ] LEAK state scoring wired to evidence
--   [ ] Transition penalties adjusted
--   [ ] LEAK → A/B initiation strongly penalized
+-   [✅] LEAK state scoring wired to evidence
+-   [✅] Transition penalties adjusted
+-   [✅] LEAK → A/B initiation strongly penalized
 -   [ ] IPU start-after-LEAK counter logged
--   [ ] Synthetic leakage test run
--   [ ] No crashes with missing leakage track
+-   [✅] Synthetic leakage test run
+-   [✅] No crashes with missing leakage track
 
 ### Exit criteria
 

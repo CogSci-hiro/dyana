@@ -31,3 +31,12 @@ def save_states(states: list[str], path: Path) -> None:
 def save_json(data: Any, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2))
+
+
+def dump_diagnostics(out_dir: Path, stem: str, diagnostics: Mapping[str, Any]) -> Path:
+    """Write deterministic diagnostics JSON under decode artifacts."""
+
+    path = out_dir / "decode" / f"{stem}_diagnostics.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(dict(diagnostics), indent=2, sort_keys=True))
+    return path
