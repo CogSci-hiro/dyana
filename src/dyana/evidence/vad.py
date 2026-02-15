@@ -5,7 +5,10 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
-import webrtcvad
+try:
+    import webrtcvad  # type: ignore
+except ImportError:  # pragma: no cover - optional dependency for tests
+    webrtcvad = None
 
 from dyana.core.cache import cache_get, cache_put, make_cache_key
 from dyana.core.timebase import CANONICAL_HOP_SECONDS, TimeBase
@@ -35,6 +38,8 @@ def compute_webrtc_vad_soft_track(
     subframe_ms: int = 5,
     cache_dir: Path | None = None,
 ) -> EvidenceTrack:
+    if webrtcvad is None:
+        raise ImportError("webrtcvad package not installed; install webrtcvad to use VAD features.")
     key = make_cache_key(audio_path, "webrtc_vad_soft", {"hop_s": hop_s, "vad_mode": vad_mode, "sub_ms": subframe_ms})
     cached = cache_get(cache_dir, key)
     if cached is not None:

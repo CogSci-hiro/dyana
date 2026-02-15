@@ -110,18 +110,18 @@
 - Produce human-readable outputs
 
 ### Checklist
-- [ ] Audio loading (mono + multi-channel)
-- [ ] End-to-end execution:
+- [✅] Audio loading (mono + multi-channel)
+- [✅] End-to-end execution:
   ```
   audio → evidence bundle → decoder → state sequence
   ```
-- [ ] IPU extraction from decoded states
-- [ ] Praat TextGrid export:
-  - [ ] Speaker A IPUs
-  - [ ] Speaker B IPUs
-  - [ ] Overlap
-  - [ ] Leakage
-- [ ] Dump intermediate artifacts (evidence + decoder outputs)
+- [✅] IPU extraction from decoded states
+- [✅] Praat TextGrid export:
+  - [✅] Speaker A IPUs
+  - [✅] Speaker B IPUs
+  - [✅] Overlap
+  - [✅] Leakage
+- [✅] Dump intermediate artifacts (evidence + decoder outputs)
 
 **Exit criteria:**
 - Pipeline runs on multiple files without crashing

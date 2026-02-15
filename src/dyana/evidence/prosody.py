@@ -10,7 +10,7 @@ from dyana.core.timebase import CANONICAL_HOP_SECONDS, TimeBase
 from dyana.core.cache import cache_get, cache_put, make_cache_key
 from dyana.evidence.base import EvidenceTrack
 from dyana.evidence.energy import compute_energy_smooth_track, compute_energy_slope_track
-from dyana.evidence.vad import compute_webrtc_vad_soft_track
+from dyana.evidence.vad import compute_webrtc_vad_soft_track, webrtcvad
 
 
 def compute_voiced_soft_track(
@@ -21,6 +21,8 @@ def compute_voiced_soft_track(
     subframe_ms: int = 5,
     cache_dir: Path | None = None,
 ) -> EvidenceTrack:
+    if webrtcvad is None:
+        raise ImportError("webrtcvad package not installed; install webrtcvad to use voiced_soft.")
     key = make_cache_key(audio_path, "voiced_soft", {"hop_s": hop_s, "vad_mode": vad_mode, "sub_ms": subframe_ms})
     cached = cache_get(cache_dir, key)
     if cached is not None:

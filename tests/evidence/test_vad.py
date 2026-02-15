@@ -1,7 +1,10 @@
+import importlib.util
 import numpy as np
 import soundfile as sf
 from pathlib import Path
+import pytest
 
+pytest.importorskip("webrtcvad")
 from dyana.evidence.vad import compute_webrtc_vad_soft_track
 
 

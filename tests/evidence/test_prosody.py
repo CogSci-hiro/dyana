@@ -1,7 +1,10 @@
+import importlib.util
 import numpy as np
 import soundfile as sf
 from pathlib import Path
+import pytest
 
+pytest.importorskip("webrtcvad")
 from dyana.evidence.prosody import compute_voiced_soft_track, compute_energy_slope_prosody_track
 
 

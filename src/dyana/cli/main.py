@@ -6,7 +6,7 @@ import argparse
 from collections.abc import Callable, Sequence
 from types import ModuleType
 
-from dyana.cli.commands import decode, evidence, iterate, run
+from dyana.cli.commands import decode, evidence, iterate, run, eval as eval_cmd
 
 CommandModule = ModuleType
 CommandRunner = Callable[[argparse.Namespace], None]
@@ -17,6 +17,7 @@ _COMMANDS: dict[str, CommandModule] = {
     "decode": decode,
     "evidence": evidence,
     "iterate": iterate,
+    "eval": eval_cmd,
 }
 
 
