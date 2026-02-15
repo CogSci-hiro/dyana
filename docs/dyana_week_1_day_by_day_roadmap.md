@@ -165,11 +165,11 @@
 You may proceed to Week 2 **only if all are true**:
 
 - [ ] Single canonical 10 ms timebase everywhere
-- [ ] EvidenceTrack / EvidenceBundle used end-to-end
-- [ ] Decoder stable with fake or missing evidence
-- [ ] LEAK state blocks spurious IPUs
-- [ ] TextGrid outputs look sane
-- [ ] Metrics exist and are reproducible
+- [✅] EvidenceTrack / EvidenceBundle used end-to-end
+- [✅] Decoder stable with fake or missing evidence
+- [✅] LEAK state blocks spurious IPUs
+- [✅] TextGrid outputs look sane
+- [✅] Metrics exist and are reproducible
 
 > If any box is unchecked: fix it before adding complexity.
 
