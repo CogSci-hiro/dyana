@@ -94,8 +94,8 @@ the 10 ms grid.
 -   [ ] OVL evidence implemented (can be simple proxy)
 -   [✅] Transition penalties adjusted
 -   [ ] OVL does not explode switch rate
--   [ ] Structural metrics evaluated on hard segment
--   [ ] Rapid alternation metric checked
+-   [✅] Structural metrics evaluated on hard segment
+-   [⚠️] Rapid alternation metric checked
 
 ### Exit criteria
 
