@@ -12,10 +12,10 @@ def test_delta_report_computation_and_writes(tmp_path: Path) -> None:
             {
                 "id": "x1",
                 "tier": "easy",
-                "boundary_f1_20": 0.8,
-                "boundary_f1_50": 0.9,
+                "boundary_f1_20ms": 0.8,
+                "boundary_f1_50ms": 0.9,
                 "micro_ipus_per_min": 2.0,
-                "speaker_switches_per_min": 5.0,
+                "switches_per_min": 5.0,
             }
         ]
     }
@@ -24,10 +24,10 @@ def test_delta_report_computation_and_writes(tmp_path: Path) -> None:
             {
                 "id": "x1",
                 "tier": "easy",
-                "boundary_f1_20": 0.85,
-                "boundary_f1_50": 0.92,
+                "boundary_f1_20ms": 0.85,
+                "boundary_f1_50ms": 0.92,
                 "micro_ipus_per_min": 1.8,
-                "speaker_switches_per_min": 4.0,
+                "switches_per_min": 4.0,
             }
         ]
     }
@@ -41,7 +41,7 @@ def test_delta_report_computation_and_writes(tmp_path: Path) -> None:
         baseline_path=baseline_path,
     )
 
-    assert report["rows"][0]["boundary_f1_20_delta"] == pytest.approx(0.05)
+    assert report["rows"][0]["boundary_f1_20ms_delta"] == pytest.approx(0.05)
     assert report["rows"][0]["micro_ipus_per_min_delta"] == pytest.approx(-0.2)
     write_delta_report(report, tmp_path)
     assert (tmp_path / "delta.json").exists()

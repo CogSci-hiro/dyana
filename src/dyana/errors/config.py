@@ -7,6 +7,10 @@ import os
 import uuid
 
 
+class ConfigError(ValueError):
+    """Raised when required runtime configuration is missing or invalid."""
+
+
 @dataclass(frozen=True)
 class ErrorHandlingConfig:
     """

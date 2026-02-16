@@ -11,13 +11,14 @@ Key primitives
 - Pipeline: dependency-aware runner that skips meaningless downstream steps
 """
 
-from .config import ErrorHandlingConfig
+from .config import ConfigError, ErrorHandlingConfig
 from .logging import configure_logging, JsonlEventLogger
 from .reporter import ErrorReporter
 from .guards import step, guard
-from .pipeline import Pipeline
+from .pipeline import Pipeline, PipelineError
 
 __all__ = [
+    "ConfigError",
     "ErrorHandlingConfig",
     "JsonlEventLogger",
     "configure_logging",
@@ -25,4 +26,5 @@ __all__ = [
     "step",
     "guard",
     "Pipeline",
+    "PipelineError",
 ]

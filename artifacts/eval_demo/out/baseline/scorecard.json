@@ -1,0 +1,110 @@
+{
+  "by_tier": {
+    "easy": {
+      "boundary_f1_20": 0.0,
+      "boundary_f1_20ms": 0.0,
+      "boundary_f1_50": 0.0,
+      "boundary_f1_50ms": 0.0,
+      "iou_a": 1.0,
+      "iou_any": 1.0,
+      "iou_b": 1.0,
+      "micro_ipus_per_min": 0.0,
+      "rapid_alternations": 0.0,
+      "rapid_alternations_per_min": 0.0,
+      "speaker_switches_per_min": 0.0,
+      "switches_per_min": 0.0
+    },
+    "hard": {
+      "boundary_f1_20": 0.0,
+      "boundary_f1_20ms": 0.0,
+      "boundary_f1_50": 0.0,
+      "boundary_f1_50ms": 0.0,
+      "iou_a": 1.0,
+      "iou_any": 1.0,
+      "iou_b": 1.0,
+      "micro_ipus_per_min": 0.0,
+      "rapid_alternations": 0.0,
+      "rapid_alternations_per_min": 0.0,
+      "speaker_switches_per_min": 0.0,
+      "switches_per_min": 0.0
+    },
+    "synthetic": {
+      "boundary_f1_20": 0.0,
+      "boundary_f1_20ms": 0.0,
+      "boundary_f1_50": 0.0,
+      "boundary_f1_50ms": 0.0,
+      "iou_a": 0.0,
+      "iou_any": 0.0,
+      "iou_b": 0.0,
+      "micro_ipus_per_min": 0.0,
+      "rapid_alternations": 0.0,
+      "rapid_alternations_per_min": 0.0,
+      "speaker_switches_per_min": 0.0,
+      "switches_per_min": 0.0
+    }
+  },
+  "results": [
+    {
+      "boundary_f1_20": 0.0,
+      "boundary_f1_20ms": 0.0,
+      "boundary_f1_50": 0.0,
+      "boundary_f1_50ms": 0.0,
+      "id": "easy_1",
+      "iou_a": 1.0,
+      "iou_any": 1.0,
+      "iou_b": 1.0,
+      "micro_ipus_per_min": 0.0,
+      "rapid_alternations": 0,
+      "rapid_alternations_per_min": 0.0,
+      "speaker_switches_per_min": 0.0,
+      "switches_per_min": 0.0,
+      "tier": "easy"
+    },
+    {
+      "boundary_f1_20": 0.0,
+      "boundary_f1_20ms": 0.0,
+      "boundary_f1_50": 0.0,
+      "boundary_f1_50ms": 0.0,
+      "id": "hard_1",
+      "iou_a": 1.0,
+      "iou_any": 1.0,
+      "iou_b": 1.0,
+      "micro_ipus_per_min": 0.0,
+      "rapid_alternations": 0,
+      "rapid_alternations_per_min": 0.0,
+      "speaker_switches_per_min": 0.0,
+      "switches_per_min": 0.0,
+      "tier": "hard"
+    },
+    {
+      "boundary_f1_20": 0.0,
+      "boundary_f1_20ms": 0.0,
+      "boundary_f1_50": 0.0,
+      "boundary_f1_50ms": 0.0,
+      "id": "syn_leak_1",
+      "iou_a": 0.0,
+      "iou_any": 0.0,
+      "iou_b": 0.0,
+      "micro_ipus_per_min": 0.0,
+      "rapid_alternations": 0,
+      "rapid_alternations_per_min": 0.0,
+      "speaker_switches_per_min": 0.0,
+      "switches_per_min": 0.0,
+      "tier": "synthetic"
+    }
+  ],
+  "summary": {
+    "boundary_f1_20": 0.0,
+    "boundary_f1_20ms": 0.0,
+    "boundary_f1_50": 0.0,
+    "boundary_f1_50ms": 0.0,
+    "iou_a": 0.6666666666666666,
+    "iou_any": 0.6666666666666666,
+    "iou_b": 0.6666666666666666,
+    "micro_ipus_per_min": 0.0,
+    "rapid_alternations": 0.0,
+    "rapid_alternations_per_min": 0.0,
+    "speaker_switches_per_min": 0.0,
+    "switches_per_min": 0.0
+  }
+}

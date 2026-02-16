@@ -1,0 +1,32 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0
+xmax =         xmax = 0
+tiers? <exists>
+size = 4
+item []:
+    item []: 1
+        class = "IntervalTier"
+        name = "SpeakerA"
+        xmin = 0
+        xmax = 0
+        intervals: size = 0
+    item []: 1
+        class = "IntervalTier"
+        name = "SpeakerB"
+        xmin = 0
+        xmax = 0
+        intervals: size = 0
+    item []: 1
+        class = "IntervalTier"
+        name = "Overlap"
+        xmin = 0
+        xmax = 0
+        intervals: size = 0
+    item []: 1
+        class = "IntervalTier"
+        name = "Leak"
+        xmin = 0
+        xmax = 0
+        intervals: size = 0

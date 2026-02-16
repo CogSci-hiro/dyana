@@ -27,21 +27,22 @@ def write_scorecard(
     rows: List[Dict[str, float]],
     summary: Dict[str, Any],
 ) -> None:
+    sorted_rows = sorted(rows, key=lambda row: (str(row.get("tier", "")), str(row.get("id", ""))))
     payload = {
-        "results": rows,
+        "results": sorted_rows,
         "summary": summary,
-        "by_tier": aggregate_by_tier(rows),
+        "by_tier": aggregate_by_tier(sorted_rows),
     }
     path_json.parent.mkdir(parents=True, exist_ok=True)
     path_json.write_text(json.dumps(payload, indent=2, sort_keys=True))
 
-    fieldnames = list(rows[0].keys()) if rows else []
+    fieldnames = list(sorted_rows[0].keys()) if sorted_rows else []
     path_csv.parent.mkdir(parents=True, exist_ok=True)
     with open(path_csv, "w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         if fieldnames:
             writer.writeheader()
-            writer.writerows(rows)
+            writer.writerows(sorted_rows)
 
 
 def read_scorecard(path_json: Path) -> Dict[str, Any]:

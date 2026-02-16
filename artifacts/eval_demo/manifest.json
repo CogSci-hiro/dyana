@@ -1,0 +1,21 @@
+[
+  {
+    "id": "syn_leak_1",
+    "tier": "synthetic",
+    "scenario": "leakage_stress",
+    "audio_path": null,
+    "ref_path": null
+  },
+  {
+    "id": "easy_1",
+    "tier": "easy",
+    "audio_path": "/Users/hiro/PycharmProjects/dyana/artifacts/eval_demo/easy_real.wav",
+    "ref_path": "/Users/hiro/PycharmProjects/dyana/artifacts/eval_demo/easy_real_ref.npy"
+  },
+  {
+    "id": "hard_1",
+    "tier": "hard",
+    "audio_path": "/Users/hiro/PycharmProjects/dyana/artifacts/eval_demo/hard_real.wav",
+    "ref_path": "/Users/hiro/PycharmProjects/dyana/artifacts/eval_demo/hard_real_ref.npy"
+  }
+]

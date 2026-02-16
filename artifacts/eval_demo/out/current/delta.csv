@@ -1,0 +1,4 @@
+id,tier,boundary_f1_20ms_baseline,boundary_f1_20ms_current,boundary_f1_20ms_delta,boundary_f1_50ms_baseline,boundary_f1_50ms_current,boundary_f1_50ms_delta,micro_ipus_per_min_baseline,micro_ipus_per_min_current,micro_ipus_per_min_delta,switches_per_min_baseline,switches_per_min_current,switches_per_min_delta
+easy_1,easy,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+hard_1,hard,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+syn_leak_1,synthetic,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0

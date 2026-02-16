@@ -1,0 +1,93 @@
+{
+  "baseline": {
+    "mtime": 1771267696.468738,
+    "path": "artifacts/eval_demo/out/baseline/scorecard.json",
+    "sha1": "15ca2f0ba0c4aac0e2ef597465cde0d14dab6f6a"
+  },
+  "failed": false,
+  "failures": [],
+  "params": {
+    "leak_entry_bias": -2.0,
+    "ovl_transition_cost": -3.0,
+    "speaker_switch_penalty": -6.0
+  },
+  "rows": [
+    {
+      "boundary_f1_20ms_baseline": 0.0,
+      "boundary_f1_20ms_current": 0.0,
+      "boundary_f1_20ms_delta": 0.0,
+      "boundary_f1_50ms_baseline": 0.0,
+      "boundary_f1_50ms_current": 0.0,
+      "boundary_f1_50ms_delta": 0.0,
+      "id": "easy_1",
+      "micro_ipus_per_min_baseline": 0.0,
+      "micro_ipus_per_min_current": 0.0,
+      "micro_ipus_per_min_delta": 0.0,
+      "switches_per_min_baseline": 0.0,
+      "switches_per_min_current": 0.0,
+      "switches_per_min_delta": 0.0,
+      "tier": "easy"
+    },
+    {
+      "boundary_f1_20ms_baseline": 0.0,
+      "boundary_f1_20ms_current": 0.0,
+      "boundary_f1_20ms_delta": 0.0,
+      "boundary_f1_50ms_baseline": 0.0,
+      "boundary_f1_50ms_current": 0.0,
+      "boundary_f1_50ms_delta": 0.0,
+      "id": "hard_1",
+      "micro_ipus_per_min_baseline": 0.0,
+      "micro_ipus_per_min_current": 0.0,
+      "micro_ipus_per_min_delta": 0.0,
+      "switches_per_min_baseline": 0.0,
+      "switches_per_min_current": 0.0,
+      "switches_per_min_delta": 0.0,
+      "tier": "hard"
+    },
+    {
+      "boundary_f1_20ms_baseline": 0.0,
+      "boundary_f1_20ms_current": 0.0,
+      "boundary_f1_20ms_delta": 0.0,
+      "boundary_f1_50ms_baseline": 0.0,
+      "boundary_f1_50ms_current": 0.0,
+      "boundary_f1_50ms_delta": 0.0,
+      "id": "syn_leak_1",
+      "micro_ipus_per_min_baseline": 0.0,
+      "micro_ipus_per_min_current": 0.0,
+      "micro_ipus_per_min_delta": 0.0,
+      "switches_per_min_baseline": 0.0,
+      "switches_per_min_current": 0.0,
+      "switches_per_min_delta": 0.0,
+      "tier": "synthetic"
+    }
+  ],
+  "summary": {
+    "overall_delta": {
+      "boundary_f1_20ms": 0.0,
+      "boundary_f1_50ms": 0.0,
+      "micro_ipus_per_min": 0.0,
+      "switches_per_min": 0.0
+    },
+    "tier_delta": {
+      "easy": {
+        "boundary_f1_20ms": 0.0,
+        "boundary_f1_50ms": 0.0,
+        "micro_ipus_per_min": 0.0,
+        "switches_per_min": 0.0
+      },
+      "hard": {
+        "boundary_f1_20ms": 0.0,
+        "boundary_f1_50ms": 0.0,
+        "micro_ipus_per_min": 0.0,
+        "switches_per_min": 0.0
+      },
+      "synthetic": {
+        "boundary_f1_20ms": 0.0,
+        "boundary_f1_50ms": 0.0,
+        "micro_ipus_per_min": 0.0,
+        "switches_per_min": 0.0
+      }
+    }
+  },
+  "warnings": []
+}

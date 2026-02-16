@@ -9,6 +9,10 @@ from .guards import step
 T = TypeVar("T")
 
 
+class PipelineError(RuntimeError):
+    """Raised when a pipeline run violates hard guardrails."""
+
+
 @dataclass(frozen=True)
 class _StepDef:
     name: str

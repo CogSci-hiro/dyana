@@ -6,10 +6,10 @@ from typing import Any, Dict, List, Sequence
 
 import numpy as np
 
-from dyana.core.timebase import CANONICAL_HOP_SECONDS, TimeBase
-from dyana.decode import decoder, fusion
+from dyana.core.timebase import CANONICAL_HOP_SECONDS
 from dyana.decode.params import DecodeTuningParams
-from dyana.decode.ipu import Segment, extract_ipus
+from dyana.decode.ipu import Segment
+from dyana.eval.synthetic_cases import materialize_synthetic_case
 from dyana.eval.metrics import (
     boundary_f1,
     framewise_iou,
@@ -17,7 +17,6 @@ from dyana.eval.metrics import (
     rapid_alternations,
     speaker_switches_per_min,
 )
-from dyana.evidence.bundle import EvidenceBundle
 from dyana.pipeline.run_pipeline import run_pipeline
 from dyana.io.praat_textgrid import parse_textgrid
 
@@ -77,6 +76,8 @@ def evaluate_item(
     cache_dir: Path | None = None,
     tuning_params: DecodeTuningParams | None = None,
 ) -> Dict[str, Any]:
+    if item.get("tier") == "synthetic" and item.get("audio_path") is None:
+        item = materialize_synthetic_case(item, out_dir / "_synthetic")
     audio_path = Path(item["audio_path"])
     run_pipeline(audio_path, out_dir=out_dir, cache_dir=cache_dir, tuning_params=tuning_params)
 
@@ -126,12 +127,16 @@ def evaluate_item(
         "tier": item.get("tier", "unknown"),
         "boundary_f1_20": b20["f1"],
         "boundary_f1_50": b50["f1"],
+        "boundary_f1_20ms": b20["f1"],
+        "boundary_f1_50ms": b50["f1"],
         "iou_a": iou_a,
         "iou_b": iou_b,
         "iou_any": iou_any,
         "micro_ipus_per_min": micro,
         "speaker_switches_per_min": switches,
+        "switches_per_min": switches,
         "rapid_alternations": rapid,
+        "rapid_alternations_per_min": rapid / max((n_frames * hop_s) / 60.0, 1e-9),
     }
 
 
@@ -144,7 +149,8 @@ def evaluate_manifest(
     manifest = json.loads(manifest_path.read_text())
     out_dir.mkdir(parents=True, exist_ok=True)
     results = []
-    for item in manifest:
+    sorted_manifest = sorted(manifest, key=lambda entry: (str(entry.get("tier", "")), str(entry.get("id", ""))))
+    for item in sorted_manifest:
         res = evaluate_item(item, out_dir / item["id"], cache_dir=cache_dir, tuning_params=tuning_params)
         results.append(res)
     return results
