@@ -7,6 +7,7 @@ from pathlib import Path
 
 from dyana.decode.params import DecodeTuningParams
 from dyana.errors import ConfigError, PipelineError
+from dyana.errors.config import load_config, resolve_out_dir
 from dyana.eval.harness import evaluate_manifest
 from dyana.eval.scorecard import aggregate, read_scorecard, write_scorecard
 from dyana.eval.tuning import METRIC_KEYS, compute_delta_report, write_delta_report
@@ -68,20 +69,19 @@ def _print_summary(report: dict) -> None:
 
 def run(args: argparse.Namespace) -> None:
     manifest_raw = getattr(args, "manifest", None)
-    out_dir_raw = getattr(args, "out_dir", None)
     baseline_raw = getattr(args, "baseline", None)
 
     if not manifest_raw:
         raise ConfigError("dyana tune requires --manifest <path>.")
-    if not out_dir_raw:
-        raise ConfigError("dyana tune requires --out-dir <path>.")
     if not baseline_raw:
         raise ConfigError("dyana tune requires --baseline <baseline_scorecard.json>.")
 
     manifest_path = Path(manifest_raw)
     baseline_path = Path(baseline_raw)
     run_name = str(getattr(args, "run_name", "current"))
-    run_out_dir = Path(out_dir_raw) / run_name
+    config = load_config(Path.cwd())
+    root_out_dir = resolve_out_dir(config, Path(args.out_dir) if getattr(args, "out_dir", None) else None)
+    run_out_dir = root_out_dir / run_name
     cache_dir = Path(args.cache_dir) if getattr(args, "cache_dir", None) else None
 
     params = _select_grid_params() if args.grid else _build_params(args)

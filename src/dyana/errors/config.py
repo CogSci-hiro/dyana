@@ -2,13 +2,87 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Any, Literal, Optional
 import os
 import uuid
 
 
 class ConfigError(ValueError):
     """Raised when required runtime configuration is missing or invalid."""
+
+
+def _parse_minimal_yaml(text: str) -> dict[str, Any]:
+    """Parse a tiny subset of YAML used by DyANA config files."""
+
+    data: dict[str, Any] = {}
+    current_section: str | None = None
+    for raw_line in text.splitlines():
+        line = raw_line.split("#", 1)[0].rstrip()
+        if not line.strip():
+            continue
+
+        if not line.startswith(" "):
+            if ":" not in line:
+                continue
+            key, value = [part.strip() for part in line.split(":", 1)]
+            if value == "":
+                data[key] = {}
+                current_section = key
+            else:
+                data[key] = value.strip("\"'")
+                current_section = None
+            continue
+
+        if current_section is None:
+            continue
+        child = line.strip()
+        if ":" not in child:
+            continue
+        key, value = [part.strip() for part in child.split(":", 1)]
+        section = data.setdefault(current_section, {})
+        if isinstance(section, dict):
+            section[key] = value.strip("\"'")
+    return data
+
+
+def load_config(root: Path) -> dict[str, Any]:
+    """
+    Load DyANA config from repository root if present.
+
+    Search order:
+    1) ``config.yaml``
+    2) ``dyana.yaml``
+    """
+
+    for filename in ("config.yaml", "dyana.yaml"):
+        config_path = root / filename
+        if config_path.exists():
+            return _parse_minimal_yaml(config_path.read_text())
+    return {}
+
+
+def resolve_out_dir(config: dict[str, Any], cli_out_dir: Path | None) -> Path:
+    """
+    Resolve output directory from CLI arg or config.
+
+    CLI value has highest priority. Fallbacks:
+    - ``paths.out_dir``
+    - ``io.out_dir``
+    """
+
+    if cli_out_dir is not None:
+        return cli_out_dir
+
+    for section_name in ("paths", "io"):
+        section = config.get(section_name)
+        if isinstance(section, dict):
+            out_dir = section.get("out_dir")
+            if isinstance(out_dir, str) and out_dir.strip():
+                return Path(out_dir.strip())
+
+    raise ConfigError(
+        "No out_dir provided. Pass --out-dir or create config.yaml with paths.out_dir."
+    )
 
 
 @dataclass(frozen=True)

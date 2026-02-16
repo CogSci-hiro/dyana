@@ -6,6 +6,10 @@ import argparse
 from pathlib import Path
 from typing import List
 
+from dyana.errors import ConfigError
+from dyana.errors.config import load_config, resolve_out_dir
+
+
 def add_subparser(subparsers: argparse._SubParsersAction) -> None:
     """Register the `run` command."""
     parser = subparsers.add_parser("run", help="Run DYANA end-to-end.")
@@ -22,11 +26,15 @@ def add_subparser(subparsers: argparse._SubParsersAction) -> None:
 
 def run(args: argparse.Namespace) -> None:
     """Execute the `run` command."""
-    if not hasattr(args, "audio") or not hasattr(args, "out_dir") or args.audio is None or args.out_dir is None:
+    if not hasattr(args, "audio") or args.audio is None:
         return
     from dyana.pipeline.run_pipeline import run_pipeline  # local import to avoid heavy deps at parse time
     audio_path = Path(args.audio)
-    out_dir = Path(args.out_dir)
+    config = load_config(Path.cwd())
+    try:
+        out_dir = resolve_out_dir(config, Path(args.out_dir) if getattr(args, "out_dir", None) else None)
+    except ConfigError as error:
+        raise ConfigError(f"dyana run requires output directory. {error}") from error
     cache_dir = Path(args.cache_dir) if args.cache_dir else None
 
     files: List[Path]

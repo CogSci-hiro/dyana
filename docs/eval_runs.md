@@ -41,3 +41,8 @@ dyana tune --manifest manifest.json --baseline out/baseline/scorecard.json --out
 - `out/current/scorecard.csv`
 - `out/current/delta.json`
 - `out/current/delta.csv`
+
+## Artifact policy
+
+- Generic run outputs are ignored via `.gitignore` (`out/` and `artifacts/**/out/`).
+- The small reproducible demo under `artifacts/eval_demo/out/` is kept trackable.
