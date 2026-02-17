@@ -2,6 +2,7 @@ import numpy as np
 
 from dyana.core.timebase import TimeBase
 from dyana.decode import decoder, fusion, state_space
+from dyana.decode.ipu import extract_ipus
 from dyana.evidence.base import EvidenceTrack
 from dyana.evidence.bundle import EvidenceBundle
 from dyana.evidence.leakage import LEAKAGE_TRACK_NAME
@@ -102,3 +103,17 @@ def test_diagnostic_counter_counts_starts_after_leak() -> None:
     states = ["SIL", "LEAK", "LEAK", "A", "A", "SIL", "LEAK", "OVL", "SIL"]
     diagnostics = decoder.decode_diagnostics(states)
     assert diagnostics["ipu_start_after_leak_count"] == 2
+
+
+def test_leakage_only_region_does_not_create_speaker_ipus() -> None:
+    n_frames = 40
+    tb = TimeBase.canonical(n_frames=n_frames)
+    vad = np.full(n_frames, 0.2, dtype=np.float32)
+    leak = np.zeros(n_frames, dtype=np.float32)
+    leak[10:30] = 0.95
+    bundle = _bundle_with_tracks(n_frames=n_frames, vad_values=vad, leak_values=leak)
+    states = decoder.decode_with_constraints(fusion.fuse_bundle_to_scores(bundle))
+    ipus_a = extract_ipus(states, tb, "A", min_duration_s=0.2)
+    ipus_b = extract_ipus(states, tb, "B", min_duration_s=0.2)
+    assert len(ipus_a) == 0
+    assert len(ipus_b) == 0

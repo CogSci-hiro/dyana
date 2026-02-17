@@ -26,6 +26,13 @@ def _write_baseline(path: Path) -> None:
                 "switches_per_min": 2.0,
             }
         ],
+        "metadata": {
+            "params": {
+                "speaker_switch_penalty": -5.0,
+                "leak_entry_bias": -2.0,
+                "ovl_transition_cost": -3.0,
+            }
+        },
         "summary": {},
     }
     path.write_text(json.dumps(payload))

@@ -9,8 +9,15 @@ from typing import Any, Dict, List
 def aggregate(results: List[Dict[str, float]]) -> Dict[str, float]:
     if not results:
         return {}
-    keys = [k for k in results[0] if k not in ("id", "tier")]
-    return {k: float(sum(r[k] for r in results) / len(results)) for k in keys}
+    keys = [
+        key
+        for key, value in results[0].items()
+        if key not in ("id", "tier", "status") and isinstance(value, (int, float))
+    ]
+    return {
+        key: float(sum(float(row.get(key, 0.0)) for row in results) / len(results))
+        for key in keys
+    }
 
 
 def aggregate_by_tier(results: List[Dict[str, float]]) -> Dict[str, Dict[str, float]]:
@@ -26,12 +33,14 @@ def write_scorecard(
     path_csv: Path,
     rows: List[Dict[str, float]],
     summary: Dict[str, Any],
+    metadata: Dict[str, Any] | None = None,
 ) -> None:
     sorted_rows = sorted(rows, key=lambda row: (str(row.get("tier", "")), str(row.get("id", ""))))
     payload = {
         "results": sorted_rows,
         "summary": summary,
         "by_tier": aggregate_by_tier(sorted_rows),
+        "metadata": metadata or {},
     }
     path_json.parent.mkdir(parents=True, exist_ok=True)
     path_json.write_text(json.dumps(payload, indent=2, sort_keys=True))

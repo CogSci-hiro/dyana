@@ -59,10 +59,13 @@ def base_transition_matrix(
     ovl = name_to_idx["OVL"]
     mat[sil, leak] = LEAK_FORBID
 
-    for other in ("SIL", "A", "B"):
-        idx = name_to_idx[other]
-        mat[ovl, idx] = params.ovl_transition_cost
-        mat[idx, ovl] = params.ovl_transition_cost
+    a_to_ovl, b_to_ovl, ovl_to_a, ovl_to_b = params.resolved_ovl_costs()
+    mat[name_to_idx["A"], ovl] = a_to_ovl
+    mat[name_to_idx["B"], ovl] = b_to_ovl
+    mat[ovl, name_to_idx["A"]] = ovl_to_a
+    mat[ovl, name_to_idx["B"]] = ovl_to_b
+    mat[name_to_idx["SIL"], ovl] = params.ovl_transition_cost
+    mat[ovl, name_to_idx["SIL"]] = params.ovl_transition_cost
 
     # Leak transitions: silence-adjacent and non-initiating for speaker IPUs.
     for src_name in ("A", "B", "OVL"):

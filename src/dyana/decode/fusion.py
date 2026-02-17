@@ -9,6 +9,7 @@ from dyana.core.timebase import CANONICAL_HOP_SECONDS
 from dyana.evidence.bundle import EvidenceBundle
 from dyana.evidence.base import EvidenceTrack
 from dyana.evidence.leakage import LEAKAGE_TRACK_NAME
+from dyana.evidence.overlap import OVERLAP_PROXY_TRACK_NAME
 from dyana.decode import state_space
 
 # ---------- Constants ----------
@@ -22,6 +23,7 @@ W_LEAK_SIL_BIAS: float = 0.5
 LEAK_BASELINE_PENALTY: float = -3.0
 W_PRIOR: float = 0.4
 OVL_BONUS: float = 0.4
+W_OVL_PROXY: float = 0.5
 
 
 def _require_prob_or_logit(track: EvidenceTrack, name: str) -> NDArray[np.floating]:
@@ -82,6 +84,7 @@ def fuse_bundle_to_scores(bundle: EvidenceBundle) -> NDArray[np.floating]:
     if leak is None:
         leak = bundle.get("leak")
     prior = bundle.get("prior_ab")
+    overlap_proxy = bundle.get(OVERLAP_PROXY_TRACK_NAME)
 
     # Speech / silence
     if vad is not None:
@@ -133,6 +136,12 @@ def fuse_bundle_to_scores(bundle: EvidenceBundle) -> NDArray[np.floating]:
         # Missing track should not crash decoding; keep conservative baseline.
         log_leak = np.zeros(T, dtype=float)
 
+    if overlap_proxy is not None:
+        p_ovl_proxy = _require_prob_or_logit(overlap_proxy, OVERLAP_PROXY_TRACK_NAME)
+        log_ovl_proxy = _log_prob(p_ovl_proxy)
+    else:
+        log_ovl_proxy = np.zeros(T, dtype=float)
+
     idx_sil = state_space.state_index("SIL")
     idx_a = state_space.state_index("A")
     idx_b = state_space.state_index("B")
@@ -142,7 +151,12 @@ def fuse_bundle_to_scores(bundle: EvidenceBundle) -> NDArray[np.floating]:
     scores[:, idx_sil] += W_SPEECH * log_nonspeech
     scores[:, idx_a] += W_SPEECH * log_speech + W_DIAR * log_pa + W_PRIOR * prior_offset_a
     scores[:, idx_b] += W_SPEECH * log_speech + W_DIAR * log_pb + W_PRIOR * prior_offset_b
-    scores[:, idx_ovl] += W_SPEECH * log_speech + W_OVL * (log_pa + log_pb) + OVL_BONUS
+    scores[:, idx_ovl] += (
+        W_SPEECH * log_speech
+        + W_OVL * (log_pa + log_pb)
+        + W_OVL_PROXY * log_ovl_proxy
+        + OVL_BONUS
+    )
     # LEAK favors leakage evidence and silence-adjacent behavior.
     scores[:, idx_leak] += (
         W_LEAK * log_leak

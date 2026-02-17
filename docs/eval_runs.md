@@ -33,6 +33,13 @@ dyana eval --manifest manifest.json --out-dir out --run-name baseline
 dyana tune --manifest manifest.json --baseline out/baseline/scorecard.json --out-dir out --run-name current
 ```
 
+Single-suite form:
+
+```bash
+dyana eval --suite week1 --segments synthetic_leakage hard easy --out-dir out --run-name baseline
+dyana tune --suite week1 --segments synthetic_leakage hard easy --baseline out/baseline/scorecard.json --out-dir out --run-name current
+```
+
 ## Outputs
 
 - `out/baseline/scorecard.json`

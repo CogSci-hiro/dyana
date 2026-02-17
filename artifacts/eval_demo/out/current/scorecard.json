@@ -43,8 +43,20 @@
       "switches_per_min": 0.0
     }
   },
+  "metadata": {
+    "params": {
+      "a_to_ovl_cost": null,
+      "b_to_ovl_cost": null,
+      "leak_entry_bias": -2.0,
+      "ovl_to_a_cost": null,
+      "ovl_to_b_cost": null,
+      "ovl_transition_cost": -3.0,
+      "speaker_switch_penalty": -6.0
+    }
+  },
   "results": [
     {
+      "audio_path": "/Users/hiro/PycharmProjects/dyana/artifacts/eval_demo/easy_real.wav",
       "boundary_f1_20": 0.0,
       "boundary_f1_20ms": 0.0,
       "boundary_f1_50": 0.0,
@@ -57,10 +69,12 @@
       "rapid_alternations": 0,
       "rapid_alternations_per_min": 0.0,
       "speaker_switches_per_min": 0.0,
+      "status": "ok",
       "switches_per_min": 0.0,
       "tier": "easy"
     },
     {
+      "audio_path": "/Users/hiro/PycharmProjects/dyana/artifacts/eval_demo/hard_real.wav",
       "boundary_f1_20": 0.0,
       "boundary_f1_20ms": 0.0,
       "boundary_f1_50": 0.0,
@@ -73,10 +87,12 @@
       "rapid_alternations": 0,
       "rapid_alternations_per_min": 0.0,
       "speaker_switches_per_min": 0.0,
+      "status": "ok",
       "switches_per_min": 0.0,
       "tier": "hard"
     },
     {
+      "audio_path": "artifacts/eval_demo/out/current/syn_leak_1/_synthetic/syn_leak_1.wav",
       "boundary_f1_20": 0.0,
       "boundary_f1_20ms": 0.0,
       "boundary_f1_50": 0.0,
@@ -89,6 +105,7 @@
       "rapid_alternations": 0,
       "rapid_alternations_per_min": 0.0,
       "speaker_switches_per_min": 0.0,
+      "status": "ok",
       "switches_per_min": 0.0,
       "tier": "synthetic"
     }

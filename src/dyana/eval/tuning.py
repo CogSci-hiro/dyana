@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -14,11 +15,12 @@ METRIC_KEYS = [
     "switches_per_min",
 ]
 
-EASY_BOUNDARY_DROP_THRESHOLD = -0.05
+EASY_BOUNDARY_DROP_THRESHOLD = -0.01
 EASY_SWITCH_INCREASE_FACTOR = 1.25
 EASY_MICRO_IPU_INCREASE_FACTOR = 1.25
 SUSPICIOUS_SWITCH_WORSE_FACTOR = 1.50
 SUSPICIOUS_MICRO_WORSE_FACTOR = 1.50
+DELTA_EPSILON = 1e-9
 
 
 def _index_by_id(rows: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
@@ -36,6 +38,19 @@ def _group_by_tier(rows: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]
     return grouped
 
 
+def _current_commit_hash() -> str | None:
+    try:
+        proc = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        return proc.stdout.strip() or None
+    except Exception:
+        return None
+
+
 def compute_delta_report(
     baseline_payload: Dict[str, Any],
     current_payload: Dict[str, Any],
@@ -43,8 +58,14 @@ def compute_delta_report(
     params: Dict[str, float],
     baseline_path: Path,
 ) -> Dict[str, Any]:
+    baseline_meta = dict(baseline_payload.get("metadata", {}))
+    baseline_params = dict(baseline_meta.get("params", {}))
+    if not baseline_params:
+        baseline_params = dict(params)
     baseline_rows = list(baseline_payload.get("results", []))
     current_rows = list(current_payload.get("results", []))
+    baseline_rows = [row for row in baseline_rows if str(row.get("status", "ok")) == "ok"]
+    current_rows = [row for row in current_rows if str(row.get("status", "ok")) == "ok"]
     baseline_by_id = _index_by_id(baseline_rows)
     current_by_id = _index_by_id(current_rows)
 
@@ -66,12 +87,21 @@ def compute_delta_report(
 
     failures: List[str] = []
     warnings: List[str] = []
+    attribution: Dict[str, Any] = {
+        "baseline_params": baseline_params,
+        "current_params": params,
+        "changed_params": {
+            key: {"baseline": baseline_params.get(key), "current": params.get(key)}
+            for key in sorted(set(baseline_params) | set(params))
+            if baseline_params.get(key) != params.get(key)
+        },
+    }
 
     for row in [item for item in per_item if item.get("tier") == "easy"]:
         if row["boundary_f1_20ms_delta"] < EASY_BOUNDARY_DROP_THRESHOLD:
-            failures.append(f"easy regression: boundary_f1_20ms drop > 0.05 for {row['id']}")
+            failures.append(f"easy regression: boundary_f1_20ms drop > 0.01 for {row['id']}")
         if row["boundary_f1_50ms_delta"] < EASY_BOUNDARY_DROP_THRESHOLD:
-            failures.append(f"easy regression: boundary_f1_50ms drop > 0.05 for {row['id']}")
+            failures.append(f"easy regression: boundary_f1_50ms drop > 0.01 for {row['id']}")
         baseline_switch = max(row["switches_per_min_baseline"], 1e-9)
         if row["switches_per_min_current"] > baseline_switch * EASY_SWITCH_INCREASE_FACTOR:
             failures.append(f"easy regression: switches_per_min increase > 25% for {row['id']}")
@@ -90,6 +120,14 @@ def compute_delta_report(
                     f"suspicious improvement: hard boundary improved but instability worsened for {row['id']}"
                 )
 
+    has_nonzero_delta = any(
+        abs(float(row.get(f"{metric}_delta", 0.0))) > DELTA_EPSILON
+        for row in per_item
+        for metric in METRIC_KEYS
+    )
+    if has_nonzero_delta and not attribution["changed_params"]:
+        failures.append("UNEXPLAINED: metrics changed but decoder parameter overrides are identical to baseline.")
+
     baseline_bytes = baseline_path.read_bytes()
     baseline_hash = hashlib.sha1(baseline_bytes).hexdigest()
 
@@ -107,6 +145,10 @@ def compute_delta_report(
             "path": str(baseline_path),
             "sha1": baseline_hash,
             "mtime": baseline_path.stat().st_mtime,
+        },
+        "metadata": {
+            "git_commit": _current_commit_hash(),
+            "attribution": attribution,
         },
         "rows": per_item,
         "summary": summary,

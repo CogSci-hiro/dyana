@@ -1,4 +1,4 @@
-id,tier,boundary_f1_20,boundary_f1_50,boundary_f1_20ms,boundary_f1_50ms,iou_a,iou_b,iou_any,micro_ipus_per_min,speaker_switches_per_min,switches_per_min,rapid_alternations,rapid_alternations_per_min
-easy_1,easy,0.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0,0.0,0.0,0,0.0
-hard_1,hard,0.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0,0.0,0.0,0,0.0
-syn_leak_1,synthetic,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0.0
+id,tier,status,audio_path,boundary_f1_20ms,boundary_f1_50ms,boundary_f1_20,boundary_f1_50,iou_a,iou_b,iou_any,micro_ipus_per_min,switches_per_min,speaker_switches_per_min,rapid_alternations,rapid_alternations_per_min
+easy_1,easy,ok,/Users/hiro/PycharmProjects/dyana/artifacts/eval_demo/easy_real.wav,0.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0,0.0,0.0,0,0.0
+hard_1,hard,ok,/Users/hiro/PycharmProjects/dyana/artifacts/eval_demo/hard_real.wav,0.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0,0.0,0.0,0,0.0
+syn_leak_1,synthetic,ok,artifacts/eval_demo/out/current/syn_leak_1/_synthetic/syn_leak_1.wav,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0.0

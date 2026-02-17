@@ -1,13 +1,41 @@
 {
   "baseline": {
-    "mtime": 1771274079.645381,
+    "mtime": 1771285675.8959932,
     "path": "artifacts/eval_demo/out/baseline/scorecard.json",
-    "sha1": "15ca2f0ba0c4aac0e2ef597465cde0d14dab6f6a"
+    "sha1": "9b575d1aefab40acb8a7babe01d76dfc612a5bfc"
   },
   "failed": false,
   "failures": [],
+  "metadata": {
+    "attribution": {
+      "baseline_params": {
+        "a_to_ovl_cost": null,
+        "b_to_ovl_cost": null,
+        "leak_entry_bias": -2.0,
+        "ovl_to_a_cost": null,
+        "ovl_to_b_cost": null,
+        "ovl_transition_cost": -3.0,
+        "speaker_switch_penalty": -6.0
+      },
+      "changed_params": {},
+      "current_params": {
+        "a_to_ovl_cost": null,
+        "b_to_ovl_cost": null,
+        "leak_entry_bias": -2.0,
+        "ovl_to_a_cost": null,
+        "ovl_to_b_cost": null,
+        "ovl_transition_cost": -3.0,
+        "speaker_switch_penalty": -6.0
+      }
+    },
+    "git_commit": "cec8f77ef05b698697c7b6ff78accf264e2a6990"
+  },
   "params": {
+    "a_to_ovl_cost": null,
+    "b_to_ovl_cost": null,
     "leak_entry_bias": -2.0,
+    "ovl_to_a_cost": null,
+    "ovl_to_b_cost": null,
     "ovl_transition_cost": -3.0,
     "speaker_switch_penalty": -6.0
   },
