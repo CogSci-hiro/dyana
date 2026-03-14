@@ -1,0 +1,1107 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>dyana.errors &#8212; DYANA</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=1a22986d" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=5c79bd3c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/dyana.errors';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="dyana.errors.config" href="dyana.errors.config.html" />
+    <link rel="prev" title="dyana.decode.state_space" href="dyana.decode.state_space.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.0" />
+    <meta name="docbuild:last-update" content="Mar 14, 2026"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">DYANA</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../cli.html">
+    Command Line Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../architecture.html">
+    Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../project_notes.html">
+    Project Notes
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/CogSci-hiro/dyana" title="Repository" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Repository</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../cli.html">
+    Command Line Interface
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../architecture.html">
+    Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../project_notes.html">
+    Project Notes
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/CogSci-hiro/dyana" title="Repository" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Repository</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="dyana.cli.html">dyana.cli</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="dyana.cli.commands.html">dyana.cli.commands</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="dyana.cli.commands.decode.html">dyana.cli.commands.decode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dyana.cli.commands.eval.html">dyana.cli.commands.eval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dyana.cli.commands.evidence.html">dyana.cli.commands.evidence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dyana.cli.commands.iterate.html">dyana.cli.commands.iterate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dyana.cli.commands.run.html">dyana.cli.commands.run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dyana.cli.commands.tune.html">dyana.cli.commands.tune</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.cli.main.html">dyana.cli.main</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="dyana.core.html">dyana.core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="dyana.core.cache.html">dyana.core.cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.core.calibrate.html">dyana.core.calibrate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.core.resample.html">dyana.core.resample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.core.timebase.html">dyana.core.timebase</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.core.types.html">dyana.core.types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="dyana.decode.html">dyana.decode</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="dyana.decode.constraints.html">dyana.decode.constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.decode.decoder.html">dyana.decode.decoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.decode.fusion.html">dyana.decode.fusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.decode.ipu.html">dyana.decode.ipu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.decode.params.html">dyana.decode.params</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.decode.state_space.html">dyana.decode.state_space</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">dyana.errors</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="dyana.errors.config.html">dyana.errors.config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.errors.guards.html">dyana.errors.guards</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.errors.logging.html">dyana.errors.logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.errors.pipeline.html">dyana.errors.pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.errors.reporter.html">dyana.errors.reporter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.errors.types.html">dyana.errors.types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="dyana.eval.html">dyana.eval</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="dyana.eval.harness.html">dyana.eval.harness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.eval.metrics.html">dyana.eval.metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.eval.scorecard.html">dyana.eval.scorecard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.eval.synthetic_cases.html">dyana.eval.synthetic_cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.eval.tuning.html">dyana.eval.tuning</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="dyana.evidence.html">dyana.evidence</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="dyana.evidence.base.html">dyana.evidence.base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.evidence.bundle.html">dyana.evidence.bundle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.evidence.diarization.html">dyana.evidence.diarization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.evidence.energy.html">dyana.evidence.energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.evidence.leakage.html">dyana.evidence.leakage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.evidence.linguistic_hints.html">dyana.evidence.linguistic_hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.evidence.mic_priors.html">dyana.evidence.mic_priors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.evidence.prosody.html">dyana.evidence.prosody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.evidence.separation.html">dyana.evidence.separation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.evidence.synthetic.html">dyana.evidence.synthetic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.evidence.vad.html">dyana.evidence.vad</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="dyana.io.html">dyana.io</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="dyana.io.artifacts.html">dyana.io.artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.io.audio.html">dyana.io.audio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.io.bids_like.html">dyana.io.bids_like</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.io.praat_textgrid.html">dyana.io.praat_textgrid</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="dyana.iterate.html">dyana.iterate</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="dyana.iterate.invariants.html">dyana.iterate.invariants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.iterate.loop.html">dyana.iterate.loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.iterate.policy.html">dyana.iterate.policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.iterate.uncertainty.html">dyana.iterate.uncertainty</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="dyana.pipeline.html">dyana.pipeline</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="dyana.pipeline.run_pipeline.html">dyana.pipeline.run_pipeline</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="dyana.version.html">dyana.version</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">dyana.errors</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-dyana.errors">
+<span id="dyana-errors"></span><h1>dyana.errors<a class="headerlink" href="#module-dyana.errors" title="Link to this heading">#</a></h1>
+<p>errors subpackage: robust error handling + logging for long-running workflows.</p>
+<section id="key-primitives">
+<h2>Key primitives<a class="headerlink" href="#key-primitives" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>ErrorHandlingConfig: global config (mode, log paths, JSONL, etc.)</p></li>
+<li><p>configure_logging(): console + file logging, optional JSONL event logger</p></li>
+<li><p>ErrorReporter: captures failures/skips and renders end-of-run report</p></li>
+<li><p>step(): context manager to wrap a named pipeline step</p></li>
+<li><p>guard(): one-liner wrapper for callables</p></li>
+<li><p>Pipeline: dependency-aware runner that skips meaningless downstream steps</p></li>
+</ul>
+</section>
+<dl class="py exception">
+<dt class="sig sig-object py" id="dyana.errors.ConfigError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">dyana.errors.</span></span><span class="sig-name descname"><span class="pre">ConfigError</span></span><a class="reference internal" href="../../_modules/dyana/errors/config.html#ConfigError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ConfigError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>Raised when required runtime configuration is missing or invalid.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="dyana.errors.PipelineError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">dyana.errors.</span></span><span class="sig-name descname"><span class="pre">PipelineError</span></span><a class="reference internal" href="../../_modules/dyana/errors/pipeline.html#PipelineError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.PipelineError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></p>
+<p>Raised when a pipeline run violates hard guardrails.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dyana.errors.ErrorHandlingConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">dyana.errors.</span></span><span class="sig-name descname"><span class="pre">ErrorHandlingConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'run'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('logs')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_jsonl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_failures</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treat_warnings_as_errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/config.html#ErrorHandlingConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorHandlingConfig" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Configuration for error-handling + logging behavior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> (<em>Literal</em><em>[</em><em>'debug'</em><em>, </em><em>'run'</em><em>]</em>) – “debug” re-raises immediately on failure; “run” records failures and continues
+when it still makes sense (skipping dependent steps).</p></li>
+<li><p><strong>log_dir</strong> (<em>pathlib.Path</em>) – Directory where log files and JSONL event logs are written.</p></li>
+<li><p><strong>run_id</strong> (<em>str</em>) – Unique identifier for the run. If “auto”, a UUID4 is generated.</p></li>
+<li><p><strong>console_level</strong> (<em>int</em>) – Logging level for console output.</p></li>
+<li><p><strong>file_level</strong> (<em>int</em>) – Logging level for file output.</p></li>
+<li><p><strong>write_jsonl</strong> (<em>bool</em>) – If True, writes structured JSONL events to &lt;log_dir&gt;/events_&lt;run_id&gt;.jsonl.</p></li>
+<li><p><strong>max_failures</strong> (<em>int</em><em> | </em><em>None</em>) – If set, stops scheduling new work once the number of <em>failed</em> steps reaches this value.
+In “debug” mode this is ignored (you stop at first failure anyway).</p></li>
+<li><p><strong>treat_warnings_as_errors</strong> (<em>bool</em>) – Optional knob if you later want to elevate warnings to failures in a single place.</p></li>
+<li><p><strong>env_prefix</strong> (<em>str</em>) – If you want environment-variable overrides, set a prefix like <code class="docutils literal notranslate"><span class="pre">&quot;PALIMPS_&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;DYANA_&quot;</span></code>.</p></li>
+<li><p><strong>example</strong> (<em>Usage</em>)</p></li>
+<li><p><strong>-------------</strong> – cfg = ErrorHandlingConfig(mode=”run”, log_dir=Path(“logs”))</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorHandlingConfig.from_env">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/config.html#ErrorHandlingConfig.from_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorHandlingConfig.from_env" title="Link to this definition">#</a></dt>
+<dd><p>Create config from environment variables.</p>
+<p>Supported variables (prefix controlled by env_prefix on <code class="docutils literal notranslate"><span class="pre">default</span></code>):
+- &lt;PFX&gt;ERROR_MODE: “debug” | “run”
+- &lt;PFX&gt;LOG_DIR: path
+- &lt;PFX&gt;WRITE_JSONL: “1”/”0”
+- &lt;PFX&gt;MAX_FAILURES: integer</p>
+<p class="rubric">Notes</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">default</span></code> is None, uses cls() and prefix “”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>default</strong> (<a class="reference internal" href="dyana.errors.config.html#dyana.errors.config.ErrorHandlingConfig" title="dyana.errors.config.ErrorHandlingConfig"><em>ErrorHandlingConfig</em></a><em> | </em><em>None</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="dyana.errors.config.html#dyana.errors.config.ErrorHandlingConfig" title="dyana.errors.config.ErrorHandlingConfig"><em>ErrorHandlingConfig</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorHandlingConfig.resolved_run_id">
+<span class="sig-name descname"><span class="pre">resolved_run_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/config.html#ErrorHandlingConfig.resolved_run_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorHandlingConfig.resolved_run_id" title="Link to this definition">#</a></dt>
+<dd><p>Return a non-auto run id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.ErrorHandlingConfig.console_level">
+<span class="sig-name descname"><span class="pre">console_level</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></span><a class="headerlink" href="#dyana.errors.ErrorHandlingConfig.console_level" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.ErrorHandlingConfig.env_prefix">
+<span class="sig-name descname"><span class="pre">env_prefix</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></span><a class="headerlink" href="#dyana.errors.ErrorHandlingConfig.env_prefix" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.ErrorHandlingConfig.file_level">
+<span class="sig-name descname"><span class="pre">file_level</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></span><a class="headerlink" href="#dyana.errors.ErrorHandlingConfig.file_level" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.ErrorHandlingConfig.log_dir">
+<span class="sig-name descname"><span class="pre">log_dir</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Path</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('logs')</span></span><a class="headerlink" href="#dyana.errors.ErrorHandlingConfig.log_dir" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.ErrorHandlingConfig.max_failures">
+<span class="sig-name descname"><span class="pre">max_failures</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#dyana.errors.ErrorHandlingConfig.max_failures" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.ErrorHandlingConfig.mode">
+<span class="sig-name descname"><span class="pre">mode</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'debug'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'run'</span></span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'run'</span></span><a class="headerlink" href="#dyana.errors.ErrorHandlingConfig.mode" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.ErrorHandlingConfig.run_id">
+<span class="sig-name descname"><span class="pre">run_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'auto'</span></span><a class="headerlink" href="#dyana.errors.ErrorHandlingConfig.run_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.ErrorHandlingConfig.treat_warnings_as_errors">
+<span class="sig-name descname"><span class="pre">treat_warnings_as_errors</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#dyana.errors.ErrorHandlingConfig.treat_warnings_as_errors" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.ErrorHandlingConfig.write_jsonl">
+<span class="sig-name descname"><span class="pre">write_jsonl</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#dyana.errors.ErrorHandlingConfig.write_jsonl" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">dyana.errors.</span></span><span class="sig-name descname"><span class="pre">ErrorReporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Collects step outcomes (OK / FAILED / SKIPPED) and renders end-of-run summaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cfg</strong> (<a class="reference internal" href="dyana.errors.config.html#dyana.errors.config.ErrorHandlingConfig" title="dyana.errors.config.ErrorHandlingConfig"><em>ErrorHandlingConfig</em></a>)</p></li>
+<li><p><strong>logger</strong> (<em>Logger</em>)</p></li>
+<li><p><strong>event_logger</strong> (<a class="reference internal" href="dyana.errors.logging.html#dyana.errors.logging.JsonlEventLogger" title="dyana.errors.logging.JsonlEventLogger"><em>JsonlEventLogger</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.exit_code">
+<span class="sig-name descname"><span class="pre">exit_code</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter.exit_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter.exit_code" title="Link to this definition">#</a></dt>
+<dd><p>Return a conventional process exit code: 0 if success, else 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.failed">
+<span class="sig-name descname"><span class="pre">failed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter.failed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter.failed" title="Link to this definition">#</a></dt>
+<dd><p>Return True if the step failed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>step_name</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.failures_count">
+<span class="sig-name descname"><span class="pre">failures_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter.failures_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter.failures_count" title="Link to this definition">#</a></dt>
+<dd><p>Return the total number of failed steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.has_failures">
+<span class="sig-name descname"><span class="pre">has_failures</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter.has_failures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter.has_failures" title="Link to this definition">#</a></dt>
+<dd><p>Return True when any step has failed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.mark_failed">
+<span class="sig-name descname"><span class="pre">mark_failed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter.mark_failed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter.mark_failed" title="Link to this definition">#</a></dt>
+<dd><p>Record a failed step and associated exception details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>step_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>exc</strong> (<em>BaseException</em>)</p></li>
+<li><p><strong>context</strong> (<em>Mapping</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.mark_ok">
+<span class="sig-name descname"><span class="pre">mark_ok</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter.mark_ok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter.mark_ok" title="Link to this definition">#</a></dt>
+<dd><p>Record a successful step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>step_name</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.mark_skipped">
+<span class="sig-name descname"><span class="pre">mark_skipped</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caused_by</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter.mark_skipped"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter.mark_skipped" title="Link to this definition">#</a></dt>
+<dd><p>Record a skipped step and its dependency cause.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>step_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>caused_by</strong> (<em>str</em>)</p></li>
+<li><p><strong>context</strong> (<em>Mapping</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.ok">
+<span class="sig-name descname"><span class="pre">ok</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter.ok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter.ok" title="Link to this definition">#</a></dt>
+<dd><p>Return True if the step completed successfully.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>step_name</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.print_summary">
+<span class="sig-name descname"><span class="pre">print_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter.print_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter.print_summary" title="Link to this definition">#</a></dt>
+<dd><p>Print summary to console, using Rich if available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.render_summary">
+<span class="sig-name descname"><span class="pre">render_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter.render_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter.render_summary" title="Link to this definition">#</a></dt>
+<dd><p>Render a human-readable summary with details and artifact paths.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.skipped">
+<span class="sig-name descname"><span class="pre">skipped</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter.skipped"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter.skipped" title="Link to this definition">#</a></dt>
+<dd><p>Return True if the step was skipped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>step_name</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.status">
+<span class="sig-name descname"><span class="pre">status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/reporter.html#ErrorReporter.status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.ErrorReporter.status" title="Link to this definition">#</a></dt>
+<dd><p>Return the current status for a step, if present.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>step_name</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="dyana.errors.types.html#dyana.errors.types.StepStatus" title="dyana.errors.types.StepStatus"><em>StepStatus</em></a> | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.cfg">
+<span class="sig-name descname"><span class="pre">cfg</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="dyana.errors.config.html#dyana.errors.config.ErrorHandlingConfig" title="dyana.errors.config.ErrorHandlingConfig"><span class="pre">ErrorHandlingConfig</span></a></span><a class="headerlink" href="#dyana.errors.ErrorReporter.cfg" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.event_logger">
+<span class="sig-name descname"><span class="pre">event_logger</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="dyana.errors.logging.html#dyana.errors.logging.JsonlEventLogger" title="dyana.errors.logging.JsonlEventLogger"><span class="pre">JsonlEventLogger</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#dyana.errors.ErrorReporter.event_logger" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.ErrorReporter.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Logger</span></span><a class="headerlink" href="#dyana.errors.ErrorReporter.logger" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dyana.errors.JsonlEventLogger">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">dyana.errors.</span></span><span class="sig-name descname"><span class="pre">JsonlEventLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/logging.html#JsonlEventLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.JsonlEventLogger" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Writes structured events as JSON lines.</p>
+<p>Each line is a dict that includes at least:
+- time_utc
+- run_id
+- event
+- step
+- level
+- context (optional)
+- exc_type, exc_msg (optional)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>Path</em>)</p></li>
+<li><p><strong>run_id</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.JsonlEventLogger.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/logging.html#JsonlEventLogger.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.JsonlEventLogger.write" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> (<em>str</em>)</p></li>
+<li><p><strong>step</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>level</strong> (<em>str</em>)</p></li>
+<li><p><strong>context</strong> (<em>Mapping</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>exc</strong> (<em>BaseException</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>message</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.JsonlEventLogger.path">
+<span class="sig-name descname"><span class="pre">path</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Path</span></span><a class="headerlink" href="#dyana.errors.JsonlEventLogger.path" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="dyana.errors.JsonlEventLogger.run_id">
+<span class="sig-name descname"><span class="pre">run_id</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#dyana.errors.JsonlEventLogger.run_id" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="dyana.errors.Pipeline">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">dyana.errors.</span></span><span class="sig-name descname"><span class="pre">Pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reporter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/pipeline.html#Pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.Pipeline" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Dependency-aware step runner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reporter</strong> (<a class="reference internal" href="#dyana.errors.ErrorReporter" title="dyana.errors.ErrorReporter"><em>ErrorReporter</em></a>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.Pipeline.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">deps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/pipeline.html#Pipeline.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.Pipeline.add" title="Link to this definition">#</a></dt>
+<dd><p>Register a named step with optional dependencies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>fn</strong> (<em>Callable</em><em>[</em><em>[</em><em>]</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>deps</strong> (<em>List</em><em>[</em><em>str</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>context</strong> (<em>Mapping</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dyana.errors.Pipeline.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/pipeline.html#Pipeline.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.Pipeline.run" title="Link to this definition">#</a></dt>
+<dd><p>Execute the pipeline in dependency order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Mapping from step name to return value (only for steps that ran successfully).
+Skipped/failed steps will not be present.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>results</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If cfg.max_failures is set, pipeline stops scheduling new work once reached.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dyana.errors.configure_logging">
+<span class="sig-prename descclassname"><span class="pre">dyana.errors.</span></span><span class="sig-name descname"><span class="pre">configure_logging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/logging.html#configure_logging"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.configure_logging" title="Link to this definition">#</a></dt>
+<dd><p>Configure console + file logging, plus optional JSONL event logger.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><em>logger</em> – A configured logger named “app”.</p></li>
+<li><p><em>event_logger</em> – JsonlEventLogger if cfg.write_jsonl else None.</p></li>
+<li><p><em>Usage example</em></p></li>
+<li><p><em>————-</em> – logger, event_logger = configure_logging(cfg=cfg)
+logger.info(“Hello”)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>cfg</strong> (<a class="reference internal" href="dyana.errors.config.html#dyana.errors.config.ErrorHandlingConfig" title="dyana.errors.config.ErrorHandlingConfig"><em>ErrorHandlingConfig</em></a>)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[<em>Logger</em>, <a class="reference internal" href="dyana.errors.logging.html#dyana.errors.logging.JsonlEventLogger" title="dyana.errors.logging.JsonlEventLogger"><em>JsonlEventLogger</em></a> | None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dyana.errors.guard">
+<span class="sig-prename descclassname"><span class="pre">dyana.errors.</span></span><span class="sig-name descname"><span class="pre">guard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reporter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/guards.html#guard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.guard" title="Link to this definition">#</a></dt>
+<dd><p>Execute a callable under error-handling policy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The callable result on success; otherwise <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>value</p>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>step_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>reporter</strong> (<a class="reference internal" href="dyana.errors.reporter.html#dyana.errors.reporter.ErrorReporter" title="dyana.errors.reporter.ErrorReporter"><em>ErrorReporter</em></a>)</p></li>
+<li><p><strong>fn</strong> (<em>Callable</em><em>[</em><em>[</em><em>]</em><em>, </em><em>T</em><em>]</em>)</p></li>
+<li><p><strong>context</strong> (<em>Mapping</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>default</strong> (<em>T</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">audio</span> <span class="o">=</span> <span class="n">guard</span><span class="p">(</span><span class="s2">&quot;load_audio&quot;</span><span class="p">,</span> <span class="n">reporter</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">load_audio</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">audio</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">return</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="dyana.errors.step">
+<span class="sig-prename descclassname"><span class="pre">dyana.errors.</span></span><span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reporter</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/errors/guards.html#step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.errors.step" title="Link to this definition">#</a></dt>
+<dd><p>Context manager wrapping a named step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>step_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>reporter</strong> (<a class="reference internal" href="dyana.errors.reporter.html#dyana.errors.reporter.ErrorReporter" title="dyana.errors.reporter.ErrorReporter"><em>ErrorReporter</em></a>)</p></li>
+<li><p><strong>context</strong> (<em>Mapping</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Iterator</em>[None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Modules</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="dyana.errors.config.html#module-dyana.errors.config" title="dyana.errors.config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">config</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="dyana.errors.guards.html#module-dyana.errors.guards" title="dyana.errors.guards"><code class="xref py py-obj docutils literal notranslate"><span class="pre">guards</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="dyana.errors.logging.html#module-dyana.errors.logging" title="dyana.errors.logging"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logging</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="dyana.errors.pipeline.html#module-dyana.errors.pipeline" title="dyana.errors.pipeline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pipeline</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="dyana.errors.reporter.html#module-dyana.errors.reporter" title="dyana.errors.reporter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reporter</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="dyana.errors.types.html#module-dyana.errors.types" title="dyana.errors.types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">types</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-primitives">Key primitives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ConfigError"><code class="docutils literal notranslate"><span class="pre">ConfigError</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.PipelineError"><code class="docutils literal notranslate"><span class="pre">PipelineError</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorHandlingConfig"><code class="docutils literal notranslate"><span class="pre">ErrorHandlingConfig</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorHandlingConfig.from_env"><code class="docutils literal notranslate"><span class="pre">ErrorHandlingConfig.from_env()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorHandlingConfig.resolved_run_id"><code class="docutils literal notranslate"><span class="pre">ErrorHandlingConfig.resolved_run_id()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorHandlingConfig.console_level"><code class="docutils literal notranslate"><span class="pre">ErrorHandlingConfig.console_level</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorHandlingConfig.env_prefix"><code class="docutils literal notranslate"><span class="pre">ErrorHandlingConfig.env_prefix</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorHandlingConfig.file_level"><code class="docutils literal notranslate"><span class="pre">ErrorHandlingConfig.file_level</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorHandlingConfig.log_dir"><code class="docutils literal notranslate"><span class="pre">ErrorHandlingConfig.log_dir</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorHandlingConfig.max_failures"><code class="docutils literal notranslate"><span class="pre">ErrorHandlingConfig.max_failures</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorHandlingConfig.mode"><code class="docutils literal notranslate"><span class="pre">ErrorHandlingConfig.mode</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorHandlingConfig.run_id"><code class="docutils literal notranslate"><span class="pre">ErrorHandlingConfig.run_id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorHandlingConfig.treat_warnings_as_errors"><code class="docutils literal notranslate"><span class="pre">ErrorHandlingConfig.treat_warnings_as_errors</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorHandlingConfig.write_jsonl"><code class="docutils literal notranslate"><span class="pre">ErrorHandlingConfig.write_jsonl</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter"><code class="docutils literal notranslate"><span class="pre">ErrorReporter</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.exit_code"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.exit_code()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.failed"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.failed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.failures_count"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.failures_count()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.has_failures"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.has_failures()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.mark_failed"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.mark_failed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.mark_ok"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.mark_ok()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.mark_skipped"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.mark_skipped()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.ok"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.ok()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.print_summary"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.print_summary()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.render_summary"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.render_summary()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.skipped"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.skipped()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.status"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.status()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.cfg"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.cfg</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.event_logger"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.event_logger</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.ErrorReporter.logger"><code class="docutils literal notranslate"><span class="pre">ErrorReporter.logger</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.JsonlEventLogger"><code class="docutils literal notranslate"><span class="pre">JsonlEventLogger</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.JsonlEventLogger.write"><code class="docutils literal notranslate"><span class="pre">JsonlEventLogger.write()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.JsonlEventLogger.path"><code class="docutils literal notranslate"><span class="pre">JsonlEventLogger.path</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.JsonlEventLogger.run_id"><code class="docutils literal notranslate"><span class="pre">JsonlEventLogger.run_id</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.Pipeline"><code class="docutils literal notranslate"><span class="pre">Pipeline</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.Pipeline.add"><code class="docutils literal notranslate"><span class="pre">Pipeline.add()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.Pipeline.run"><code class="docutils literal notranslate"><span class="pre">Pipeline.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.configure_logging"><code class="docutils literal notranslate"><span class="pre">configure_logging()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.guard"><code class="docutils literal notranslate"><span class="pre">guard()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.errors.step"><code class="docutils literal notranslate"><span class="pre">step()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Hiro.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -35,17 +35,17 @@ class EvidenceTrack:
     metadata
         Free-form provenance metadata.
 
-    Usage example
-    -------------
-        tb = TimeBase.canonical()
-        T = tb.num_frames(3.0)
-        vad = EvidenceTrack(
-            name="vad",
-            timebase=tb,
-            values=np.random.rand(T).astype(np.float32),
-            semantics="probability",
-            metadata={"module": "webrtcvad"},
-        )
+    Examples
+    --------
+    >>> tb = TimeBase.canonical()
+    >>> T = tb.num_frames(3.0)
+    >>> vad = EvidenceTrack(
+    ...     name="vad",
+    ...     timebase=tb,
+    ...     values=np.random.rand(T).astype(np.float32),
+    ...     semantics="probability",
+    ...     metadata={"module": "webrtcvad"},
+    ... )
     """
 
     name: str
@@ -152,9 +152,9 @@ class EvidenceTrack:
         EvidenceTrack
             Resampled track.
 
-        Usage example
-        -------------
-            canonical = track.to_canonical(downsample_agg="mean")
+        Examples
+        --------
+        >>> canonical = track.to_canonical(downsample_agg="mean")
         """
 
         target = target_timebase or TimeBase.canonical()

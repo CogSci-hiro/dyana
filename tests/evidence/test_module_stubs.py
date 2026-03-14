@@ -13,6 +13,7 @@ import pytest
         "dyana.evidence.mic_priors",
         "dyana.evidence.prosody",
         "dyana.evidence.separation",
+        "dyana.evidence.stereo",
         "dyana.evidence.vad",
     ],
 )

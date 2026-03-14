@@ -111,7 +111,7 @@ class ErrorHandlingConfig:
     treat_warnings_as_errors
         Optional knob if you later want to elevate warnings to failures in a single place.
     env_prefix
-        If you want environment-variable overrides, set a prefix like "PALIMPS_" or "DYANA_".
+        If you want environment-variable overrides, set a prefix like ``"PALIMPS_"`` or ``"DYANA_"``.
 
     Usage example
     -------------
@@ -142,7 +142,7 @@ class ErrorHandlingConfig:
         """
         Create config from environment variables.
 
-        Supported variables (prefix controlled by env_prefix on `default`):
+        Supported variables (prefix controlled by env_prefix on ``default``):
         - <PFX>ERROR_MODE: "debug" | "run"
         - <PFX>LOG_DIR: path
         - <PFX>WRITE_JSONL: "1"/"0"

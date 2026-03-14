@@ -117,6 +117,7 @@ def decode_with_constraints(
         raise ValueError(f"log_scores second dim must be {len(base_names)} (base states)")
 
     min_durs = min_durations or constraints.default_min_durations()
+    min_durs = constraints.resolve_min_durations(min_durs if min_durations is not None else None, tuning_params=tuning_params)
     base_trans = (
         transition
         if transition is not None

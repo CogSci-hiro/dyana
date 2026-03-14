@@ -103,7 +103,7 @@ def _print_summary(report: dict) -> None:
         print("Guardrails: PASS")
 
 
-def _params_dict(params: DecodeTuningParams) -> dict[str, float | None]:
+def _params_dict(params: DecodeTuningParams) -> dict[str, float | str | None]:
     return {
         "speaker_switch_penalty": params.speaker_switch_penalty,
         "leak_entry_bias": params.leak_entry_bias,
@@ -112,6 +112,9 @@ def _params_dict(params: DecodeTuningParams) -> dict[str, float | None]:
         "b_to_ovl_cost": params.b_to_ovl_cost,
         "ovl_to_a_cost": params.ovl_to_a_cost,
         "ovl_to_b_cost": params.ovl_to_b_cost,
+        "ipu_detection_mode": params.ipu_detection_mode,
+        "silence_bias": params.silence_bias,
+        "merge_silence_gap_ms": params.merge_silence_gap_ms,
     }
 
 

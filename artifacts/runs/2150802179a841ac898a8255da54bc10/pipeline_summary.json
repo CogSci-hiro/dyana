@@ -1,0 +1,11 @@
+{
+  "artifacts_produced": {
+    "alignment": "d810c9efc2ffe6df0ae12776fbe77b6a56b16193c1c086da900b4ab8656a7a44"
+  },
+  "run_id": "2150802179a841ac898a8255da54bc10",
+  "status": "ok",
+  "step_count": 1,
+  "target_outputs": [
+    "alignment"
+  ]
+}

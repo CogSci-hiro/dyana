@@ -1,0 +1,13 @@
+{
+  "artifact_hash": "753900928b4a681554fa7d0c321830d425fb5fa9b27ccc107a418d58a450c5b5",
+  "artifact_name": "evidence",
+  "code_version": "0.0.0",
+  "inputs": {
+    "audio": "69ea26ef7b847a36973506c6b024bfd59fe4699860c6f5f5d5fdd0edf05b3022"
+  },
+  "parameters": {},
+  "payload_hash": "4419dc8a6d8049fb059380cf0ef00d57b24cf665927ff78c96ee0f2c1e88110f",
+  "serializer": "pickle",
+  "step": "evidence",
+  "timestamp": 1773523601.424744
+}

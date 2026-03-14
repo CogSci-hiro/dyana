@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Tuple
+from typing import Literal, Tuple
 
 
 @dataclass(frozen=True)
@@ -15,6 +15,11 @@ class DecodeTuningParams:
     -----
     ``ovl_transition_cost`` is kept for backward compatibility and acts as a
     fallback when explicit OVL edge costs are not provided.
+
+    ``ipu_detection_mode="balanced"`` preserves the current decoder behavior.
+    ``ipu_detection_mode="high_recall"`` biases the system toward speech
+    coverage for pre-transcription IPU segmentation, even if that slightly
+    over-extends IPUs across silence-like dips.
     """
 
     speaker_switch_penalty: float = -6.0
@@ -24,6 +29,9 @@ class DecodeTuningParams:
     b_to_ovl_cost: float | None = None
     ovl_to_a_cost: float | None = None
     ovl_to_b_cost: float | None = None
+    ipu_detection_mode: Literal["balanced", "high_recall"] = "balanced"
+    silence_bias: float = 0.0
+    merge_silence_gap_ms: float = 400.0
 
     def resolved_ovl_costs(self) -> Tuple[float, float, float, float]:
         """Return explicit OVL transition costs in A->OVL, B->OVL, OVL->A, OVL->B order."""

@@ -13,23 +13,49 @@ from dyana.errors.config import load_config, resolve_out_dir
 def add_subparser(subparsers: argparse._SubParsersAction) -> None:
     """Register the `run` command."""
     parser = subparsers.add_parser("run", help="Run DYANA end-to-end.")
+    parser.add_argument(
+        "audio_path",
+        nargs="?",
+        help="Audio file or directory containing wav/flac.",
+    )
     parser.add_argument("--audio", required=False, help="Audio file or directory containing wav/flac.")
     parser.add_argument("--out-dir", required=False, help="Output directory.")
     parser.add_argument("--cache-dir", help="Cache directory.", default=None)
-    parser.add_argument("--channel", type=int, default=None, help="Channel index for multi-channel audio.")
+    parser.add_argument(
+        "--channel",
+        type=int,
+        default=None,
+        help="Channel index for multi-channel audio.",
+    )
     parser.add_argument("--vad-mode", type=int, default=2)
     parser.add_argument("--smooth-ms", type=float, default=80.0)
     parser.add_argument("--min-ipu-s", type=float, default=0.2)
     parser.add_argument("--min-sil-s", type=float, default=0.1)
+    parser.add_argument("--ipu-mode", choices=("balanced", "high_recall"), default="balanced")
+    parser.add_argument("--silence-bias", type=float, default=0.0)
+    parser.add_argument(
+        "--enable-asr",
+        action="store_true",
+        help="Enable Whisper ASR after IPU extraction.",
+    )
+    parser.add_argument(
+        "--asr-model",
+        choices=("tiny", "base", "small", "medium", "large"),
+        default="small",
+        help="Whisper model to use when ASR is enabled.",
+    )
     parser.set_defaults(command="run")
 
 
 def run(args: argparse.Namespace) -> None:
     """Execute the `run` command."""
-    if not hasattr(args, "audio") or args.audio is None:
+    audio_arg = getattr(args, "audio", None) or getattr(args, "audio_path", None)
+    if audio_arg is None:
         return
-    from dyana.pipeline.run_pipeline import run_pipeline  # local import to avoid heavy deps at parse time
-    audio_path = Path(args.audio)
+    from dyana.pipeline.run_pipeline import (
+        run_pipeline,
+    )  # local import to avoid heavy deps at parse time
+    audio_path = Path(audio_arg)
     config = load_config(Path.cwd())
     try:
         out_dir = resolve_out_dir(config, Path(args.out_dir) if getattr(args, "out_dir", None) else None)
@@ -48,10 +74,15 @@ def run(args: argparse.Namespace) -> None:
             f,
             out_dir=out_dir / f.stem,
             cache_dir=cache_dir,
+            channel=args.channel,
             vad_mode=args.vad_mode,
             smooth_ms=args.smooth_ms,
             min_ipu_s=args.min_ipu_s,
             min_sil_s=args.min_sil_s,
+            ipu_detection_mode=args.ipu_mode,
+            silence_bias=args.silence_bias,
+            enable_asr=args.enable_asr,
+            asr_model=args.asr_model,
             seed=0,
         )
         print(

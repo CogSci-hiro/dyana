@@ -13,6 +13,7 @@ except ImportError:  # pragma: no cover - optional dependency for tests
 from dyana.core.cache import cache_get, cache_put, make_cache_key
 from dyana.core.timebase import CANONICAL_HOP_SECONDS, TimeBase
 from dyana.evidence.base import EvidenceTrack
+from dyana.evidence.energy import compute_energy_smooth_track
 from dyana.io.audio import load_audio_mono
 
 
@@ -30,6 +31,38 @@ def _bytes_16k(samples: np.ndarray) -> bytes:
     return int16.tobytes()
 
 
+def _energy_vad_fallback(
+    audio_path: Path,
+    *,
+    hop_s: float,
+    cache_dir: Path | None = None,
+    channel: int | None = None,
+) -> EvidenceTrack:
+    energy = compute_energy_smooth_track(audio_path, hop_s=hop_s, cache_dir=cache_dir, channel=channel)
+    values = np.asarray(energy.values, dtype=np.float32)
+    floor = float(np.percentile(values, 10))
+    ceiling = float(np.percentile(values, 90))
+    if ceiling - floor < 1e-6:
+        floor = float(values.min())
+        ceiling = float(values.max())
+    if ceiling - floor < 1e-6:
+        probs = np.ones_like(values, dtype=np.float32) if ceiling > 1e-8 else np.zeros_like(values, dtype=np.float32)
+    else:
+        scale = ceiling - floor
+        probs = np.clip((values - floor) / scale, 0.0, 1.0).astype(np.float32)
+    if len(probs) > 1:
+        kernel = np.ones(9, dtype=np.float32) / 9.0
+        padded = np.pad(probs, (4, 4), mode="edge")
+        probs = np.convolve(padded, kernel, mode="valid").astype(np.float32)
+    return EvidenceTrack(
+        name="vad",
+        timebase=energy.timebase,
+        values=probs,
+        semantics="probability",
+        metadata={"source": "energy_fallback"},
+    )
+
+
 def compute_webrtc_vad_soft_track(
     audio_path: Path,
     *,
@@ -37,18 +70,26 @@ def compute_webrtc_vad_soft_track(
     vad_mode: int = 2,
     subframe_ms: int = 5,
     cache_dir: Path | None = None,
+    channel: int | None = None,
 ) -> EvidenceTrack:
-    if webrtcvad is None:
-        raise ImportError("webrtcvad package not installed; install webrtcvad to use VAD features.")
-    key = make_cache_key(audio_path, "webrtc_vad_soft", {"hop_s": hop_s, "vad_mode": vad_mode, "sub_ms": subframe_ms})
+    key = make_cache_key(
+        audio_path,
+        "webrtc_vad_soft",
+        {"hop_s": hop_s, "vad_mode": vad_mode, "sub_ms": subframe_ms, "channel": channel},
+    )
     cached = cache_get(cache_dir, key)
     if cached is not None:
         with np.load(cached) as npz:
             values = npz["values"]
         tb = TimeBase.canonical(n_frames=len(values))
-        return EvidenceTrack(name="webrtc_vad_soft", timebase=tb, values=values, semantics="probability")
+        return EvidenceTrack(name="vad", timebase=tb, values=values, semantics="probability")
 
-    samples, sr = load_audio_mono(audio_path)
+    if webrtcvad is None:
+        track = _energy_vad_fallback(audio_path, hop_s=hop_s, cache_dir=cache_dir, channel=channel)
+        cache_put(cache_dir, key, {"values": np.asarray(track.values, dtype=np.float32)})
+        return track
+
+    samples, sr = load_audio_mono(audio_path, channel=channel)
     sr_vad = 16000
     samples_16k = _resample_linear(samples, sr, sr_vad)
 
@@ -92,4 +133,4 @@ def compute_webrtc_vad_soft_track(
 
     tb = TimeBase.canonical(n_frames=n_frames)
     cache_put(cache_dir, key, {"values": values})
-    return EvidenceTrack(name="webrtc_vad_soft", timebase=tb, values=values, semantics="probability")
+    return EvidenceTrack(name="vad", timebase=tb, values=values, semantics="probability")

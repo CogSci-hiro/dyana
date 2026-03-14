@@ -1,0 +1,74 @@
+[
+  {
+    "artifact_hash": "8cd9629e593bbd3427103eb816e1b03e1ea473b6d0fac1680edc9e87dd696e79",
+    "end_time": 1773523601.424586,
+    "inputs": {
+      "audio": "69ea26ef7b847a36973506c6b024bfd59fe4699860c6f5f5d5fdd0edf05b3022"
+    },
+    "outputs": [
+      "transcript"
+    ],
+    "parameters": {},
+    "start_time": 1773523601.424408,
+    "status": "executed",
+    "step": "transcription"
+  },
+  {
+    "artifact_hash": "d57593f99413f904358202398d159ce7772ce2c421a8298ea0f35df63f93944b",
+    "end_time": 1773523601.42473,
+    "inputs": {
+      "audio": "69ea26ef7b847a36973506c6b024bfd59fe4699860c6f5f5d5fdd0edf05b3022",
+      "transcript": "8cd9629e593bbd3427103eb816e1b03e1ea473b6d0fac1680edc9e87dd696e79"
+    },
+    "outputs": [
+      "alignment"
+    ],
+    "parameters": {},
+    "start_time": 1773523601.424602,
+    "status": "executed",
+    "step": "alignment"
+  },
+  {
+    "artifact_hash": "753900928b4a681554fa7d0c321830d425fb5fa9b27ccc107a418d58a450c5b5",
+    "end_time": 1773523601.424851,
+    "inputs": {
+      "audio": "69ea26ef7b847a36973506c6b024bfd59fe4699860c6f5f5d5fdd0edf05b3022"
+    },
+    "outputs": [
+      "evidence"
+    ],
+    "parameters": {},
+    "start_time": 1773523601.424743,
+    "status": "executed",
+    "step": "evidence"
+  },
+  {
+    "artifact_hash": "4897b7dbf4ef9495c0f4a2f2b219220e27ff35f5d354ea2c44a2d6931880c869",
+    "end_time": 1773523601.4249668,
+    "inputs": {
+      "alignment": "d57593f99413f904358202398d159ce7772ce2c421a8298ea0f35df63f93944b",
+      "evidence": "753900928b4a681554fa7d0c321830d425fb5fa9b27ccc107a418d58a450c5b5"
+    },
+    "outputs": [
+      "decode"
+    ],
+    "parameters": {},
+    "start_time": 1773523601.4248629,
+    "status": "executed",
+    "step": "decode"
+  },
+  {
+    "artifact_hash": "4107c0a1b7abeb1218f974329e266f7b9e1914d6b79ec49fd755065ed1da11b4",
+    "end_time": 1773523601.425091,
+    "inputs": {
+      "decode": "4897b7dbf4ef9495c0f4a2f2b219220e27ff35f5d354ea2c44a2d6931880c869"
+    },
+    "outputs": [
+      "diagnostics"
+    ],
+    "parameters": {},
+    "start_time": 1773523601.424978,
+    "status": "executed",
+    "step": "diagnostics"
+  }
+]

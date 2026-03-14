@@ -1,0 +1,13 @@
+{
+  "artifact_hash": "8cd9629e593bbd3427103eb816e1b03e1ea473b6d0fac1680edc9e87dd696e79",
+  "artifact_name": "transcription",
+  "code_version": "0.0.0",
+  "inputs": {
+    "audio": "69ea26ef7b847a36973506c6b024bfd59fe4699860c6f5f5d5fdd0edf05b3022"
+  },
+  "parameters": {},
+  "payload_hash": "20169b39a4de26fc9010357f5e16812f8c3da5c2c00f32a1b60cef5c660e1c44",
+  "serializer": "pickle",
+  "step": "transcription",
+  "timestamp": 1773523601.424414
+}

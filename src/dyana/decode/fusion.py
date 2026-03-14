@@ -8,9 +8,8 @@ from numpy.typing import NDArray
 from dyana.core.timebase import CANONICAL_HOP_SECONDS
 from dyana.evidence.bundle import EvidenceBundle
 from dyana.evidence.base import EvidenceTrack
-from dyana.evidence.leakage import LEAKAGE_TRACK_NAME
-from dyana.evidence.overlap import OVERLAP_PROXY_TRACK_NAME
 from dyana.decode import state_space
+from dyana.decode.params import DecodeTuningParams
 
 # ---------- Constants ----------
 
@@ -24,6 +23,9 @@ LEAK_BASELINE_PENALTY: float = -3.0
 W_PRIOR: float = 0.4
 OVL_BONUS: float = 0.4
 W_OVL_PROXY: float = 0.5
+HIGH_RECALL_SILENCE_SCORE_DELTA: float = -1.0
+LEAKAGE_TRACK_NAME: str = "leakage_likelihood"
+OVERLAP_PROXY_TRACK_NAME: str = "overlap_proxy"
 
 
 def _require_prob_or_logit(track: EvidenceTrack, name: str) -> NDArray[np.floating]:
@@ -62,9 +64,19 @@ def _check_timebases(bundle: EvidenceBundle) -> int:
     return n_frames
 
 
-def fuse_bundle_to_scores(bundle: EvidenceBundle) -> NDArray[np.floating]:
+def fuse_bundle_to_scores(
+    bundle: EvidenceBundle,
+    *,
+    tuning_params: DecodeTuningParams | None = None,
+) -> NDArray[np.floating]:
     """
     Convert an EvidenceBundle into log-scores over base states.
+
+    Notes
+    -----
+    Balanced mode preserves the default silence handling.
+    High-recall mode is intended for pre-transcription segmentation and reduces
+    silence preference so short energy dips are less likely to split speech.
 
     Returns
     -------
@@ -72,6 +84,7 @@ def fuse_bundle_to_scores(bundle: EvidenceBundle) -> NDArray[np.floating]:
         Shape (T, num_states) in log space.
     """
 
+    params = tuning_params or DecodeTuningParams()
     T = _check_timebases(bundle)
     S = state_space.num_states()
     scores = np.zeros((T, S), dtype=float)
@@ -148,7 +161,11 @@ def fuse_bundle_to_scores(bundle: EvidenceBundle) -> NDArray[np.floating]:
     idx_ovl = state_space.state_index("OVL")
     idx_leak = state_space.state_index("LEAK")
 
-    scores[:, idx_sil] += W_SPEECH * log_nonspeech
+    silence_score = W_SPEECH * log_nonspeech + params.silence_bias
+    if params.ipu_detection_mode == "high_recall":
+        silence_score += HIGH_RECALL_SILENCE_SCORE_DELTA
+
+    scores[:, idx_sil] += silence_score
     scores[:, idx_a] += W_SPEECH * log_speech + W_DIAR * log_pa + W_PRIOR * prior_offset_a
     scores[:, idx_b] += W_SPEECH * log_speech + W_DIAR * log_pb + W_PRIOR * prior_offset_b
     scores[:, idx_ovl] += (

@@ -1,0 +1,55 @@
+:root {
+  --dyana-accent: #005f73;
+  --dyana-accent-soft: #e6f4f1;
+  --dyana-ink: #102a43;
+  --dyana-muted: #486581;
+}
+
+html[data-theme="light"] {
+  --pst-color-primary: var(--dyana-accent);
+  --pst-color-secondary: #0a9396;
+  --pst-color-link: var(--dyana-accent);
+  --pst-color-link-hover: #0a9396;
+}
+
+.dyana-hero {
+  padding: 1.5rem 0 2rem;
+}
+
+.dyana-eyebrow {
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dyana-accent);
+}
+
+.dyana-hero h1 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2.5rem, 5vw, 4.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--dyana-ink);
+}
+
+.dyana-lead {
+  max-width: 52rem;
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--dyana-muted);
+}
+
+.sd-card {
+  border-radius: 1rem;
+  border: 1px solid rgba(0, 95, 115, 0.16);
+  box-shadow: none;
+}
+
+.sd-card:hover {
+  border-color: rgba(10, 147, 150, 0.45);
+  transform: translateY(-1px);
+  transition: border-color 160ms ease, transform 160ms ease;
+}

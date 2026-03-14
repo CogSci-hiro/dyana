@@ -25,8 +25,14 @@ def _frame_audio(samples: np.ndarray, sr: int, hop_s: float) -> Tuple[np.ndarray
     return framed, hop
 
 
-def compute_energy_rms_track(audio_path: Path, *, hop_s: float = CANONICAL_HOP_SECONDS, cache_dir: Path | None = None) -> EvidenceTrack:
-    key = make_cache_key(audio_path, "energy_rms", {"hop_s": hop_s})
+def compute_energy_rms_track(
+    audio_path: Path,
+    *,
+    hop_s: float = CANONICAL_HOP_SECONDS,
+    cache_dir: Path | None = None,
+    channel: int | None = None,
+) -> EvidenceTrack:
+    key = make_cache_key(audio_path, "energy_rms", {"hop_s": hop_s, "channel": channel})
     cached = cache_get(cache_dir, key)
     if cached is not None:
         with np.load(cached) as npz:
@@ -34,7 +40,7 @@ def compute_energy_rms_track(audio_path: Path, *, hop_s: float = CANONICAL_HOP_S
         tb = TimeBase.canonical(n_frames=len(values))
         return EvidenceTrack(name="energy_rms", timebase=tb, values=values, semantics="score")
 
-    samples, sr = load_audio_mono(audio_path)
+    samples, sr = load_audio_mono(audio_path, channel=channel)
     frames, _ = _frame_audio(samples, sr, hop_s)
     rms = np.sqrt(np.mean(frames.astype(np.float32) ** 2, axis=1))
     tb = TimeBase.canonical(n_frames=len(rms))
@@ -49,8 +55,15 @@ def _smooth(values: np.ndarray, smooth_ms: float, hop_s: float) -> np.ndarray:
     return np.convolve(values, kernel, mode="same")
 
 
-def compute_energy_smooth_track(audio_path: Path, *, hop_s: float = CANONICAL_HOP_SECONDS, smooth_ms: float = SMOOTH_MS_DEFAULT, cache_dir: Path | None = None) -> EvidenceTrack:
-    key = make_cache_key(audio_path, "energy_smooth", {"hop_s": hop_s, "smooth_ms": smooth_ms})
+def compute_energy_smooth_track(
+    audio_path: Path,
+    *,
+    hop_s: float = CANONICAL_HOP_SECONDS,
+    smooth_ms: float = SMOOTH_MS_DEFAULT,
+    cache_dir: Path | None = None,
+    channel: int | None = None,
+) -> EvidenceTrack:
+    key = make_cache_key(audio_path, "energy_smooth", {"hop_s": hop_s, "smooth_ms": smooth_ms, "channel": channel})
     cached = cache_get(cache_dir, key)
     if cached is not None:
         with np.load(cached) as npz:
@@ -58,15 +71,22 @@ def compute_energy_smooth_track(audio_path: Path, *, hop_s: float = CANONICAL_HO
         tb = TimeBase.canonical(n_frames=len(values))
         return EvidenceTrack(name="energy_smooth", timebase=tb, values=values, semantics="score")
 
-    base = compute_energy_rms_track(audio_path, hop_s=hop_s, cache_dir=cache_dir)
+    base = compute_energy_rms_track(audio_path, hop_s=hop_s, cache_dir=cache_dir, channel=channel)
     smoothed = _smooth(np.asarray(base.values), smooth_ms, hop_s)
     tb = TimeBase.canonical(n_frames=len(smoothed))
     cache_put(cache_dir, key, {"values": smoothed})
     return EvidenceTrack(name="energy_smooth", timebase=tb, values=smoothed, semantics="score")
 
 
-def compute_energy_slope_track(audio_path: Path, *, hop_s: float = CANONICAL_HOP_SECONDS, smooth_ms: float = SMOOTH_MS_DEFAULT, cache_dir: Path | None = None) -> EvidenceTrack:
-    key = make_cache_key(audio_path, "energy_slope", {"hop_s": hop_s, "smooth_ms": smooth_ms})
+def compute_energy_slope_track(
+    audio_path: Path,
+    *,
+    hop_s: float = CANONICAL_HOP_SECONDS,
+    smooth_ms: float = SMOOTH_MS_DEFAULT,
+    cache_dir: Path | None = None,
+    channel: int | None = None,
+) -> EvidenceTrack:
+    key = make_cache_key(audio_path, "energy_slope", {"hop_s": hop_s, "smooth_ms": smooth_ms, "channel": channel})
     cached = cache_get(cache_dir, key)
     if cached is not None:
         with np.load(cached) as npz:
@@ -74,7 +94,13 @@ def compute_energy_slope_track(audio_path: Path, *, hop_s: float = CANONICAL_HOP
         tb = TimeBase.canonical(n_frames=len(values))
         return EvidenceTrack(name="energy_slope", timebase=tb, values=values, semantics="score")
 
-    smooth_track = compute_energy_smooth_track(audio_path, hop_s=hop_s, smooth_ms=smooth_ms, cache_dir=cache_dir)
+    smooth_track = compute_energy_smooth_track(
+        audio_path,
+        hop_s=hop_s,
+        smooth_ms=smooth_ms,
+        cache_dir=cache_dir,
+        channel=channel,
+    )
     smooth_vals = np.asarray(smooth_track.values, dtype=float)
     slope = np.empty_like(smooth_vals)
     slope[0] = 0.0

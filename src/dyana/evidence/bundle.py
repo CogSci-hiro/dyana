@@ -29,8 +29,8 @@ class EvidenceBundle:
     tracks
         Optional initial mapping of tracks (by name).
 
-    Usage example
-    -------------
+    Examples
+    --------
         tb = TimeBase.canonical()
         bundle = EvidenceBundle(timebase=tb)
         bundle.add_track("vad", vad_track)
@@ -91,8 +91,8 @@ class EvidenceBundle:
         ValueError
             If timebases are incompatible.
 
-        Usage example
-        -------------
+        Examples
+        --------
             merged = b1.merge(b2)
         """
 
@@ -150,8 +150,8 @@ class EvidenceBundle:
         - manifest.json: lists track metadata and filenames
         - <name>.npz: arrays for each track
 
-        Usage example
-        -------------
+        Examples
+        --------
             bundle.to_directory(Path("/tmp/bundle"))
         """
 

@@ -1,0 +1,11 @@
+{
+  "artifacts_produced": {
+    "transcript": "8cd9629e593bbd3427103eb816e1b03e1ea473b6d0fac1680edc9e87dd696e79"
+  },
+  "run_id": "28481fd9a72a472cacdf5392616a5f37",
+  "status": "ok",
+  "step_count": 1,
+  "target_outputs": [
+    "transcript"
+  ]
+}

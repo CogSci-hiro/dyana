@@ -23,10 +23,10 @@ def step(
     - debug mode: exception is re-raised (hard stop).
     - run mode: exception is recorded and suppressed; caller continues after the block.
 
-    Usage example
-    -------------
-        with step("load_audio", reporter, context={"subject": "sub-001"}):
-            audio = load_audio(...)
+    Examples
+    --------
+    >>> with step("load_audio", reporter, context={"subject": "sub-001"}):
+    ...     audio = load_audio(...)
     """
     try:
         yield
@@ -52,13 +52,13 @@ def guard(
     Returns
     -------
     value
-        The callable result on success; otherwise `default`.
+        The callable result on success; otherwise ``default``.
 
-    Usage example
-    -------------
-        audio = guard("load_audio", reporter, lambda: load_audio(path), default=None)
-        if audio is None:
-            return
+    Examples
+    --------
+    >>> audio = guard("load_audio", reporter, lambda: load_audio(path), default=None)
+    >>> if audio is None:
+    ...     return
     """
     try:
         result = fn()
@@ -70,4 +70,3 @@ def guard(
     else:
         reporter.mark_ok(step_name)
         return result
-

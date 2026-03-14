@@ -1,0 +1,16 @@
+[
+  {
+    "artifact_hash": "8cd9629e593bbd3427103eb816e1b03e1ea473b6d0fac1680edc9e87dd696e79",
+    "end_time": 1773523601.427069,
+    "inputs": {
+      "audio": "69ea26ef7b847a36973506c6b024bfd59fe4699860c6f5f5d5fdd0edf05b3022"
+    },
+    "outputs": [
+      "transcript"
+    ],
+    "parameters": {},
+    "start_time": 1773523601.427047,
+    "status": "cached",
+    "step": "transcription"
+  }
+]

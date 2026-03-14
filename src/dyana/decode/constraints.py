@@ -26,6 +26,8 @@ LEAK_TO_OVL_PENALTY: float = -5.0
 
 MIN_IPU_FRAMES: int = 3  # A/B/OVL/LEAK
 MIN_SIL_FRAMES: int = 2
+HIGH_RECALL_SILENCE_ENTRY_SCALE: float = 3.0
+HIGH_RECALL_MIN_SILENCE_SCALE: int = 2
 
 
 def base_transition_matrix(
@@ -81,6 +83,9 @@ def base_transition_matrix(
     mat[sil, leak] = LEAK_FORBID  # keep explicit hard rule after SIL penalties
     mat[leak, name_to_idx["A"]] = LEAK_TO_AB_FORBID
     mat[leak, name_to_idx["B"]] = LEAK_TO_AB_FORBID
+    if params.ipu_detection_mode == "high_recall":
+        for src_name in ("A", "B", "OVL"):
+            mat[name_to_idx[src_name], sil] *= HIGH_RECALL_SILENCE_ENTRY_SCALE
     return mat
 
 
@@ -155,3 +160,23 @@ def default_min_durations() -> Dict[str, int]:
         "OVL": MIN_IPU_FRAMES,
         "LEAK": MIN_IPU_FRAMES,
     }
+
+
+def resolve_min_durations(
+    min_durations: Dict[str, int] | None = None,
+    *,
+    tuning_params: DecodeTuningParams | None = None,
+) -> Dict[str, int]:
+    """
+    Return min-duration settings after applying mode-specific adjustments.
+
+    High-recall mode doubles the minimum SIL duration so brief dips are less
+    likely to fragment IPUs.
+    """
+
+    resolved = default_min_durations()
+    if min_durations is not None:
+        resolved.update(min_durations)
+    if tuning_params is not None and tuning_params.ipu_detection_mode == "high_recall":
+        resolved["SIL"] = int(resolved["SIL"] * HIGH_RECALL_MIN_SILENCE_SCALE)
+    return resolved

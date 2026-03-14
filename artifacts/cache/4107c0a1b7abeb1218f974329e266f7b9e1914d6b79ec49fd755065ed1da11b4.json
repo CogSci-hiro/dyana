@@ -1,0 +1,13 @@
+{
+  "artifact_hash": "4107c0a1b7abeb1218f974329e266f7b9e1914d6b79ec49fd755065ed1da11b4",
+  "artifact_name": "diagnostics",
+  "code_version": "0.0.0",
+  "inputs": {
+    "decode": "4897b7dbf4ef9495c0f4a2f2b219220e27ff35f5d354ea2c44a2d6931880c869"
+  },
+  "parameters": {},
+  "payload_hash": "60b7fc54101475f769cdc0590f38e54de7ff13f389dac47dc92c4be6eff1c07e",
+  "serializer": "pickle",
+  "step": "diagnostics",
+  "timestamp": 1773523601.424979
+}

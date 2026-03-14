@@ -1,0 +1,14 @@
+{
+  "artifact_hash": "d57593f99413f904358202398d159ce7772ce2c421a8298ea0f35df63f93944b",
+  "artifact_name": "alignment",
+  "code_version": "0.0.0",
+  "inputs": {
+    "audio": "69ea26ef7b847a36973506c6b024bfd59fe4699860c6f5f5d5fdd0edf05b3022",
+    "transcript": "8cd9629e593bbd3427103eb816e1b03e1ea473b6d0fac1680edc9e87dd696e79"
+  },
+  "parameters": {},
+  "payload_hash": "1d798e5e6ea5f7edb9c3ac8f4da3ca6828fe4541fc0307e06ab57950b334ec9f",
+  "serializer": "pickle",
+  "step": "alignment",
+  "timestamp": 1773523601.424603
+}

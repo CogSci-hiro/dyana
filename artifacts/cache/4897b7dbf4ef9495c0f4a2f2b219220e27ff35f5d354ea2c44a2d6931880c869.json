@@ -1,0 +1,14 @@
+{
+  "artifact_hash": "4897b7dbf4ef9495c0f4a2f2b219220e27ff35f5d354ea2c44a2d6931880c869",
+  "artifact_name": "decode",
+  "code_version": "0.0.0",
+  "inputs": {
+    "alignment": "d57593f99413f904358202398d159ce7772ce2c421a8298ea0f35df63f93944b",
+    "evidence": "753900928b4a681554fa7d0c321830d425fb5fa9b27ccc107a418d58a450c5b5"
+  },
+  "parameters": {},
+  "payload_hash": "2651e548abffd1a42246d5caf9f37c13a4fe8b030f6fe9c487527ed2b383deb1",
+  "serializer": "pickle",
+  "step": "decode",
+  "timestamp": 1773523601.424864
+}

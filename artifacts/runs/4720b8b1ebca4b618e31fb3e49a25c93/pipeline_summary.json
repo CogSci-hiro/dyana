@@ -1,0 +1,15 @@
+{
+  "artifacts_produced": {
+    "alignment": "d57593f99413f904358202398d159ce7772ce2c421a8298ea0f35df63f93944b",
+    "decode": "4897b7dbf4ef9495c0f4a2f2b219220e27ff35f5d354ea2c44a2d6931880c869",
+    "diagnostics": "4107c0a1b7abeb1218f974329e266f7b9e1914d6b79ec49fd755065ed1da11b4",
+    "evidence": "753900928b4a681554fa7d0c321830d425fb5fa9b27ccc107a418d58a450c5b5",
+    "transcript": "8cd9629e593bbd3427103eb816e1b03e1ea473b6d0fac1680edc9e87dd696e79"
+  },
+  "run_id": "4720b8b1ebca4b618e31fb3e49a25c93",
+  "status": "ok",
+  "step_count": 5,
+  "target_outputs": [
+    "diagnostics"
+  ]
+}

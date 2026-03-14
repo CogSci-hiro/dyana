@@ -49,6 +49,35 @@ def extract_ipus(states: Sequence[str], timebase: TimeBase, target_label: str, *
     return segments
 
 
+def merge_ipus_across_short_silence(segments: Sequence[Segment], *, max_gap_s: float) -> List[Segment]:
+    """
+    Merge adjacent same-label IPUs separated by a short silence gap.
+
+    Parameters
+    ----------
+    segments
+        Ordered IPU segments for a single label.
+    max_gap_s
+        Merge threshold in seconds. Gaps strictly smaller than this value are
+        merged.
+    """
+
+    if max_gap_s < 0.0:
+        raise ValueError("max_gap_s must be non-negative.")
+    if not segments:
+        return []
+
+    merged: List[Segment] = [Segment(**segments[0].__dict__)]
+    for seg in segments[1:]:
+        last = merged[-1]
+        gap_s = seg.start_time - last.end_time
+        if seg.label == last.label and gap_s < max_gap_s:
+            merged[-1] = Segment(start_time=last.start_time, end_time=seg.end_time, label=last.label)
+            continue
+        merged.append(Segment(**seg.__dict__))
+    return merged
+
+
 def count_ipu_starts_after_leak(base_states: Sequence[str]) -> int:
     """
     Count IPU starts whose previous contiguous segment label is LEAK.
