@@ -1,5 +1,5 @@
 [project]
-name = "dyana"
+name = "dyana-annotate"
 version = "0.0.0"
 description = "DYadic Annotation of Naturalistic Audio"
 readme = "README.md"
