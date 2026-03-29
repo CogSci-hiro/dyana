@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1a22986d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=862bf139" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,7 +49,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.0" />
-    <meta name="docbuild:last-update" content="Mar 14, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 29, 2026"/>
   </head>
   
   
@@ -109,6 +109,12 @@
   
   
   
+  
+    
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt=""/>
+    <img src="../../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt=""/>
   
   
     <p class="title logo__title">DYANA</p>
@@ -501,6 +507,7 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;log_scores second dim must be </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">base_names</span><span class="p">)</span><span class="si">}</span><span class="s2"> (base states)&quot;</span><span class="p">)</span>
 
     <span class="n">min_durs</span> <span class="o">=</span> <span class="n">min_durations</span> <span class="ow">or</span> <span class="n">constraints</span><span class="o">.</span><span class="n">default_min_durations</span><span class="p">()</span>
+    <span class="n">min_durs</span> <span class="o">=</span> <span class="n">constraints</span><span class="o">.</span><span class="n">resolve_min_durations</span><span class="p">(</span><span class="n">min_durs</span> <span class="k">if</span> <span class="n">min_durations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tuning_params</span><span class="o">=</span><span class="n">tuning_params</span><span class="p">)</span>
     <span class="n">base_trans</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">transition</span>
         <span class="k">if</span> <span class="n">transition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>

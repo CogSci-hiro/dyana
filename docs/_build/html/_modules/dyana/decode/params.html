@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1a22986d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=862bf139" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,7 +49,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.0" />
-    <meta name="docbuild:last-update" content="Mar 14, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 29, 2026"/>
   </head>
   
   
@@ -109,6 +109,12 @@
   
   
   
+  
+    
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt=""/>
+    <img src="../../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt=""/>
   
   
     <p class="title logo__title">DYANA</p>
@@ -379,7 +385,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Tuple</span>
 
 
 <div class="viewcode-block" id="DecodeTuningParams">
@@ -393,6 +399,11 @@
 <span class="sd">    -----</span>
 <span class="sd">    ``ovl_transition_cost`` is kept for backward compatibility and acts as a</span>
 <span class="sd">    fallback when explicit OVL edge costs are not provided.</span>
+
+<span class="sd">    ``ipu_detection_mode=&quot;balanced&quot;`` preserves the current decoder behavior.</span>
+<span class="sd">    ``ipu_detection_mode=&quot;high_recall&quot;`` biases the system toward speech</span>
+<span class="sd">    coverage for pre-transcription IPU segmentation, even if that slightly</span>
+<span class="sd">    over-extends IPUs across silence-like dips.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">speaker_switch_penalty</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.0</span>
@@ -402,6 +413,9 @@
     <span class="n">b_to_ovl_cost</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">ovl_to_a_cost</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">ovl_to_b_cost</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">ipu_detection_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;balanced&quot;</span><span class="p">,</span> <span class="s2">&quot;high_recall&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;balanced&quot;</span>
+    <span class="n">silence_bias</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">merge_silence_gap_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">400.0</span>
 
 <div class="viewcode-block" id="DecodeTuningParams.resolved_ovl_costs">
 <a class="viewcode-back" href="../../../api/generated/dyana.decode.params.html#dyana.decode.params.DecodeTuningParams.resolved_ovl_costs">[docs]</a>

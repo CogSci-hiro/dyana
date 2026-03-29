@@ -41,6 +41,7 @@ default_role = "literal"
 
 html_theme = "pydata_sphinx_theme"
 html_title = "DYANA"
+html_logo = "_static/logo.svg"
 html_static_path = ["_static"]
 html_css_files = ["custom.css"]
 html_show_sourcelink = False
@@ -52,6 +53,9 @@ html_theme_options = {
     "navbar_align": "left",
     "navbar_start": ["navbar-logo"],
     "navbar_center": ["navbar-nav"],
+    "logo": {
+        "text": "DYANA",
+    },
     "secondary_sidebar_items": ["page-toc"],
     "article_header_start": ["breadcrumbs"],
     "icon_links": [

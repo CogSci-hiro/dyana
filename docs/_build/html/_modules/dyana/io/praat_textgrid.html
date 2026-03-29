@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1a22986d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=862bf139" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,7 +49,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.0" />
-    <meta name="docbuild:last-update" content="Mar 14, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 29, 2026"/>
   </head>
   
   
@@ -109,6 +109,12 @@
   
   
   
+  
+    
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt=""/>
+    <img src="../../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt=""/>
   
   
     <p class="title logo__title">DYANA</p>
@@ -384,40 +390,78 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.decode.ipu</span><span class="w"> </span><span class="kn">import</span> <span class="n">Segment</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_tier_block</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">segments</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Segment</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_format_number</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fill_with_silence</span><span class="p">(</span><span class="n">segments</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Segment</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">xmax</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">silence_label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Segment</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">xmax</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Segment</span><span class="p">(</span><span class="n">start_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">silence_label</span><span class="p">)]</span>
+
+    <span class="n">filled</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Segment</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">seg</span><span class="o">.</span><span class="n">start_time</span> <span class="o">&gt;</span> <span class="n">cursor</span><span class="p">:</span>
+            <span class="n">filled</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Segment</span><span class="p">(</span><span class="n">start_time</span><span class="o">=</span><span class="n">cursor</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="n">seg</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">silence_label</span><span class="p">))</span>
+        <span class="n">filled</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seg</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">end_time</span>
+    <span class="k">if</span> <span class="n">cursor</span> <span class="o">&lt;</span> <span class="n">xmax</span><span class="p">:</span>
+        <span class="n">filled</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Segment</span><span class="p">(</span><span class="n">start_time</span><span class="o">=</span><span class="n">cursor</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">silence_label</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">filled</span><span class="p">:</span>
+        <span class="n">filled</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Segment</span><span class="p">(</span><span class="n">start_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">silence_label</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">filled</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_tier_block</span><span class="p">(</span><span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">segments</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Segment</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">xmax</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">silence_label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="n">seg_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+    <span class="n">seg_list</span> <span class="o">=</span> <span class="n">_fill_with_silence</span><span class="p">(</span><span class="n">seg_list</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">silence_label</span><span class="o">=</span><span class="n">silence_label</span><span class="p">)</span>
     <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="sa">f</span><span class="s1">&#39;    item []: </span><span class="si">{</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s1">&#39;    item [</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1">]:&#39;</span><span class="p">,</span>
         <span class="s1">&#39;        class = &quot;IntervalTier&quot;&#39;</span><span class="p">,</span>
         <span class="sa">f</span><span class="s1">&#39;        name = &quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s1">&#39;        xmin = </span><span class="si">{</span><span class="mi">0</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s1">&#39;        xmax = </span><span class="si">{</span><span class="n">seg_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">end_time</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">seg_list</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s1">&#39;        xmin = </span><span class="si">{</span><span class="n">_format_number</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s1">&#39;        xmax = </span><span class="si">{</span><span class="n">_format_number</span><span class="p">(</span><span class="n">xmax</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
         <span class="sa">f</span><span class="s1">&#39;        intervals: size = </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">seg_list</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
     <span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">seg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seg_list</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">lines</span> <span class="o">+=</span> <span class="p">[</span>
             <span class="sa">f</span><span class="s1">&#39;        intervals [</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">]:&#39;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s1">&#39;            xmin = </span><span class="si">{</span><span class="n">seg</span><span class="o">.</span><span class="n">start_time</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s1">&#39;            xmax = </span><span class="si">{</span><span class="n">seg</span><span class="o">.</span><span class="n">end_time</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s1">&#39;            xmin = </span><span class="si">{</span><span class="n">_format_number</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s1">&#39;            xmax = </span><span class="si">{</span><span class="n">_format_number</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">end_time</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
             <span class="sa">f</span><span class="s1">&#39;            text = &quot;</span><span class="si">{</span><span class="n">seg</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
-        <span class="p">]</span>
+    <span class="p">]</span>
     <span class="k">return</span> <span class="n">lines</span>
 
 
 <div class="viewcode-block" id="write_textgrid">
 <a class="viewcode-back" href="../../../api/generated/dyana.io.praat_textgrid.html#dyana.io.praat_textgrid.write_textgrid">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">write_textgrid</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">speaker_a</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Segment</span><span class="p">],</span> <span class="n">speaker_b</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Segment</span><span class="p">],</span> <span class="n">overlap</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Segment</span><span class="p">],</span> <span class="n">leak</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Segment</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_textgrid</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">speaker_a</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Segment</span><span class="p">],</span>
+    <span class="n">speaker_b</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Segment</span><span class="p">],</span>
+    <span class="n">overlap</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Segment</span><span class="p">],</span>
+    <span class="n">leak</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Segment</span><span class="p">],</span>
+    <span class="n">silence_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;#&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">speaker_a_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">speaker_a</span><span class="p">)</span>
+    <span class="n">speaker_b_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">speaker_b</span><span class="p">)</span>
+    <span class="n">overlap_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">overlap</span><span class="p">)</span>
+    <span class="n">leak_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">leak</span><span class="p">)</span>
+    <span class="n">all_segments</span> <span class="o">=</span> <span class="n">speaker_a_list</span> <span class="o">+</span> <span class="n">speaker_b_list</span> <span class="o">+</span> <span class="n">overlap_list</span> <span class="o">+</span> <span class="n">leak_list</span>
+    <span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="n">seg</span><span class="o">.</span><span class="n">end_time</span> <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">all_segments</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
     <span class="n">tiers</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">tiers</span> <span class="o">+=</span> <span class="n">_tier_block</span><span class="p">(</span><span class="s2">&quot;SpeakerA&quot;</span><span class="p">,</span> <span class="n">speaker_a</span><span class="p">)</span>
-    <span class="n">tiers</span> <span class="o">+=</span> <span class="n">_tier_block</span><span class="p">(</span><span class="s2">&quot;SpeakerB&quot;</span><span class="p">,</span> <span class="n">speaker_b</span><span class="p">)</span>
-    <span class="n">tiers</span> <span class="o">+=</span> <span class="n">_tier_block</span><span class="p">(</span><span class="s2">&quot;Overlap&quot;</span><span class="p">,</span> <span class="n">overlap</span><span class="p">)</span>
-    <span class="n">tiers</span> <span class="o">+=</span> <span class="n">_tier_block</span><span class="p">(</span><span class="s2">&quot;Leak&quot;</span><span class="p">,</span> <span class="n">leak</span><span class="p">)</span>
+    <span class="n">tiers</span> <span class="o">+=</span> <span class="n">_tier_block</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;SpeakerA&quot;</span><span class="p">,</span> <span class="n">speaker_a_list</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">silence_label</span><span class="o">=</span><span class="n">silence_label</span><span class="p">)</span>
+    <span class="n">tiers</span> <span class="o">+=</span> <span class="n">_tier_block</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;SpeakerB&quot;</span><span class="p">,</span> <span class="n">speaker_b_list</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">silence_label</span><span class="o">=</span><span class="n">silence_label</span><span class="p">)</span>
+    <span class="n">tiers</span> <span class="o">+=</span> <span class="n">_tier_block</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Overlap&quot;</span><span class="p">,</span> <span class="n">overlap_list</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">silence_label</span><span class="o">=</span><span class="n">silence_label</span><span class="p">)</span>
+    <span class="n">tiers</span> <span class="o">+=</span> <span class="n">_tier_block</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;Leak&quot;</span><span class="p">,</span> <span class="n">leak_list</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">silence_label</span><span class="o">=</span><span class="n">silence_label</span><span class="p">)</span>
     <span class="n">header</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s1">&#39;File type = &quot;ooTextFile&quot;&#39;</span><span class="p">,</span>
         <span class="s1">&#39;Object class = &quot;TextGrid&quot;&#39;</span><span class="p">,</span>
         <span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;xmin = 0&#39;</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s1">&#39;xmax = </span><span class="si">{</span><span class="n">tiers</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">tiers</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s1">&#39;xmin = </span><span class="si">{</span><span class="n">_format_number</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s1">&#39;xmax = </span><span class="si">{</span><span class="n">_format_number</span><span class="p">(</span><span class="n">xmax</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
         <span class="s1">&#39;tiers? &lt;exists&gt;&#39;</span><span class="p">,</span>
         <span class="s1">&#39;size = 4&#39;</span><span class="p">,</span>
         <span class="s1">&#39;item []:&#39;</span><span class="p">,</span>
@@ -445,7 +489,7 @@
             <span class="n">xmax</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">elif</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">current</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">current</span> <span class="ow">in</span> <span class="n">tiers</span> <span class="ow">and</span> <span class="n">text</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">current</span> <span class="ow">in</span> <span class="n">tiers</span> <span class="ow">and</span> <span class="n">text</span> <span class="ow">and</span> <span class="n">text</span> <span class="o">!=</span> <span class="s2">&quot;#&quot;</span><span class="p">:</span>
                 <span class="n">tiers</span><span class="p">[</span><span class="n">current</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Segment</span><span class="p">(</span><span class="n">start_time</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">text</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">tiers</span></div>
 

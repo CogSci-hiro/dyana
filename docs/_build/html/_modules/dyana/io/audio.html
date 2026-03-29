@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1a22986d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=862bf139" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,7 +49,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.0" />
-    <meta name="docbuild:last-update" content="Mar 14, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 29, 2026"/>
   </head>
   
   
@@ -109,6 +109,12 @@
   
   
   
+  
+    
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt=""/>
+    <img src="../../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt=""/>
   
   
     <p class="title logo__title">DYANA</p>
@@ -382,7 +388,27 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_soundfile</span><span class="p">():</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">soundfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sf</span>
+
+    <span class="k">return</span> <span class="n">sf</span>
+
+
+<div class="viewcode-block" id="load_audio_stereo">
+<a class="viewcode-back" href="../../../api/generated/dyana.io.audio.html#dyana.io.audio.load_audio_stereo">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_audio_stereo</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load audio and require exactly two channels.&quot;&quot;&quot;</span>
+
+    <span class="n">sf</span> <span class="o">=</span> <span class="n">_soundfile</span><span class="p">()</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">always_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected stereo audio with shape (n_samples, 2), got </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">sr</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="load_audio_mono">
@@ -403,6 +429,7 @@
 <span class="sd">    sample_rate : int</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">sf</span> <span class="o">=</span> <span class="n">_soundfile</span><span class="p">()</span>
     <span class="n">data</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">always_2d</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">channel</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">channel</span> <span class="o">&gt;=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
@@ -413,6 +440,52 @@
     <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">sr</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="detect_channel_similarity">
+<a class="viewcode-back" href="../../../api/generated/dyana.io.audio.html#dyana.io.audio.detect_channel_similarity">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">detect_channel_similarity</span><span class="p">(</span>
+    <span class="n">wav_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.98</span><span class="p">,</span>
+    <span class="n">max_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1_000_000</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Detect whether stereo channels contain the same signal.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    label : str</span>
+<span class="sd">        ``&quot;same&quot;`` or ``&quot;different&quot;``.</span>
+<span class="sd">    correlation : float</span>
+<span class="sd">        Pearson correlation between channels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">stereo</span><span class="p">,</span> <span class="n">sample_rate</span> <span class="o">=</span> <span class="n">load_audio_stereo</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">wav_path</span><span class="p">))</span>
+    <span class="n">max_window</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">stereo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">sample_rate</span> <span class="o">*</span> <span class="mi">30</span><span class="p">))</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="n">stereo</span><span class="p">[:</span><span class="n">max_window</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">window</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">max_samples</span><span class="p">:</span>
+        <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">window</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">max_samples</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="n">window</span> <span class="o">=</span> <span class="n">window</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+
+    <span class="n">left</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">window</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">window</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">left</span> <span class="o">-=</span> <span class="n">left</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">right</span> <span class="o">-=</span> <span class="n">right</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">left_std</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">left</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+    <span class="n">right_std</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">right</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
+
+    <span class="k">if</span> <span class="n">left_std</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span> <span class="ow">or</span> <span class="n">right_std</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span><span class="p">:</span>
+        <span class="n">corr</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">left</span> <span class="o">/=</span> <span class="n">left_std</span>
+        <span class="n">right</span> <span class="o">/=</span> <span class="n">right_std</span>
+        <span class="n">corr</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">left</span> <span class="o">*</span> <span class="n">right</span><span class="p">))</span>
+        <span class="n">corr</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">corr</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+
+    <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;same&quot;</span> <span class="k">if</span> <span class="n">corr</span> <span class="o">&gt;</span> <span class="n">threshold</span> <span class="k">else</span> <span class="s2">&quot;different&quot;</span>
+    <span class="k">return</span> <span class="n">label</span><span class="p">,</span> <span class="n">corr</span></div>
 
 </pre></div>
 

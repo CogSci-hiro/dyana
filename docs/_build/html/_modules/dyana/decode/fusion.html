@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1a22986d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=862bf139" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,7 +49,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.0" />
-    <meta name="docbuild:last-update" content="Mar 14, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 29, 2026"/>
   </head>
   
   
@@ -109,6 +109,12 @@
   
   
   
+  
+    
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt=""/>
+    <img src="../../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt=""/>
   
   
     <p class="title logo__title">DYANA</p>
@@ -384,9 +390,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.core.timebase</span><span class="w"> </span><span class="kn">import</span> <span class="n">CANONICAL_HOP_SECONDS</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.evidence.bundle</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvidenceBundle</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.evidence.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvidenceTrack</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dyana.evidence.leakage</span><span class="w"> </span><span class="kn">import</span> <span class="n">LEAKAGE_TRACK_NAME</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dyana.evidence.overlap</span><span class="w"> </span><span class="kn">import</span> <span class="n">OVERLAP_PROXY_TRACK_NAME</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.decode</span><span class="w"> </span><span class="kn">import</span> <span class="n">state_space</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dyana.decode.params</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecodeTuningParams</span>
 
 <span class="c1"># ---------- Constants ----------</span>
 
@@ -400,6 +405,9 @@
 <span class="n">W_PRIOR</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.4</span>
 <span class="n">OVL_BONUS</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.4</span>
 <span class="n">W_OVL_PROXY</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">HIGH_RECALL_SILENCE_SCORE_DELTA</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+<span class="n">LEAKAGE_TRACK_NAME</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;leakage_likelihood&quot;</span>
+<span class="n">OVERLAP_PROXY_TRACK_NAME</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;overlap_proxy&quot;</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_require_prob_or_logit</span><span class="p">(</span><span class="n">track</span><span class="p">:</span> <span class="n">EvidenceTrack</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">]:</span>
@@ -440,9 +448,19 @@
 
 <div class="viewcode-block" id="fuse_bundle_to_scores">
 <a class="viewcode-back" href="../../../api/generated/dyana.decode.fusion.html#dyana.decode.fusion.fuse_bundle_to_scores">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">fuse_bundle_to_scores</span><span class="p">(</span><span class="n">bundle</span><span class="p">:</span> <span class="n">EvidenceBundle</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fuse_bundle_to_scores</span><span class="p">(</span>
+    <span class="n">bundle</span><span class="p">:</span> <span class="n">EvidenceBundle</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">tuning_params</span><span class="p">:</span> <span class="n">DecodeTuningParams</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert an EvidenceBundle into log-scores over base states.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Balanced mode preserves the default silence handling.</span>
+<span class="sd">    High-recall mode is intended for pre-transcription segmentation and reduces</span>
+<span class="sd">    silence preference so short energy dips are less likely to split speech.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -450,6 +468,7 @@
 <span class="sd">        Shape (T, num_states) in log space.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">params</span> <span class="o">=</span> <span class="n">tuning_params</span> <span class="ow">or</span> <span class="n">DecodeTuningParams</span><span class="p">()</span>
     <span class="n">T</span> <span class="o">=</span> <span class="n">_check_timebases</span><span class="p">(</span><span class="n">bundle</span><span class="p">)</span>
     <span class="n">S</span> <span class="o">=</span> <span class="n">state_space</span><span class="o">.</span><span class="n">num_states</span><span class="p">()</span>
     <span class="n">scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">T</span><span class="p">,</span> <span class="n">S</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -526,7 +545,11 @@
     <span class="n">idx_ovl</span> <span class="o">=</span> <span class="n">state_space</span><span class="o">.</span><span class="n">state_index</span><span class="p">(</span><span class="s2">&quot;OVL&quot;</span><span class="p">)</span>
     <span class="n">idx_leak</span> <span class="o">=</span> <span class="n">state_space</span><span class="o">.</span><span class="n">state_index</span><span class="p">(</span><span class="s2">&quot;LEAK&quot;</span><span class="p">)</span>
 
-    <span class="n">scores</span><span class="p">[:,</span> <span class="n">idx_sil</span><span class="p">]</span> <span class="o">+=</span> <span class="n">W_SPEECH</span> <span class="o">*</span> <span class="n">log_nonspeech</span>
+    <span class="n">silence_score</span> <span class="o">=</span> <span class="n">W_SPEECH</span> <span class="o">*</span> <span class="n">log_nonspeech</span> <span class="o">+</span> <span class="n">params</span><span class="o">.</span><span class="n">silence_bias</span>
+    <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">ipu_detection_mode</span> <span class="o">==</span> <span class="s2">&quot;high_recall&quot;</span><span class="p">:</span>
+        <span class="n">silence_score</span> <span class="o">+=</span> <span class="n">HIGH_RECALL_SILENCE_SCORE_DELTA</span>
+
+    <span class="n">scores</span><span class="p">[:,</span> <span class="n">idx_sil</span><span class="p">]</span> <span class="o">+=</span> <span class="n">silence_score</span>
     <span class="n">scores</span><span class="p">[:,</span> <span class="n">idx_a</span><span class="p">]</span> <span class="o">+=</span> <span class="n">W_SPEECH</span> <span class="o">*</span> <span class="n">log_speech</span> <span class="o">+</span> <span class="n">W_DIAR</span> <span class="o">*</span> <span class="n">log_pa</span> <span class="o">+</span> <span class="n">W_PRIOR</span> <span class="o">*</span> <span class="n">prior_offset_a</span>
     <span class="n">scores</span><span class="p">[:,</span> <span class="n">idx_b</span><span class="p">]</span> <span class="o">+=</span> <span class="n">W_SPEECH</span> <span class="o">*</span> <span class="n">log_speech</span> <span class="o">+</span> <span class="n">W_DIAR</span> <span class="o">*</span> <span class="n">log_pb</span> <span class="o">+</span> <span class="n">W_PRIOR</span> <span class="o">*</span> <span class="n">prior_offset_b</span>
     <span class="n">scores</span><span class="p">[:,</span> <span class="n">idx_ovl</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>

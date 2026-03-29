@@ -12,8 +12,28 @@ html[data-theme="light"] {
   --pst-color-link-hover: #0a9396;
 }
 
+.dyana-title-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 0.1rem 0 0.35rem;
+  line-height: 0;
+  background: transparent !important;
+  border: 0;
+  box-shadow: none;
+}
+
+.dyana-title-logo {
+  width: min(16rem, 56vw);
+  height: auto;
+  display: block;
+  background: transparent !important;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
 .dyana-hero {
-  padding: 1.5rem 0 2rem;
+  padding: 0.65rem 0 2rem;
 }
 
 .dyana-eyebrow {
@@ -40,6 +60,11 @@ html[data-theme="light"] {
   font-size: 1.1rem;
   line-height: 1.7;
   color: var(--dyana-muted);
+}
+
+.navbar-brand img {
+  max-height: 2.25rem;
+  width: auto;
 }
 
 .sd-card {

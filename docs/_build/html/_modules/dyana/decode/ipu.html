@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1a22986d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=862bf139" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,7 +49,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.0" />
-    <meta name="docbuild:last-update" content="Mar 14, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 29, 2026"/>
   </head>
   
   
@@ -109,6 +109,12 @@
   
   
   
+  
+    
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt=""/>
+    <img src="../../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt=""/>
   
   
     <p class="title logo__title">DYANA</p>
@@ -428,6 +434,38 @@
                 <span class="p">)</span>
             <span class="p">)</span>
     <span class="k">return</span> <span class="n">segments</span></div>
+
+
+
+<div class="viewcode-block" id="merge_ipus_across_short_silence">
+<a class="viewcode-back" href="../../../api/generated/dyana.decode.ipu.html#dyana.decode.ipu.merge_ipus_across_short_silence">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_ipus_across_short_silence</span><span class="p">(</span><span class="n">segments</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Segment</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">max_gap_s</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Segment</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Merge adjacent same-label IPUs separated by a short silence gap.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    segments</span>
+<span class="sd">        Ordered IPU segments for a single label.</span>
+<span class="sd">    max_gap_s</span>
+<span class="sd">        Merge threshold in seconds. Gaps strictly smaller than this value are</span>
+<span class="sd">        merged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">max_gap_s</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;max_gap_s must be non-negative.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">segments</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="n">merged</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Segment</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Segment</span><span class="p">(</span><span class="o">**</span><span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">gap_s</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">start_time</span> <span class="o">-</span> <span class="n">last</span><span class="o">.</span><span class="n">end_time</span>
+        <span class="k">if</span> <span class="n">seg</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="n">last</span><span class="o">.</span><span class="n">label</span> <span class="ow">and</span> <span class="n">gap_s</span> <span class="o">&lt;</span> <span class="n">max_gap_s</span><span class="p">:</span>
+            <span class="n">merged</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Segment</span><span class="p">(</span><span class="n">start_time</span><span class="o">=</span><span class="n">last</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="n">seg</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">last</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">merged</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Segment</span><span class="p">(</span><span class="o">**</span><span class="n">seg</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">merged</span></div>
 
 
 

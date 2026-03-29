@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1a22986d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=862bf139" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,7 +49,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.0" />
-    <meta name="docbuild:last-update" content="Mar 14, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 29, 2026"/>
   </head>
   
   
@@ -109,6 +109,12 @@
   
   
   
+  
+    
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt=""/>
+    <img src="../../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt=""/>
   
   
     <p class="title logo__title">DYANA</p>
@@ -403,8 +409,14 @@
 
 <div class="viewcode-block" id="compute_energy_rms_track">
 <a class="viewcode-back" href="../../../api/generated/dyana.evidence.energy.html#dyana.evidence.energy.compute_energy_rms_track">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_energy_rms_track</span><span class="p">(</span><span class="n">audio_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">hop_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">CANONICAL_HOP_SECONDS</span><span class="p">,</span> <span class="n">cache_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EvidenceTrack</span><span class="p">:</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">make_cache_key</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="s2">&quot;energy_rms&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;hop_s&quot;</span><span class="p">:</span> <span class="n">hop_s</span><span class="p">})</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_energy_rms_track</span><span class="p">(</span>
+    <span class="n">audio_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">hop_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">CANONICAL_HOP_SECONDS</span><span class="p">,</span>
+    <span class="n">cache_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">channel</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EvidenceTrack</span><span class="p">:</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">make_cache_key</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="s2">&quot;energy_rms&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;hop_s&quot;</span><span class="p">:</span> <span class="n">hop_s</span><span class="p">,</span> <span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="n">channel</span><span class="p">})</span>
     <span class="n">cached</span> <span class="o">=</span> <span class="n">cache_get</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">cached</span><span class="p">)</span> <span class="k">as</span> <span class="n">npz</span><span class="p">:</span>
@@ -412,7 +424,7 @@
         <span class="n">tb</span> <span class="o">=</span> <span class="n">TimeBase</span><span class="o">.</span><span class="n">canonical</span><span class="p">(</span><span class="n">n_frames</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">EvidenceTrack</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;energy_rms&quot;</span><span class="p">,</span> <span class="n">timebase</span><span class="o">=</span><span class="n">tb</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span> <span class="n">semantics</span><span class="o">=</span><span class="s2">&quot;score&quot;</span><span class="p">)</span>
 
-    <span class="n">samples</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="n">load_audio_mono</span><span class="p">(</span><span class="n">audio_path</span><span class="p">)</span>
+    <span class="n">samples</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="n">load_audio_mono</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">)</span>
     <span class="n">frames</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_frame_audio</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">sr</span><span class="p">,</span> <span class="n">hop_s</span><span class="p">)</span>
     <span class="n">rms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">frames</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
     <span class="n">tb</span> <span class="o">=</span> <span class="n">TimeBase</span><span class="o">.</span><span class="n">canonical</span><span class="p">(</span><span class="n">n_frames</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rms</span><span class="p">))</span>
@@ -430,8 +442,15 @@
 
 <div class="viewcode-block" id="compute_energy_smooth_track">
 <a class="viewcode-back" href="../../../api/generated/dyana.evidence.energy.html#dyana.evidence.energy.compute_energy_smooth_track">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_energy_smooth_track</span><span class="p">(</span><span class="n">audio_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">hop_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">CANONICAL_HOP_SECONDS</span><span class="p">,</span> <span class="n">smooth_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">SMOOTH_MS_DEFAULT</span><span class="p">,</span> <span class="n">cache_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EvidenceTrack</span><span class="p">:</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">make_cache_key</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="s2">&quot;energy_smooth&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;hop_s&quot;</span><span class="p">:</span> <span class="n">hop_s</span><span class="p">,</span> <span class="s2">&quot;smooth_ms&quot;</span><span class="p">:</span> <span class="n">smooth_ms</span><span class="p">})</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_energy_smooth_track</span><span class="p">(</span>
+    <span class="n">audio_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">hop_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">CANONICAL_HOP_SECONDS</span><span class="p">,</span>
+    <span class="n">smooth_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">SMOOTH_MS_DEFAULT</span><span class="p">,</span>
+    <span class="n">cache_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">channel</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EvidenceTrack</span><span class="p">:</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">make_cache_key</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="s2">&quot;energy_smooth&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;hop_s&quot;</span><span class="p">:</span> <span class="n">hop_s</span><span class="p">,</span> <span class="s2">&quot;smooth_ms&quot;</span><span class="p">:</span> <span class="n">smooth_ms</span><span class="p">,</span> <span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="n">channel</span><span class="p">})</span>
     <span class="n">cached</span> <span class="o">=</span> <span class="n">cache_get</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">cached</span><span class="p">)</span> <span class="k">as</span> <span class="n">npz</span><span class="p">:</span>
@@ -439,7 +458,7 @@
         <span class="n">tb</span> <span class="o">=</span> <span class="n">TimeBase</span><span class="o">.</span><span class="n">canonical</span><span class="p">(</span><span class="n">n_frames</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">EvidenceTrack</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;energy_smooth&quot;</span><span class="p">,</span> <span class="n">timebase</span><span class="o">=</span><span class="n">tb</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span> <span class="n">semantics</span><span class="o">=</span><span class="s2">&quot;score&quot;</span><span class="p">)</span>
 
-    <span class="n">base</span> <span class="o">=</span> <span class="n">compute_energy_rms_track</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">hop_s</span><span class="o">=</span><span class="n">hop_s</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">compute_energy_rms_track</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">hop_s</span><span class="o">=</span><span class="n">hop_s</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">)</span>
     <span class="n">smoothed</span> <span class="o">=</span> <span class="n">_smooth</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="n">smooth_ms</span><span class="p">,</span> <span class="n">hop_s</span><span class="p">)</span>
     <span class="n">tb</span> <span class="o">=</span> <span class="n">TimeBase</span><span class="o">.</span><span class="n">canonical</span><span class="p">(</span><span class="n">n_frames</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">smoothed</span><span class="p">))</span>
     <span class="n">cache_put</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="n">smoothed</span><span class="p">})</span>
@@ -449,8 +468,15 @@
 
 <div class="viewcode-block" id="compute_energy_slope_track">
 <a class="viewcode-back" href="../../../api/generated/dyana.evidence.energy.html#dyana.evidence.energy.compute_energy_slope_track">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_energy_slope_track</span><span class="p">(</span><span class="n">audio_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">hop_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">CANONICAL_HOP_SECONDS</span><span class="p">,</span> <span class="n">smooth_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">SMOOTH_MS_DEFAULT</span><span class="p">,</span> <span class="n">cache_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EvidenceTrack</span><span class="p">:</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">make_cache_key</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="s2">&quot;energy_slope&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;hop_s&quot;</span><span class="p">:</span> <span class="n">hop_s</span><span class="p">,</span> <span class="s2">&quot;smooth_ms&quot;</span><span class="p">:</span> <span class="n">smooth_ms</span><span class="p">})</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_energy_slope_track</span><span class="p">(</span>
+    <span class="n">audio_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">hop_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">CANONICAL_HOP_SECONDS</span><span class="p">,</span>
+    <span class="n">smooth_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">SMOOTH_MS_DEFAULT</span><span class="p">,</span>
+    <span class="n">cache_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">channel</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EvidenceTrack</span><span class="p">:</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">make_cache_key</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="s2">&quot;energy_slope&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;hop_s&quot;</span><span class="p">:</span> <span class="n">hop_s</span><span class="p">,</span> <span class="s2">&quot;smooth_ms&quot;</span><span class="p">:</span> <span class="n">smooth_ms</span><span class="p">,</span> <span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="n">channel</span><span class="p">})</span>
     <span class="n">cached</span> <span class="o">=</span> <span class="n">cache_get</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">cached</span><span class="p">)</span> <span class="k">as</span> <span class="n">npz</span><span class="p">:</span>
@@ -458,7 +484,13 @@
         <span class="n">tb</span> <span class="o">=</span> <span class="n">TimeBase</span><span class="o">.</span><span class="n">canonical</span><span class="p">(</span><span class="n">n_frames</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">EvidenceTrack</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;energy_slope&quot;</span><span class="p">,</span> <span class="n">timebase</span><span class="o">=</span><span class="n">tb</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span> <span class="n">semantics</span><span class="o">=</span><span class="s2">&quot;score&quot;</span><span class="p">)</span>
 
-    <span class="n">smooth_track</span> <span class="o">=</span> <span class="n">compute_energy_smooth_track</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">hop_s</span><span class="o">=</span><span class="n">hop_s</span><span class="p">,</span> <span class="n">smooth_ms</span><span class="o">=</span><span class="n">smooth_ms</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
+    <span class="n">smooth_track</span> <span class="o">=</span> <span class="n">compute_energy_smooth_track</span><span class="p">(</span>
+        <span class="n">audio_path</span><span class="p">,</span>
+        <span class="n">hop_s</span><span class="o">=</span><span class="n">hop_s</span><span class="p">,</span>
+        <span class="n">smooth_ms</span><span class="o">=</span><span class="n">smooth_ms</span><span class="p">,</span>
+        <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">,</span>
+        <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">smooth_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">smooth_track</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">slope</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">smooth_vals</span><span class="p">)</span>
     <span class="n">slope</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>

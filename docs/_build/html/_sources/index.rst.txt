@@ -1,5 +1,10 @@
-DYANA
-=====
+.. title:: DYANA
+
+.. raw:: html
+
+   <div class="dyana-title-logo-wrap">
+     <img class="dyana-title-logo" src="_static/logo-tight.svg" alt="DYANA logo" />
+   </div>
 
 .. raw:: html
 

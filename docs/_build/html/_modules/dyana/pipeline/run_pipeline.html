@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1a22986d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=862bf139" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,7 +49,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.0" />
-    <meta name="docbuild:last-update" content="Mar 14, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 29, 2026"/>
   </head>
   
   
@@ -109,6 +109,12 @@
   
   
   
+  
+    
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt=""/>
+    <img src="../../../_static/logo.svg" class="logo__image only-dark pst-js-only" alt=""/>
   
   
     <p class="title logo__title">DYANA</p>
@@ -379,18 +385,30 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">dyana.asr</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">WhisperBackend</span><span class="p">,</span>
+    <span class="n">align_transcript_to_ipus</span><span class="p">,</span>
+    <span class="n">assign_speaker</span><span class="p">,</span>
+    <span class="n">build_asr_chunks</span><span class="p">,</span>
+    <span class="n">merge_transcripts</span><span class="p">,</span>
+    <span class="n">write_textgrid</span> <span class="k">as</span> <span class="n">write_transcript_textgrid</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.core.timebase</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeBase</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.decode</span><span class="w"> </span><span class="kn">import</span> <span class="n">decoder</span><span class="p">,</span> <span class="n">fusion</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dyana.decode.ipu</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_ipu_starts_after_leak</span><span class="p">,</span> <span class="n">extract_ipus</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dyana.decode.ipu</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_ipu_starts_after_leak</span><span class="p">,</span> <span class="n">extract_ipus</span><span class="p">,</span> <span class="n">merge_ipus_across_short_silence</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.decode.params</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecodeTuningParams</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.evidence.bundle</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvidenceBundle</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dyana.evidence.diarization</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_stereo_diarization_tracks</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.evidence.energy</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">compute_energy_rms_track</span><span class="p">,</span>
     <span class="n">compute_energy_smooth_track</span><span class="p">,</span>
     <span class="n">compute_energy_slope_track</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dyana.evidence.overlap</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_overlap_proxy_tracker</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.evidence.prosody</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_voiced_soft_track</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dyana.evidence.stereo</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_stereo_evidence</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.evidence.vad</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_webrtc_vad_soft_track</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dyana.io.audio</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_audio_stereo</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dyana.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">artifacts</span><span class="p">,</span> <span class="n">praat_textgrid</span>
 
 
@@ -405,29 +423,88 @@
     <span class="n">smooth_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">80.0</span><span class="p">,</span>
     <span class="n">min_ipu_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
     <span class="n">min_sil_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">ipu_detection_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;balanced&quot;</span><span class="p">,</span>
+    <span class="n">silence_bias</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">merge_silence_gap_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">400.0</span><span class="p">,</span>
     <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">tuning_params</span><span class="p">:</span> <span class="n">DecodeTuningParams</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">channel</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">enable_asr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">asr_model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;small&quot;</span><span class="p">,</span>
+    <span class="n">asr_model_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">asr_model_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">asr_language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
     <span class="k">del</span> <span class="n">seed</span>  <span class="c1"># deterministic; seed unused currently</span>
+    <span class="k">del</span> <span class="n">min_sil_s</span>  <span class="c1"># reserved for future explicit silence post-processing</span>
 
-    <span class="n">energy_rms</span> <span class="o">=</span> <span class="n">compute_energy_rms_track</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
-    <span class="n">energy_smooth</span> <span class="o">=</span> <span class="n">compute_energy_smooth_track</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">smooth_ms</span><span class="o">=</span><span class="n">smooth_ms</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
-    <span class="n">energy_slope</span> <span class="o">=</span> <span class="n">compute_energy_slope_track</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">smooth_ms</span><span class="o">=</span><span class="n">smooth_ms</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
-    <span class="n">vad_soft</span> <span class="o">=</span> <span class="n">compute_webrtc_vad_soft_track</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">vad_mode</span><span class="o">=</span><span class="n">vad_mode</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
-    <span class="n">voiced_soft</span> <span class="o">=</span> <span class="n">compute_voiced_soft_track</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">vad_mode</span><span class="o">=</span><span class="n">vad_mode</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
+    <span class="n">effective_tuning_params</span> <span class="o">=</span> <span class="n">tuning_params</span> <span class="ow">or</span> <span class="n">DecodeTuningParams</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">tuning_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">effective_tuning_params</span> <span class="o">=</span> <span class="n">DecodeTuningParams</span><span class="p">(</span>
+            <span class="n">speaker_switch_penalty</span><span class="o">=</span><span class="n">effective_tuning_params</span><span class="o">.</span><span class="n">speaker_switch_penalty</span><span class="p">,</span>
+            <span class="n">leak_entry_bias</span><span class="o">=</span><span class="n">effective_tuning_params</span><span class="o">.</span><span class="n">leak_entry_bias</span><span class="p">,</span>
+            <span class="n">ovl_transition_cost</span><span class="o">=</span><span class="n">effective_tuning_params</span><span class="o">.</span><span class="n">ovl_transition_cost</span><span class="p">,</span>
+            <span class="n">a_to_ovl_cost</span><span class="o">=</span><span class="n">effective_tuning_params</span><span class="o">.</span><span class="n">a_to_ovl_cost</span><span class="p">,</span>
+            <span class="n">b_to_ovl_cost</span><span class="o">=</span><span class="n">effective_tuning_params</span><span class="o">.</span><span class="n">b_to_ovl_cost</span><span class="p">,</span>
+            <span class="n">ovl_to_a_cost</span><span class="o">=</span><span class="n">effective_tuning_params</span><span class="o">.</span><span class="n">ovl_to_a_cost</span><span class="p">,</span>
+            <span class="n">ovl_to_b_cost</span><span class="o">=</span><span class="n">effective_tuning_params</span><span class="o">.</span><span class="n">ovl_to_b_cost</span><span class="p">,</span>
+            <span class="n">ipu_detection_mode</span><span class="o">=</span><span class="n">ipu_detection_mode</span><span class="p">,</span>
+            <span class="n">silence_bias</span><span class="o">=</span><span class="n">silence_bias</span><span class="p">,</span>
+            <span class="n">merge_silence_gap_ms</span><span class="o">=</span><span class="n">merge_silence_gap_ms</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">energy_rms</span> <span class="o">=</span> <span class="n">compute_energy_rms_track</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">)</span>
+    <span class="n">energy_smooth</span> <span class="o">=</span> <span class="n">compute_energy_smooth_track</span><span class="p">(</span>
+        <span class="n">audio_path</span><span class="p">,</span> <span class="n">smooth_ms</span><span class="o">=</span><span class="n">smooth_ms</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span>
+    <span class="p">)</span>
+    <span class="n">energy_slope</span> <span class="o">=</span> <span class="n">compute_energy_slope_track</span><span class="p">(</span>
+        <span class="n">audio_path</span><span class="p">,</span> <span class="n">smooth_ms</span><span class="o">=</span><span class="n">smooth_ms</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span>
+    <span class="p">)</span>
+    <span class="n">vad_soft</span> <span class="o">=</span> <span class="n">compute_webrtc_vad_soft_track</span><span class="p">(</span>
+        <span class="n">audio_path</span><span class="p">,</span> <span class="n">vad_mode</span><span class="o">=</span><span class="n">vad_mode</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span>
+    <span class="p">)</span>
+    <span class="n">voiced_soft</span> <span class="o">=</span> <span class="n">compute_voiced_soft_track</span><span class="p">(</span>
+        <span class="n">audio_path</span><span class="p">,</span> <span class="n">vad_mode</span><span class="o">=</span><span class="n">vad_mode</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="n">channel</span>
+    <span class="p">)</span>
+
+    <span class="n">stereo_bundle</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">stereo_audio</span><span class="p">,</span> <span class="n">sample_rate</span> <span class="o">=</span> <span class="n">load_audio_stereo</span><span class="p">(</span><span class="n">audio_path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">stereo_audio</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">stereo_audio</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stereo_bundle</span> <span class="o">=</span> <span class="n">compute_stereo_evidence</span><span class="p">((</span><span class="n">stereo_audio</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">),</span> <span class="n">energy_rms</span><span class="o">.</span><span class="n">timebase</span><span class="p">)</span>
+
+    <span class="n">diar_tracks</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="n">compute_stereo_diarization_tracks</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="n">tb</span><span class="p">:</span> <span class="n">TimeBase</span> <span class="o">=</span> <span class="n">energy_rms</span><span class="o">.</span><span class="n">timebase</span>
     <span class="n">bundle</span> <span class="o">=</span> <span class="n">EvidenceBundle</span><span class="p">(</span><span class="n">timebase</span><span class="o">=</span><span class="n">tb</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="p">[</span><span class="n">energy_rms</span><span class="p">,</span> <span class="n">energy_smooth</span><span class="p">,</span> <span class="n">energy_slope</span><span class="p">,</span> <span class="n">vad_soft</span><span class="p">,</span> <span class="n">voiced_soft</span><span class="p">]:</span>
         <span class="n">bundle</span><span class="o">.</span><span class="n">add_track</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">tr</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">stereo_bundle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bundle</span> <span class="o">=</span> <span class="n">bundle</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">stereo_bundle</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">diar_tracks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">diar_a</span><span class="p">,</span> <span class="n">diar_b</span> <span class="o">=</span> <span class="n">diar_tracks</span>
+        <span class="n">bundle</span><span class="o">.</span><span class="n">add_track</span><span class="p">(</span><span class="n">diar_a</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">diar_a</span><span class="p">)</span>
+        <span class="n">bundle</span><span class="o">.</span><span class="n">add_track</span><span class="p">(</span><span class="n">diar_b</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">diar_b</span><span class="p">)</span>
+        <span class="n">bundle</span><span class="o">.</span><span class="n">add_track</span><span class="p">(</span><span class="s2">&quot;overlap_proxy&quot;</span><span class="p">,</span> <span class="n">compute_overlap_proxy_tracker</span><span class="p">(</span><span class="n">diar_a</span><span class="p">,</span> <span class="n">diar_b</span><span class="p">))</span>
 
-    <span class="n">scores</span> <span class="o">=</span> <span class="n">fusion</span><span class="o">.</span><span class="n">fuse_bundle_to_scores</span><span class="p">(</span><span class="n">bundle</span><span class="p">)</span>
-    <span class="n">states</span> <span class="o">=</span> <span class="n">decoder</span><span class="o">.</span><span class="n">decode_with_constraints</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">tuning_params</span><span class="o">=</span><span class="n">tuning_params</span><span class="p">)</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">fusion</span><span class="o">.</span><span class="n">fuse_bundle_to_scores</span><span class="p">(</span><span class="n">bundle</span><span class="p">,</span> <span class="n">tuning_params</span><span class="o">=</span><span class="n">effective_tuning_params</span><span class="p">)</span>
+    <span class="n">states</span> <span class="o">=</span> <span class="n">decoder</span><span class="o">.</span><span class="n">decode_with_constraints</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">tuning_params</span><span class="o">=</span><span class="n">effective_tuning_params</span><span class="p">)</span>
 
     <span class="n">ipus_a</span> <span class="o">=</span> <span class="n">extract_ipus</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">tb</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">min_duration_s</span><span class="o">=</span><span class="n">min_ipu_s</span><span class="p">)</span>
     <span class="n">ipus_b</span> <span class="o">=</span> <span class="n">extract_ipus</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">tb</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">min_duration_s</span><span class="o">=</span><span class="n">min_ipu_s</span><span class="p">)</span>
     <span class="n">ipus_ovl</span> <span class="o">=</span> <span class="n">extract_ipus</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">tb</span><span class="p">,</span> <span class="s2">&quot;OVL&quot;</span><span class="p">,</span> <span class="n">min_duration_s</span><span class="o">=</span><span class="n">min_ipu_s</span><span class="p">)</span>
     <span class="n">ipus_leak</span> <span class="o">=</span> <span class="n">extract_ipus</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">tb</span><span class="p">,</span> <span class="s2">&quot;LEAK&quot;</span><span class="p">,</span> <span class="n">min_duration_s</span><span class="o">=</span><span class="n">min_ipu_s</span><span class="p">)</span>
+    <span class="n">merge_gap_s</span> <span class="o">=</span> <span class="n">effective_tuning_params</span><span class="o">.</span><span class="n">merge_silence_gap_ms</span> <span class="o">/</span> <span class="mf">1000.0</span>
+    <span class="n">ipus_a</span> <span class="o">=</span> <span class="n">merge_ipus_across_short_silence</span><span class="p">(</span><span class="n">ipus_a</span><span class="p">,</span> <span class="n">max_gap_s</span><span class="o">=</span><span class="n">merge_gap_s</span><span class="p">)</span>
+    <span class="n">ipus_b</span> <span class="o">=</span> <span class="n">merge_ipus_across_short_silence</span><span class="p">(</span><span class="n">ipus_b</span><span class="p">,</span> <span class="n">max_gap_s</span><span class="o">=</span><span class="n">merge_gap_s</span><span class="p">)</span>
+    <span class="n">ipus_ovl</span> <span class="o">=</span> <span class="n">merge_ipus_across_short_silence</span><span class="p">(</span><span class="n">ipus_ovl</span><span class="p">,</span> <span class="n">max_gap_s</span><span class="o">=</span><span class="n">merge_gap_s</span><span class="p">)</span>
     <span class="n">total_ipus</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ipus_a</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">ipus_b</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">ipus_ovl</span><span class="p">)</span>
     <span class="n">diagnostics</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;ipu_starts_after_leak&quot;</span><span class="p">:</span> <span class="n">count_ipu_starts_after_leak</span><span class="p">(</span><span class="n">states</span><span class="p">),</span>
@@ -445,10 +522,81 @@
     <span class="n">artifacts</span><span class="o">.</span><span class="n">save_evidence_track</span><span class="p">(</span><span class="n">energy_slope</span><span class="p">,</span> <span class="n">evidence_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">_energy_slope.npz&quot;</span><span class="p">)</span>
     <span class="n">artifacts</span><span class="o">.</span><span class="n">save_evidence_track</span><span class="p">(</span><span class="n">vad_soft</span><span class="p">,</span> <span class="n">evidence_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">_vad_soft.npz&quot;</span><span class="p">)</span>
     <span class="n">artifacts</span><span class="o">.</span><span class="n">save_evidence_track</span><span class="p">(</span><span class="n">voiced_soft</span><span class="p">,</span> <span class="n">evidence_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">_voiced_soft.npz&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">stereo_bundle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">track</span> <span class="ow">in</span> <span class="n">stereo_bundle</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">artifacts</span><span class="o">.</span><span class="n">save_evidence_track</span><span class="p">(</span><span class="n">track</span><span class="p">,</span> <span class="n">evidence_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.npz&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">diar_tracks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">diar_a</span><span class="p">,</span> <span class="n">diar_b</span> <span class="o">=</span> <span class="n">diar_tracks</span>
+        <span class="n">artifacts</span><span class="o">.</span><span class="n">save_evidence_track</span><span class="p">(</span><span class="n">diar_a</span><span class="p">,</span> <span class="n">evidence_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">_diar_a.npz&quot;</span><span class="p">)</span>
+        <span class="n">artifacts</span><span class="o">.</span><span class="n">save_evidence_track</span><span class="p">(</span><span class="n">diar_b</span><span class="p">,</span> <span class="n">evidence_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">_diar_b.npz&quot;</span><span class="p">)</span>
 
     <span class="n">artifacts</span><span class="o">.</span><span class="n">save_states</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">decode_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">_states.npy&quot;</span><span class="p">)</span>
-    <span class="n">artifacts</span><span class="o">.</span><span class="n">save_json</span><span class="p">([</span><span class="n">seg</span><span class="o">.</span><span class="vm">__dict__</span> <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">ipus_a</span> <span class="o">+</span> <span class="n">ipus_b</span> <span class="o">+</span> <span class="n">ipus_ovl</span> <span class="o">+</span> <span class="n">ipus_leak</span><span class="p">],</span> <span class="n">decode_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">_ipus.json&quot;</span><span class="p">)</span>
+    <span class="n">artifacts</span><span class="o">.</span><span class="n">save_json</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">seg</span><span class="o">.</span><span class="vm">__dict__</span> <span class="k">for</span> <span class="n">seg</span> <span class="ow">in</span> <span class="n">ipus_a</span> <span class="o">+</span> <span class="n">ipus_b</span> <span class="o">+</span> <span class="n">ipus_ovl</span> <span class="o">+</span> <span class="n">ipus_leak</span><span class="p">],</span>
+        <span class="n">decode_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">_ipus.json&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">artifacts</span><span class="o">.</span><span class="n">dump_diagnostics</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="n">stem</span><span class="p">,</span> <span class="n">diagnostics</span><span class="p">)</span>
+
+    <span class="n">asr_enabled</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">enable_asr</span><span class="p">)</span>
+    <span class="n">transcript_payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">asr_chunk_payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">asr_enabled</span><span class="p">:</span>
+        <span class="n">audio_duration_seconds</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">states</span><span class="p">)</span> <span class="o">*</span> <span class="n">tb</span><span class="o">.</span><span class="n">hop_s</span>
+        <span class="n">speaker_transcripts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">asr_chunk_payload</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">speaker_channel_map</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;OVL&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">stereo_bundle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">channel</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="n">channel</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="n">channel</span><span class="p">,</span> <span class="s2">&quot;OVL&quot;</span><span class="p">:</span> <span class="n">channel</span><span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">speaker_configs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;chunks&quot;</span><span class="p">:</span> <span class="n">build_asr_chunks</span><span class="p">(</span><span class="n">ipus_a</span><span class="p">,</span> <span class="n">audio_duration_seconds</span><span class="p">),</span>
+                <span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="n">speaker_channel_map</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;ipus&quot;</span><span class="p">:</span> <span class="n">ipus_a</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;chunks&quot;</span><span class="p">:</span> <span class="n">build_asr_chunks</span><span class="p">(</span><span class="n">ipus_b</span><span class="p">,</span> <span class="n">audio_duration_seconds</span><span class="p">),</span>
+                <span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="n">speaker_channel_map</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;ipus&quot;</span><span class="p">:</span> <span class="n">ipus_b</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;OVL&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;chunks&quot;</span><span class="p">:</span> <span class="n">build_asr_chunks</span><span class="p">(</span><span class="n">ipus_ovl</span><span class="p">,</span> <span class="n">audio_duration_seconds</span><span class="p">),</span>
+                <span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="n">speaker_channel_map</span><span class="p">[</span><span class="s2">&quot;OVL&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;ipus&quot;</span><span class="p">:</span> <span class="n">ipus_ovl</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">speaker_label</span><span class="p">,</span> <span class="n">speaker_config</span> <span class="ow">in</span> <span class="n">speaker_configs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">speaker_chunks</span> <span class="o">=</span> <span class="n">speaker_config</span><span class="p">[</span><span class="s2">&quot;chunks&quot;</span><span class="p">]</span>
+            <span class="n">whisper_backend</span> <span class="o">=</span> <span class="n">WhisperBackend</span><span class="p">(</span>
+                <span class="n">model_name</span><span class="o">=</span><span class="n">asr_model</span><span class="p">,</span>
+                <span class="n">model_path</span><span class="o">=</span><span class="n">asr_model_path</span><span class="p">,</span>
+                <span class="n">model_dir</span><span class="o">=</span><span class="n">asr_model_dir</span><span class="p">,</span>
+                <span class="n">language</span><span class="o">=</span><span class="n">asr_language</span><span class="p">,</span>
+                <span class="n">audio_channel</span><span class="o">=</span><span class="n">speaker_config</span><span class="p">[</span><span class="s2">&quot;channel&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">speaker_transcript</span> <span class="o">=</span> <span class="n">whisper_backend</span><span class="o">.</span><span class="n">transcribe_chunks</span><span class="p">(</span><span class="n">audio_path</span><span class="p">,</span> <span class="n">speaker_chunks</span><span class="p">)</span>
+            <span class="n">aligned_speaker_transcript</span> <span class="o">=</span> <span class="n">align_transcript_to_ipus</span><span class="p">(</span>
+                <span class="n">speaker_transcript</span><span class="p">,</span>
+                <span class="n">speaker_config</span><span class="p">[</span><span class="s2">&quot;ipus&quot;</span><span class="p">],</span>
+                <span class="n">speaker</span><span class="o">=</span><span class="n">speaker_label</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">speaker_transcripts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">assign_speaker</span><span class="p">(</span><span class="n">aligned_speaker_transcript</span><span class="p">,</span> <span class="n">speaker_label</span><span class="p">))</span>
+            <span class="n">asr_chunk_payload</span><span class="p">[</span><span class="n">speaker_label</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">chunk</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span>
+                    <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">chunk</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span>
+                    <span class="s2">&quot;ipu_indices&quot;</span><span class="p">:</span> <span class="n">chunk</span><span class="o">.</span><span class="n">ipu_indices</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">speaker_chunks</span>
+            <span class="p">]</span>
+
+        <span class="n">transcript</span> <span class="o">=</span> <span class="n">merge_transcripts</span><span class="p">(</span><span class="n">speaker_transcripts</span><span class="p">)</span>
+        <span class="n">transcript_payload</span> <span class="o">=</span> <span class="n">transcript</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span>
+        <span class="n">artifacts</span><span class="o">.</span><span class="n">save_json</span><span class="p">(</span><span class="n">asr_chunk_payload</span><span class="p">,</span> <span class="n">out_dir</span> <span class="o">/</span> <span class="s2">&quot;asr_chunks.json&quot;</span><span class="p">)</span>
+        <span class="n">artifacts</span><span class="o">.</span><span class="n">save_json</span><span class="p">(</span><span class="n">transcript_payload</span><span class="p">,</span> <span class="n">out_dir</span> <span class="o">/</span> <span class="s2">&quot;transcript.json&quot;</span><span class="p">)</span>
+        <span class="n">write_transcript_textgrid</span><span class="p">(</span><span class="n">transcript</span><span class="p">,</span> <span class="n">out_dir</span> <span class="o">/</span> <span class="s2">&quot;transcript.TextGrid&quot;</span><span class="p">)</span>
 
     <span class="n">praat_textgrid</span><span class="o">.</span><span class="n">write_textgrid</span><span class="p">(</span>
         <span class="n">out_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stem</span><span class="si">}</span><span class="s2">.TextGrid&quot;</span><span class="p">,</span>
@@ -469,6 +617,13 @@
             <span class="s2">&quot;LEAK&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">ipus_leak</span><span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">&quot;diagnostics&quot;</span><span class="p">:</span> <span class="n">diagnostics</span><span class="p">,</span>
+        <span class="s2">&quot;stereo_diarization&quot;</span><span class="p">:</span> <span class="n">diar_tracks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;ipu_detection_mode&quot;</span><span class="p">:</span> <span class="n">effective_tuning_params</span><span class="o">.</span><span class="n">ipu_detection_mode</span><span class="p">,</span>
+        <span class="s2">&quot;asr_enabled&quot;</span><span class="p">:</span> <span class="n">asr_enabled</span><span class="p">,</span>
+        <span class="s2">&quot;asr_model&quot;</span><span class="p">:</span> <span class="n">asr_model</span> <span class="k">if</span> <span class="n">asr_enabled</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;asr_language&quot;</span><span class="p">:</span> <span class="n">asr_language</span> <span class="k">if</span> <span class="n">asr_enabled</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;transcript&quot;</span><span class="p">:</span> <span class="n">transcript_payload</span><span class="p">,</span>
+        <span class="s2">&quot;asr_chunks&quot;</span><span class="p">:</span> <span class="n">asr_chunk_payload</span><span class="p">,</span>
         <span class="s2">&quot;out_dir&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_dir</span><span class="p">),</span>
     <span class="p">}</span></div>
 
