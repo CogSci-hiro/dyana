@@ -6,7 +6,7 @@ import argparse
 from collections.abc import Callable, Sequence
 from types import ModuleType
 
-from dyana.cli.commands import decode, evidence, iterate, run, eval as eval_cmd, tune
+from dyana.cli.commands import asr_setup, decode, evidence, iterate, run, eval as eval_cmd, tune
 
 CommandModule = ModuleType
 CommandRunner = Callable[[argparse.Namespace], None]
@@ -14,6 +14,7 @@ CommandRunner = Callable[[argparse.Namespace], None]
 # Map CLI subcommands to their implementation modules.
 _COMMANDS: dict[str, CommandModule] = {
     "run": run,
+    "asr-setup": asr_setup,
     "decode": decode,
     "evidence": evidence,
     "iterate": iterate,

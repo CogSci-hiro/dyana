@@ -34,9 +34,29 @@ def test_add_subparser_accepts_ipu_mode_and_silence_bias() -> None:
 
 def test_add_subparser_accepts_asr_flags() -> None:
     parser = _parser()
-    args = parser.parse_args(["run", "--audio", "a.wav", "--out-dir", "o", "--enable-asr", "--asr-model", "base"])
+    args = parser.parse_args(
+        [
+            "run",
+            "--audio",
+            "a.wav",
+            "--out-dir",
+            "o",
+            "--enable-asr",
+            "--asr-model",
+            "base",
+            "--asr-model-path",
+            "/tmp/base.pt",
+            "--asr-model-dir",
+            "/tmp/whisper",
+            "--asr-language",
+            "fr",
+        ]
+    )
     assert args.enable_asr is True
     assert args.asr_model == "base"
+    assert args.asr_model_path == "/tmp/base.pt"
+    assert args.asr_model_dir == "/tmp/whisper"
+    assert args.asr_language == "fr"
 
 
 def test_run_handler_is_noop() -> None:
@@ -49,5 +69,8 @@ def test_run_handler_is_noop() -> None:
             cache_dir=None,
             enable_asr=False,
             asr_model="small",
+            asr_model_path=None,
+            asr_model_dir=None,
+            asr_language=None,
         )
     )

@@ -9,8 +9,10 @@ from dyana.cli import main as cli_main
 
 def test_build_arg_parser_accepts_all_registered_commands() -> None:
     parser = cli_main.build_arg_parser()
-    for command in ("run", "decode", "evidence", "iterate", "eval", "tune"):
+    for command in ("run", "asr-setup", "decode", "evidence", "iterate", "eval", "tune"):
         extra = ["--audio", "a.wav", "--out-dir", "o"] if command == "run" else []
+        if command == "asr-setup":
+            extra = []
         if command in ("eval", "tune"):
             extra = ["--manifest", "m.json", "--out-dir", "o"]
             if command == "tune":

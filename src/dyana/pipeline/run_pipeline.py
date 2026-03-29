@@ -3,7 +3,14 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict
 
-from dyana.asr import WhisperBackend, build_asr_chunks
+from dyana.asr import (
+    WhisperBackend,
+    align_transcript_to_ipus,
+    assign_speaker,
+    build_asr_chunks,
+    merge_transcripts,
+    write_textgrid as write_transcript_textgrid,
+)
 from dyana.core.timebase import TimeBase
 from dyana.decode import decoder, fusion
 from dyana.decode.ipu import count_ipu_starts_after_leak, extract_ipus, merge_ipus_across_short_silence
@@ -40,6 +47,9 @@ def run_pipeline(
     channel: int | None = None,
     enable_asr: bool = False,
     asr_model: str = "small",
+    asr_model_path: Path | None = None,
+    asr_model_dir: Path | None = None,
+    asr_language: str | None = None,
 ) -> Dict[str, Any]:
     del seed  # deterministic; seed unused currently
     del min_sil_s  # reserved for future explicit silence post-processing
@@ -145,29 +155,64 @@ def run_pipeline(
 
     asr_enabled = bool(enable_asr)
     transcript_payload: dict[str, Any] | None = None
-    asr_chunk_payload: list[dict[str, Any]] | None = None
+    asr_chunk_payload: dict[str, list[dict[str, Any]]] | None = None
     if asr_enabled:
         audio_duration_seconds = len(states) * tb.hop_s
-        asr_ipus = sorted(
-            ipus_a + ipus_b + ipus_ovl,
-            key=lambda ipu: (ipu.start_time, ipu.end_time, ipu.label),
+        speaker_transcripts = []
+        asr_chunk_payload = {}
+        speaker_channel_map = (
+            {"A": 0, "B": 1, "OVL": None}
+            if stereo_bundle is not None and channel is None
+            else {"A": channel, "B": channel, "OVL": channel}
         )
-        asr_chunks = build_asr_chunks(asr_ipus, audio_duration_seconds)
-        transcript = WhisperBackend(model_name=asr_model).transcribe_chunks(
-            audio_path,
-            asr_chunks,
-        )
+        speaker_configs = {
+            "A": {
+                "chunks": build_asr_chunks(ipus_a, audio_duration_seconds),
+                "channel": speaker_channel_map["A"],
+                "ipus": ipus_a,
+            },
+            "B": {
+                "chunks": build_asr_chunks(ipus_b, audio_duration_seconds),
+                "channel": speaker_channel_map["B"],
+                "ipus": ipus_b,
+            },
+            "OVL": {
+                "chunks": build_asr_chunks(ipus_ovl, audio_duration_seconds),
+                "channel": speaker_channel_map["OVL"],
+                "ipus": ipus_ovl,
+            },
+        }
+
+        for speaker_label, speaker_config in speaker_configs.items():
+            speaker_chunks = speaker_config["chunks"]
+            whisper_backend = WhisperBackend(
+                model_name=asr_model,
+                model_path=asr_model_path,
+                model_dir=asr_model_dir,
+                language=asr_language,
+                audio_channel=speaker_config["channel"],
+            )
+            speaker_transcript = whisper_backend.transcribe_chunks(audio_path, speaker_chunks)
+            aligned_speaker_transcript = align_transcript_to_ipus(
+                speaker_transcript,
+                speaker_config["ipus"],
+                speaker=speaker_label,
+            )
+            speaker_transcripts.append(assign_speaker(aligned_speaker_transcript, speaker_label))
+            asr_chunk_payload[speaker_label] = [
+                {
+                    "start_time": chunk.start_time,
+                    "end_time": chunk.end_time,
+                    "ipu_indices": chunk.ipu_indices,
+                }
+                for chunk in speaker_chunks
+            ]
+
+        transcript = merge_transcripts(speaker_transcripts)
         transcript_payload = transcript.to_json()
-        asr_chunk_payload = [
-            {
-                "start_time": chunk.start_time,
-                "end_time": chunk.end_time,
-                "ipu_indices": chunk.ipu_indices,
-            }
-            for chunk in asr_chunks
-        ]
         artifacts.save_json(asr_chunk_payload, out_dir / "asr_chunks.json")
         artifacts.save_json(transcript_payload, out_dir / "transcript.json")
+        write_transcript_textgrid(transcript, out_dir / "transcript.TextGrid")
 
     praat_textgrid.write_textgrid(
         out_dir / f"{stem}.TextGrid",
@@ -192,6 +237,7 @@ def run_pipeline(
         "ipu_detection_mode": effective_tuning_params.ipu_detection_mode,
         "asr_enabled": asr_enabled,
         "asr_model": asr_model if asr_enabled else None,
+        "asr_language": asr_language if asr_enabled else None,
         "transcript": transcript_payload,
         "asr_chunks": asr_chunk_payload,
         "out_dir": str(out_dir),

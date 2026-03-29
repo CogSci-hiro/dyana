@@ -44,6 +44,21 @@ def add_subparser(subparsers: argparse._SubParsersAction) -> None:
         default="small",
         help="Whisper model to use when ASR is enabled.",
     )
+    parser.add_argument(
+        "--asr-model-path",
+        default=None,
+        help="Direct path to a local Whisper checkpoint (.pt).",
+    )
+    parser.add_argument(
+        "--asr-model-dir",
+        default=None,
+        help="Directory containing Whisper checkpoint files.",
+    )
+    parser.add_argument(
+        "--asr-language",
+        default=None,
+        help="Whisper language code such as 'fr', 'de', or 'en'. Defaults to auto-detect.",
+    )
     parser.set_defaults(command="run")
 
 
@@ -83,6 +98,9 @@ def run(args: argparse.Namespace) -> None:
             silence_bias=args.silence_bias,
             enable_asr=args.enable_asr,
             asr_model=args.asr_model,
+            asr_model_path=Path(args.asr_model_path) if args.asr_model_path else None,
+            asr_model_dir=Path(args.asr_model_dir) if args.asr_model_dir else None,
+            asr_language=args.asr_language,
             seed=0,
         )
         print(
