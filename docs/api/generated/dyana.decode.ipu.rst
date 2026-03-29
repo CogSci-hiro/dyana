@@ -1,4 +1,4 @@
-dyana.decode.ipu
+﻿dyana.decode.ipu
 ================
 
 .. automodule:: dyana.decode.ipu
@@ -10,6 +10,7 @@ dyana.decode.ipu
    
       count_ipu_starts_after_leak
       extract_ipus
+      merge_ipus_across_short_silence
    
    .. rubric:: Classes
 

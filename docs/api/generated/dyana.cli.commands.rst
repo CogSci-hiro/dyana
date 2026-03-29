@@ -1,4 +1,4 @@
-dyana.cli.commands
+﻿dyana.cli.commands
 ==================
 
 .. automodule:: dyana.cli.commands
@@ -10,6 +10,7 @@ dyana.cli.commands
    :toctree:
    :recursive:
 
+   asr_setup
    decode
    eval
    evidence

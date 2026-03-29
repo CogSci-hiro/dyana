@@ -14,3 +14,4 @@
    audio
    bids_like
    praat_textgrid
+   textgrid

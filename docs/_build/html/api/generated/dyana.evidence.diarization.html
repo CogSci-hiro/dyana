@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.0" />
-    <meta name="docbuild:last-update" content="Mar 14, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 29, 2026"/>
   </head>
   
   
@@ -221,6 +221,10 @@
   
 
   
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
 </div>
 
     </header>
@@ -327,6 +331,7 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="dyana.cli.html">dyana.cli</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="dyana.cli.commands.html">dyana.cli.commands</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="dyana.cli.commands.asr_setup.html">dyana.cli.commands.asr_setup</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dyana.cli.commands.decode.html">dyana.cli.commands.decode</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dyana.cli.commands.eval.html">dyana.cli.commands.eval</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dyana.cli.commands.evidence.html">dyana.cli.commands.evidence</a></li>
@@ -341,6 +346,15 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="dyana.core.html">dyana.core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="dyana.core.cache.html">dyana.core.cache</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dyana.core.calibrate.html">dyana.core.calibrate</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="dyana.core.contracts.html">dyana.core.contracts</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="dyana.core.contracts.alignment.html">dyana.core.contracts.alignment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dyana.core.contracts.audio.html">dyana.core.contracts.audio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dyana.core.contracts.decoder.html">dyana.core.contracts.decoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dyana.core.contracts.diagnostics.html">dyana.core.contracts.diagnostics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dyana.core.contracts.evidence.html">dyana.core.contracts.evidence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dyana.core.contracts.transcript.html">dyana.core.contracts.transcript</a></li>
+</ul>
+</details></li>
 <li class="toctree-l2"><a class="reference internal" href="dyana.core.resample.html">dyana.core.resample</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dyana.core.timebase.html">dyana.core.timebase</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dyana.core.types.html">dyana.core.types</a></li>
@@ -382,6 +396,7 @@
 <li class="toctree-l2"><a class="reference internal" href="dyana.evidence.mic_priors.html">dyana.evidence.mic_priors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dyana.evidence.prosody.html">dyana.evidence.prosody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dyana.evidence.separation.html">dyana.evidence.separation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.evidence.stereo.html">dyana.evidence.stereo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dyana.evidence.synthetic.html">dyana.evidence.synthetic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dyana.evidence.vad.html">dyana.evidence.vad</a></li>
 </ul>
@@ -391,6 +406,7 @@
 <li class="toctree-l2"><a class="reference internal" href="dyana.io.audio.html">dyana.io.audio</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dyana.io.bids_like.html">dyana.io.bids_like</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dyana.io.praat_textgrid.html">dyana.io.praat_textgrid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.io.textgrid.html">dyana.io.textgrid</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="dyana.iterate.html">dyana.iterate</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -401,7 +417,13 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="dyana.pipeline.html">dyana.pipeline</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="dyana.pipeline.assemble.html">dyana.pipeline.assemble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.pipeline.registry.html">dyana.pipeline.registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.pipeline.run.html">dyana.pipeline.run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dyana.pipeline.run_pipeline.html">dyana.pipeline.run_pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.pipeline.runner.html">dyana.pipeline.runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.pipeline.steps.html">dyana.pipeline.steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dyana.pipeline.types.html">dyana.pipeline.types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="dyana.version.html">dyana.version</a></li>
@@ -470,7 +492,37 @@
                   
   <section id="module-dyana.evidence.diarization">
 <span id="dyana-evidence-diarization"></span><h1>dyana.evidence.diarization<a class="headerlink" href="#module-dyana.evidence.diarization" title="Link to this heading">#</a></h1>
-<p>Speaker-identity evidence extraction (to be implemented).</p>
+<p>Lightweight stereo diarization evidence extraction.</p>
+<p class="rubric">Functions</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#dyana.evidence.diarization.compute_stereo_diarization_tracks" title="dyana.evidence.diarization.compute_stereo_diarization_tracks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_stereo_diarization_tracks</span></code></a>(audio_path, *)</p></td>
+<td><p>Build speaker-A/B soft tracks from stereo channel dominance.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="dyana.evidence.diarization.compute_stereo_diarization_tracks">
+<span class="sig-prename descclassname"><span class="pre">dyana.evidence.diarization.</span></span><span class="sig-name descname"><span class="pre">compute_stereo_diarization_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio_path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">hop_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">similarity_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.98</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_similarity_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/dyana/evidence/diarization.html#compute_stereo_diarization_tracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dyana.evidence.diarization.compute_stereo_diarization_tracks" title="Link to this definition">#</a></dt>
+<dd><p>Build speaker-A/B soft tracks from stereo channel dominance.</p>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> when the file is dual-mono or not exactly stereo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>audio_path</strong> (<em>Path</em>)</p></li>
+<li><p><strong>hop_s</strong> (<em>float</em>)</p></li>
+<li><p><strong>similarity_threshold</strong> (<em>float</em>)</p></li>
+<li><p><strong>max_similarity_samples</strong> (<em>int</em>)</p></li>
+<li><p><strong>cache_dir</strong> (<em>Path</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[<a class="reference internal" href="dyana.evidence.base.html#dyana.evidence.base.EvidenceTrack" title="dyana.evidence.base.EvidenceTrack"><em>EvidenceTrack</em></a>, <a class="reference internal" href="dyana.evidence.base.html#dyana.evidence.base.EvidenceTrack" title="dyana.evidence.base.EvidenceTrack"><em>EvidenceTrack</em></a>] | None</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -483,6 +535,24 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dyana.evidence.diarization.compute_stereo_diarization_tracks"><code class="docutils literal notranslate"><span class="pre">compute_stereo_diarization_tracks()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

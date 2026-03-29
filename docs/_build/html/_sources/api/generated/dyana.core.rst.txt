@@ -12,6 +12,7 @@
 
    cache
    calibrate
+   contracts
    resample
    timebase
    types

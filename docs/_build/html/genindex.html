@@ -49,7 +49,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.0" />
-    <meta name="docbuild:last-update" content="Mar 14, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 29, 2026"/>
   </head>
   
   
@@ -385,9 +385,11 @@
         <li><a href="api/generated/dyana.errors.pipeline.html#dyana.errors.pipeline.Pipeline.add">(dyana.errors.pipeline.Pipeline method)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/dyana.cli.commands.decode.html#dyana.cli.commands.decode.add_subparser">add_subparser() (in module dyana.cli.commands.decode)</a>
+      <li><a href="api/generated/dyana.cli.commands.asr_setup.html#dyana.cli.commands.asr_setup.add_subparser">add_subparser() (in module dyana.cli.commands.asr_setup)</a>
 
       <ul>
+        <li><a href="api/generated/dyana.cli.commands.decode.html#dyana.cli.commands.decode.add_subparser">(in module dyana.cli.commands.decode)</a>
+</li>
         <li><a href="api/generated/dyana.cli.commands.eval.html#dyana.cli.commands.eval.add_subparser">(in module dyana.cli.commands.eval)</a>
 </li>
         <li><a href="api/generated/dyana.cli.commands.evidence.html#dyana.cli.commands.evidence.add_subparser">(in module dyana.cli.commands.evidence)</a>
@@ -399,22 +401,42 @@
         <li><a href="api/generated/dyana.cli.commands.tune.html#dyana.cli.commands.tune.add_subparser">(in module dyana.cli.commands.tune)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/dyana.evidence.bundle.html#dyana.evidence.bundle.EvidenceBundle.add_track">add_track() (dyana.evidence.bundle.EvidenceBundle method)</a>
 
       <ul>
         <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceBundle.add_track">(dyana.evidence.EvidenceBundle method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/dyana.eval.scorecard.html#dyana.eval.scorecard.aggregate">aggregate() (in module dyana.eval.scorecard)</a>
 </li>
       <li><a href="api/generated/dyana.eval.scorecard.html#dyana.eval.scorecard.aggregate_by_tier">aggregate_by_tier() (in module dyana.eval.scorecard)</a>
 </li>
+      <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.DecoderInput.alignment">alignment (dyana.core.contracts.decoder.DecoderInput attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.DecoderInput.alignment">(dyana.core.contracts.DecoderInput attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.AlignmentBundle">AlignmentBundle (class in dyana.core.contracts)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.alignment.html#dyana.core.contracts.alignment.AlignmentBundle">(class in dyana.core.contracts.alignment)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.decode.state_space.html#dyana.decode.state_space.all_state_indices">all_state_indices() (in module dyana.decode.state_space)</a>
 </li>
       <li><a href="api/generated/dyana.cli.main.html#dyana.cli.main.app">app() (in module dyana.cli.main)</a>
 </li>
+      <li><a href="api/generated/dyana.pipeline.assemble.html#dyana.pipeline.assemble.assemble_annotation">assemble_annotation() (in module dyana.pipeline.assemble)</a>
+</li>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.AudioInput">AudioInput (class in dyana.core.contracts)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.audio.html#dyana.core.contracts.audio.AudioInput">(class in dyana.core.contracts.audio)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -451,7 +473,19 @@
         <li><a href="api/generated/dyana.errors.reporter.html#dyana.errors.reporter.ErrorReporter.cfg">(dyana.errors.reporter.ErrorReporter attribute)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.audio.html#dyana.core.contracts.audio.AudioInput.channels">channels (dyana.core.contracts.audio.AudioInput attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.AudioInput.channels">(dyana.core.contracts.AudioInput attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.evidence.stereo.html#dyana.evidence.stereo.compute_channel_energy">compute_channel_energy() (in module dyana.evidence.stereo)</a>
+</li>
+      <li><a href="api/generated/dyana.evidence.stereo.html#dyana.evidence.stereo.compute_cross_channel_correlation">compute_cross_channel_correlation() (in module dyana.evidence.stereo)</a>
+</li>
       <li><a href="api/generated/dyana.eval.tuning.html#dyana.eval.tuning.compute_delta_report">compute_delta_report() (in module dyana.eval.tuning)</a>
+</li>
+      <li><a href="api/generated/dyana.evidence.stereo.html#dyana.evidence.stereo.compute_energy_ratio">compute_energy_ratio() (in module dyana.evidence.stereo)</a>
 </li>
       <li><a href="api/generated/dyana.evidence.energy.html#dyana.evidence.energy.compute_energy_rms_track">compute_energy_rms_track() (in module dyana.evidence.energy)</a>
 </li>
@@ -459,16 +493,16 @@
 </li>
       <li><a href="api/generated/dyana.evidence.energy.html#dyana.evidence.energy.compute_energy_slope_track">compute_energy_slope_track() (in module dyana.evidence.energy)</a>
 </li>
-      <li><a href="api/generated/dyana.evidence.energy.html#dyana.evidence.energy.compute_energy_smooth_track">compute_energy_smooth_track() (in module dyana.evidence.energy)</a>
-</li>
-      <li><a href="api/generated/dyana.evidence.html#dyana.evidence.compute_leakage_likelihood">compute_leakage_likelihood() (in module dyana.evidence)</a>
-
-      <ul>
-        <li><a href="api/generated/dyana.evidence.leakage.html#dyana.evidence.leakage.compute_leakage_likelihood">(in module dyana.evidence.leakage)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/dyana.evidence.energy.html#dyana.evidence.energy.compute_energy_smooth_track">compute_energy_smooth_track() (in module dyana.evidence.energy)</a>
+</li>
+      <li><a href="api/generated/dyana.evidence.leakage.html#dyana.evidence.leakage.compute_leakage_likelihood">compute_leakage_likelihood() (in module dyana.evidence.leakage)</a>
+</li>
+      <li><a href="api/generated/dyana.evidence.diarization.html#dyana.evidence.diarization.compute_stereo_diarization_tracks">compute_stereo_diarization_tracks() (in module dyana.evidence.diarization)</a>
+</li>
+      <li><a href="api/generated/dyana.evidence.stereo.html#dyana.evidence.stereo.compute_stereo_evidence">compute_stereo_evidence() (in module dyana.evidence.stereo)</a>
+</li>
       <li><a href="api/generated/dyana.evidence.prosody.html#dyana.evidence.prosody.compute_voiced_soft_track">compute_voiced_soft_track() (in module dyana.evidence.prosody)</a>
 </li>
       <li><a href="api/generated/dyana.evidence.vad.html#dyana.evidence.vad.compute_webrtc_vad_soft_track">compute_webrtc_vad_soft_track() (in module dyana.evidence.vad)</a>
@@ -509,14 +543,44 @@
 </li>
       <li><a href="api/generated/dyana.decode.decoder.html#dyana.decode.decoder.decode_with_constraints">decode_with_constraints() (in module dyana.decode.decoder)</a>
 </li>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.DecodeResult">DecodeResult (class in dyana.core.contracts)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.DecodeResult">(class in dyana.core.contracts.decoder)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.DecoderInput">DecoderInput (class in dyana.core.contracts)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.DecoderInput">(class in dyana.core.contracts.decoder)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.decode.params.html#dyana.decode.params.DecodeTuningParams">DecodeTuningParams (class in dyana.decode.params)</a>
 </li>
       <li><a href="api/generated/dyana.decode.constraints.html#dyana.decode.constraints.default_min_durations">default_min_durations() (in module dyana.decode.constraints)</a>
 </li>
+      <li><a href="api/generated/dyana.io.audio.html#dyana.io.audio.detect_channel_similarity">detect_channel_similarity() (in module dyana.io.audio)</a>
+</li>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.DiagnosticsBundle">DiagnosticsBundle (class in dyana.core.contracts)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.diagnostics.html#dyana.core.contracts.diagnostics.DiagnosticsBundle">(class in dyana.core.contracts.diagnostics)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.core.resample.html#dyana.core.resample.downsample">downsample() (in module dyana.core.resample)</a>
 </li>
       <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.dump_diagnostics">dump_diagnostics() (in module dyana.io.artifacts)</a>
 </li>
+      <li><a href="api/generated/dyana.core.contracts.audio.html#dyana.core.contracts.audio.AudioInput.duration">duration (dyana.core.contracts.audio.AudioInput attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.AudioInput.duration">(dyana.core.contracts.AudioInput attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.evidence.html#dyana.core.contracts.evidence.EvidenceBundle.duration">(dyana.core.contracts.evidence.EvidenceBundle attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.EvidenceBundle.duration">(dyana.core.contracts.EvidenceBundle attribute)</a>
+</li>
+      </ul></li>
       <li>
     dyana.cli
 
@@ -529,6 +593,13 @@
 
       <ul>
         <li><a href="api/generated/dyana.cli.commands.html#module-dyana.cli.commands">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.cli.commands.asr_setup
+
+      <ul>
+        <li><a href="api/generated/dyana.cli.commands.asr_setup.html#module-dyana.cli.commands.asr_setup">module</a>
 </li>
       </ul></li>
       <li>
@@ -599,6 +670,55 @@
 
       <ul>
         <li><a href="api/generated/dyana.core.calibrate.html#module-dyana.core.calibrate">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.core.contracts
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#module-dyana.core.contracts">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.core.contracts.alignment
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.alignment.html#module-dyana.core.contracts.alignment">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.core.contracts.audio
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.audio.html#module-dyana.core.contracts.audio">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.core.contracts.decoder
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.decoder.html#module-dyana.core.contracts.decoder">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.core.contracts.diagnostics
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.diagnostics.html#module-dyana.core.contracts.diagnostics">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.core.contracts.evidence
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.evidence.html#module-dyana.core.contracts.evidence">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.core.contracts.transcript
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.transcript.html#module-dyana.core.contracts.transcript">module</a>
 </li>
       </ul></li>
       <li>
@@ -699,6 +819,8 @@
         <li><a href="api/generated/dyana.errors.logging.html#module-dyana.errors.logging">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     dyana.errors.pipeline
 
@@ -720,8 +842,6 @@
         <li><a href="api/generated/dyana.errors.types.html#module-dyana.errors.types">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     dyana.eval
 
@@ -835,6 +955,13 @@
 </li>
       </ul></li>
       <li>
+    dyana.evidence.stereo
+
+      <ul>
+        <li><a href="api/generated/dyana.evidence.stereo.html#module-dyana.evidence.stereo">module</a>
+</li>
+      </ul></li>
+      <li>
     dyana.evidence.synthetic
 
       <ul>
@@ -884,6 +1011,13 @@
 </li>
       </ul></li>
       <li>
+    dyana.io.textgrid
+
+      <ul>
+        <li><a href="api/generated/dyana.io.textgrid.html#module-dyana.io.textgrid">module</a>
+</li>
+      </ul></li>
+      <li>
     dyana.iterate
 
       <ul>
@@ -926,10 +1060,52 @@
 </li>
       </ul></li>
       <li>
+    dyana.pipeline.assemble
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.assemble.html#module-dyana.pipeline.assemble">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.pipeline.registry
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.registry.html#module-dyana.pipeline.registry">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.pipeline.run
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.run.html#module-dyana.pipeline.run">module</a>
+</li>
+      </ul></li>
+      <li>
     dyana.pipeline.run_pipeline
 
       <ul>
         <li><a href="api/generated/dyana.pipeline.run_pipeline.html#module-dyana.pipeline.run_pipeline">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.pipeline.runner
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.runner.html#module-dyana.pipeline.runner">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.pipeline.steps
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.steps.html#module-dyana.pipeline.steps">module</a>
+</li>
+      </ul></li>
+      <li>
+    dyana.pipeline.types
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.types.html#module-dyana.pipeline.types">module</a>
 </li>
       </ul></li>
       <li>
@@ -945,6 +1121,24 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/dyana.core.contracts.alignment.html#dyana.core.contracts.alignment.PhonemeInterval.end">end (dyana.core.contracts.alignment.PhonemeInterval attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.alignment.html#dyana.core.contracts.alignment.WordInterval.end">(dyana.core.contracts.alignment.WordInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.IPUInterval.end">(dyana.core.contracts.decoder.IPUInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.StateInterval.end">(dyana.core.contracts.decoder.StateInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.IPUInterval.end">(dyana.core.contracts.IPUInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.PhonemeInterval.end">(dyana.core.contracts.PhonemeInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.StateInterval.end">(dyana.core.contracts.StateInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.WordInterval.end">(dyana.core.contracts.WordInterval attribute)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.decode.ipu.html#dyana.decode.ipu.Segment.end_time">end_time (dyana.decode.ipu.Segment attribute)</a>
 </li>
       <li><a href="api/generated/dyana.errors.config.html#dyana.errors.config.ErrorHandlingConfig.env_prefix">env_prefix (dyana.errors.config.ErrorHandlingConfig attribute)</a>
@@ -977,15 +1171,29 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceBundle">EvidenceBundle (class in dyana.evidence)</a>
+      <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.DecoderInput.evidence">evidence (dyana.core.contracts.decoder.DecoderInput attribute)</a>
 
       <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.DecoderInput.evidence">(dyana.core.contracts.DecoderInput attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.EvidenceBundle">EvidenceBundle (class in dyana.core.contracts)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.evidence.html#dyana.core.contracts.evidence.EvidenceBundle">(class in dyana.core.contracts.evidence)</a>
+</li>
+        <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceBundle">(class in dyana.evidence)</a>
+</li>
         <li><a href="api/generated/dyana.evidence.bundle.html#dyana.evidence.bundle.EvidenceBundle">(class in dyana.evidence.bundle)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack">EvidenceTrack (class in dyana.evidence)</a>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.EvidenceTrack">EvidenceTrack (class in dyana.core.contracts)</a>
 
       <ul>
+        <li><a href="api/generated/dyana.core.contracts.evidence.html#dyana.core.contracts.evidence.EvidenceTrack">(class in dyana.core.contracts.evidence)</a>
+</li>
+        <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack">(class in dyana.evidence)</a>
+</li>
         <li><a href="api/generated/dyana.evidence.base.html#dyana.evidence.base.EvidenceTrack">(class in dyana.evidence.base)</a>
 </li>
       </ul></li>
@@ -1000,6 +1208,8 @@
       <li><a href="api/generated/dyana.decode.decoder.html#dyana.decode.decoder.expand_scores">expand_scores() (in module dyana.decode.decoder)</a>
 </li>
       <li><a href="api/generated/dyana.decode.constraints.html#dyana.decode.constraints.expand_state_space">expand_state_space() (in module dyana.decode.constraints)</a>
+</li>
+      <li><a href="api/generated/dyana.io.textgrid.html#dyana.io.textgrid.export_textgrid">export_textgrid() (in module dyana.io.textgrid)</a>
 </li>
       <li><a href="api/generated/dyana.decode.ipu.html#dyana.decode.ipu.extract_ipus">extract_ipus() (in module dyana.decode.ipu)</a>
 </li>
@@ -1031,14 +1241,26 @@
         <li><a href="api/generated/dyana.errors.html#dyana.errors.ErrorHandlingConfig.file_level">(dyana.errors.ErrorHandlingConfig attribute)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.diagnostics.html#dyana.core.contracts.diagnostics.DiagnosticsBundle.flags">flags (dyana.core.contracts.diagnostics.DiagnosticsBundle attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.DiagnosticsBundle.flags">(dyana.core.contracts.DiagnosticsBundle attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.evidence.html#dyana.core.contracts.evidence.EvidenceTrack.frame_hop">frame_hop (dyana.core.contracts.evidence.EvidenceTrack attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.EvidenceTrack.frame_hop">(dyana.core.contracts.EvidenceTrack attribute)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.core.timebase.html#dyana.core.timebase.TimeBase.frame_times">frame_times() (dyana.core.timebase.TimeBase method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/dyana.core.timebase.html#dyana.core.timebase.TimeBase.frame_to_time">frame_to_time() (dyana.core.timebase.TimeBase method)</a>
 </li>
       <li><a href="api/generated/dyana.evidence.synthetic.html#dyana.evidence.synthetic.frames_for_seconds">frames_for_seconds() (in module dyana.evidence.synthetic)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/dyana.eval.metrics.html#dyana.eval.metrics.framewise_iou">framewise_iou() (in module dyana.eval.metrics)</a>
 </li>
       <li><a href="api/generated/dyana.evidence.bundle.html#dyana.evidence.bundle.EvidenceBundle.from_directory">from_directory() (dyana.evidence.bundle.EvidenceBundle static method)</a>
@@ -1085,6 +1307,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/dyana.pipeline.registry.html#dyana.pipeline.registry.get_step_for_output">get_step_for_output() (in module dyana.pipeline.registry)</a>
+</li>
       <li><a href="api/generated/dyana.errors.html#dyana.errors.guard">guard() (in module dyana.errors)</a>
 
       <ul>
@@ -1115,10 +1339,30 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/dyana.core.timebase.html#dyana.core.timebase.TimeBase.is_canonical">is_canonical (dyana.core.timebase.TimeBase property)</a>
+      <li><a href="api/generated/dyana.pipeline.html#dyana.pipeline.PipelineStep.inputs">inputs (dyana.pipeline.PipelineStep attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.types.html#dyana.pipeline.types.PipelineStep.inputs">(dyana.pipeline.types.PipelineStep attribute)</a>
 </li>
+      </ul></li>
+      <li><a href="api/generated/dyana.decode.params.html#dyana.decode.params.DecodeTuningParams.ipu_detection_mode">ipu_detection_mode (dyana.decode.params.DecodeTuningParams attribute)</a>
+</li>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.IPUInterval">IPUInterval (class in dyana.core.contracts)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.IPUInterval">(class in dyana.core.contracts.decoder)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.DecodeResult.ipus">ipus (dyana.core.contracts.decoder.DecodeResult attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.DecodeResult.ipus">(dyana.core.contracts.DecodeResult attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.timebase.html#dyana.core.timebase.TimeBase.is_canonical">is_canonical (dyana.core.timebase.TimeBase property)</a>
+</li>
       <li><a href="api/generated/dyana.evidence.bundle.html#dyana.evidence.bundle.EvidenceBundle.items">items() (dyana.evidence.bundle.EvidenceBundle method)</a>
 
       <ul>
@@ -1163,17 +1407,43 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/dyana.decode.ipu.html#dyana.decode.ipu.Segment.label">label (dyana.decode.ipu.Segment attribute)</a>
+      <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.StateInterval.label">label (dyana.core.contracts.decoder.StateInterval attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.StateInterval.label">(dyana.core.contracts.StateInterval attribute)</a>
 </li>
+        <li><a href="api/generated/dyana.decode.ipu.html#dyana.decode.ipu.Segment.label">(dyana.decode.ipu.Segment attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.transcript.html#dyana.core.contracts.transcript.TranscriptBundle.language">language (dyana.core.contracts.transcript.TranscriptBundle attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.TranscriptBundle.language">(dyana.core.contracts.TranscriptBundle attribute)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.decode.params.html#dyana.decode.params.DecodeTuningParams.leak_entry_bias">leak_entry_bias (dyana.decode.params.DecodeTuningParams attribute)</a>
 </li>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.load_alignment">load_alignment() (in module dyana.io.artifacts)</a>
+</li>
       <li><a href="api/generated/dyana.io.audio.html#dyana.io.audio.load_audio_mono">load_audio_mono() (in module dyana.io.audio)</a>
+</li>
+      <li><a href="api/generated/dyana.io.audio.html#dyana.io.audio.load_audio_stereo">load_audio_stereo() (in module dyana.io.audio)</a>
 </li>
       <li><a href="api/generated/dyana.errors.config.html#dyana.errors.config.load_config">load_config() (in module dyana.errors.config)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.load_diagnostics">load_diagnostics() (in module dyana.io.artifacts)</a>
+</li>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.load_evidence">load_evidence() (in module dyana.io.artifacts)</a>
+</li>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.load_ipus">load_ipus() (in module dyana.io.artifacts)</a>
+</li>
       <li><a href="api/generated/dyana.eval.harness.html#dyana.eval.harness.load_reference_states">load_reference_states() (in module dyana.eval.harness)</a>
+</li>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.load_states">load_states() (in module dyana.io.artifacts)</a>
+</li>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.load_transcript">load_transcript() (in module dyana.io.artifacts)</a>
 </li>
       <li><a href="api/generated/dyana.errors.config.html#dyana.errors.config.ErrorHandlingConfig.log_dir">log_dir (dyana.errors.config.ErrorHandlingConfig attribute)</a>
 
@@ -1237,12 +1507,26 @@
         <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceBundle.merge">(dyana.evidence.EvidenceBundle method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/dyana.decode.ipu.html#dyana.decode.ipu.merge_ipus_across_short_silence">merge_ipus_across_short_silence() (in module dyana.decode.ipu)</a>
+</li>
+      <li><a href="api/generated/dyana.decode.params.html#dyana.decode.params.DecodeTuningParams.merge_silence_gap_ms">merge_silence_gap_ms (dyana.decode.params.DecodeTuningParams attribute)</a>
+</li>
       <li><a href="api/generated/dyana.errors.types.html#dyana.errors.types.FailureRecord.message">message (dyana.errors.types.FailureRecord attribute)</a>
 </li>
-      <li><a href="api/generated/dyana.evidence.base.html#dyana.evidence.base.EvidenceTrack.metadata">metadata (dyana.evidence.base.EvidenceTrack attribute)</a>
+      <li><a href="api/generated/dyana.core.contracts.transcript.html#dyana.core.contracts.transcript.TranscriptBundle.metadata">metadata (dyana.core.contracts.transcript.TranscriptBundle attribute)</a>
 
       <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.TranscriptBundle.metadata">(dyana.core.contracts.TranscriptBundle attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.evidence.base.html#dyana.evidence.base.EvidenceTrack.metadata">(dyana.evidence.base.EvidenceTrack attribute)</a>
+</li>
         <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.metadata">(dyana.evidence.EvidenceTrack attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.diagnostics.html#dyana.core.contracts.diagnostics.DiagnosticsBundle.metrics">metrics (dyana.core.contracts.diagnostics.DiagnosticsBundle attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.DiagnosticsBundle.metrics">(dyana.core.contracts.DiagnosticsBundle attribute)</a>
 </li>
       </ul></li>
       <li><a href="api/generated/dyana.eval.metrics.html#dyana.eval.metrics.micro_ipus_per_min">micro_ipus_per_min() (in module dyana.eval.metrics)</a>
@@ -1260,6 +1544,8 @@
         <li><a href="api/generated/dyana.cli.html#module-dyana.cli">dyana.cli</a>
 </li>
         <li><a href="api/generated/dyana.cli.commands.html#module-dyana.cli.commands">dyana.cli.commands</a>
+</li>
+        <li><a href="api/generated/dyana.cli.commands.asr_setup.html#module-dyana.cli.commands.asr_setup">dyana.cli.commands.asr_setup</a>
 </li>
         <li><a href="api/generated/dyana.cli.commands.decode.html#module-dyana.cli.commands.decode">dyana.cli.commands.decode</a>
 </li>
@@ -1280,6 +1566,20 @@
         <li><a href="api/generated/dyana.core.cache.html#module-dyana.core.cache">dyana.core.cache</a>
 </li>
         <li><a href="api/generated/dyana.core.calibrate.html#module-dyana.core.calibrate">dyana.core.calibrate</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#module-dyana.core.contracts">dyana.core.contracts</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.alignment.html#module-dyana.core.contracts.alignment">dyana.core.contracts.alignment</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.audio.html#module-dyana.core.contracts.audio">dyana.core.contracts.audio</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.decoder.html#module-dyana.core.contracts.decoder">dyana.core.contracts.decoder</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.diagnostics.html#module-dyana.core.contracts.diagnostics">dyana.core.contracts.diagnostics</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.evidence.html#module-dyana.core.contracts.evidence">dyana.core.contracts.evidence</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.transcript.html#module-dyana.core.contracts.transcript">dyana.core.contracts.transcript</a>
 </li>
         <li><a href="api/generated/dyana.core.resample.html#module-dyana.core.resample">dyana.core.resample</a>
 </li>
@@ -1347,6 +1647,8 @@
 </li>
         <li><a href="api/generated/dyana.evidence.separation.html#module-dyana.evidence.separation">dyana.evidence.separation</a>
 </li>
+        <li><a href="api/generated/dyana.evidence.stereo.html#module-dyana.evidence.stereo">dyana.evidence.stereo</a>
+</li>
         <li><a href="api/generated/dyana.evidence.synthetic.html#module-dyana.evidence.synthetic">dyana.evidence.synthetic</a>
 </li>
         <li><a href="api/generated/dyana.evidence.vad.html#module-dyana.evidence.vad">dyana.evidence.vad</a>
@@ -1361,6 +1663,8 @@
 </li>
         <li><a href="api/generated/dyana.io.praat_textgrid.html#module-dyana.io.praat_textgrid">dyana.io.praat_textgrid</a>
 </li>
+        <li><a href="api/generated/dyana.io.textgrid.html#module-dyana.io.textgrid">dyana.io.textgrid</a>
+</li>
         <li><a href="api/generated/dyana.iterate.html#module-dyana.iterate">dyana.iterate</a>
 </li>
         <li><a href="api/generated/dyana.iterate.invariants.html#module-dyana.iterate.invariants">dyana.iterate.invariants</a>
@@ -1373,7 +1677,19 @@
 </li>
         <li><a href="api/generated/dyana.pipeline.html#module-dyana.pipeline">dyana.pipeline</a>
 </li>
+        <li><a href="api/generated/dyana.pipeline.assemble.html#module-dyana.pipeline.assemble">dyana.pipeline.assemble</a>
+</li>
+        <li><a href="api/generated/dyana.pipeline.registry.html#module-dyana.pipeline.registry">dyana.pipeline.registry</a>
+</li>
+        <li><a href="api/generated/dyana.pipeline.run.html#module-dyana.pipeline.run">dyana.pipeline.run</a>
+</li>
         <li><a href="api/generated/dyana.pipeline.run_pipeline.html#module-dyana.pipeline.run_pipeline">dyana.pipeline.run_pipeline</a>
+</li>
+        <li><a href="api/generated/dyana.pipeline.runner.html#module-dyana.pipeline.runner">dyana.pipeline.runner</a>
+</li>
+        <li><a href="api/generated/dyana.pipeline.steps.html#module-dyana.pipeline.steps">dyana.pipeline.steps</a>
+</li>
+        <li><a href="api/generated/dyana.pipeline.types.html#module-dyana.pipeline.types">dyana.pipeline.types</a>
 </li>
         <li><a href="api/generated/dyana.version.html#module-dyana.version">dyana.version</a>
 </li>
@@ -1386,10 +1702,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/dyana.core.timebase.html#dyana.core.timebase.TimeBase.n_frames">n_frames (dyana.core.timebase.TimeBase attribute)</a>
 </li>
-      <li><a href="api/generated/dyana.evidence.base.html#dyana.evidence.base.EvidenceTrack.name">name (dyana.evidence.base.EvidenceTrack attribute)</a>
+      <li><a href="api/generated/dyana.core.contracts.evidence.html#dyana.core.contracts.evidence.EvidenceTrack.name">name (dyana.core.contracts.evidence.EvidenceTrack attribute)</a>
 
       <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.EvidenceTrack.name">(dyana.core.contracts.EvidenceTrack attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.evidence.base.html#dyana.evidence.base.EvidenceTrack.name">(dyana.evidence.base.EvidenceTrack attribute)</a>
+</li>
         <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.name">(dyana.evidence.EvidenceTrack attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.pipeline.html#dyana.pipeline.PipelineStep.name">(dyana.pipeline.PipelineStep attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.pipeline.types.html#dyana.pipeline.types.PipelineStep.name">(dyana.pipeline.types.PipelineStep attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1412,6 +1736,12 @@
         <li><a href="api/generated/dyana.errors.reporter.html#dyana.errors.reporter.ErrorReporter.ok">(dyana.errors.reporter.ErrorReporter method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/dyana.pipeline.html#dyana.pipeline.PipelineStep.outputs">outputs (dyana.pipeline.PipelineStep attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.types.html#dyana.pipeline.types.PipelineStep.outputs">(dyana.pipeline.types.PipelineStep attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/dyana.decode.params.html#dyana.decode.params.DecodeTuningParams.ovl_to_a_cost">ovl_to_a_cost (dyana.decode.params.DecodeTuningParams attribute)</a>
@@ -1426,12 +1756,36 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/dyana.io.praat_textgrid.html#dyana.io.praat_textgrid.parse_textgrid">parse_textgrid() (in module dyana.io.praat_textgrid)</a>
-</li>
-      <li><a href="api/generated/dyana.errors.html#dyana.errors.JsonlEventLogger.path">path (dyana.errors.JsonlEventLogger attribute)</a>
+      <li><a href="api/generated/dyana.pipeline.html#dyana.pipeline.PipelineStep.parameters">parameters (dyana.pipeline.PipelineStep attribute)</a>
 
       <ul>
+        <li><a href="api/generated/dyana.pipeline.types.html#dyana.pipeline.types.PipelineStep.parameters">(dyana.pipeline.types.PipelineStep attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.io.praat_textgrid.html#dyana.io.praat_textgrid.parse_textgrid">parse_textgrid() (in module dyana.io.praat_textgrid)</a>
+</li>
+      <li><a href="api/generated/dyana.core.contracts.audio.html#dyana.core.contracts.audio.AudioInput.path">path (dyana.core.contracts.audio.AudioInput attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.AudioInput.path">(dyana.core.contracts.AudioInput attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.errors.html#dyana.errors.JsonlEventLogger.path">(dyana.errors.JsonlEventLogger attribute)</a>
+</li>
         <li><a href="api/generated/dyana.errors.logging.html#dyana.errors.logging.JsonlEventLogger.path">(dyana.errors.logging.JsonlEventLogger attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.PhonemeInterval">PhonemeInterval (class in dyana.core.contracts)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.alignment.html#dyana.core.contracts.alignment.PhonemeInterval">(class in dyana.core.contracts.alignment)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/dyana.core.contracts.alignment.html#dyana.core.contracts.alignment.AlignmentBundle.phonemes">phonemes (dyana.core.contracts.alignment.AlignmentBundle attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.AlignmentBundle.phonemes">(dyana.core.contracts.AlignmentBundle attribute)</a>
 </li>
       </ul></li>
       <li><a href="api/generated/dyana.errors.html#dyana.errors.Pipeline">Pipeline (class in dyana.errors)</a>
@@ -1440,10 +1794,14 @@
         <li><a href="api/generated/dyana.errors.pipeline.html#dyana.errors.pipeline.Pipeline">(class in dyana.errors.pipeline)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/dyana.errors.html#dyana.errors.PipelineError">PipelineError</a>, <a href="api/generated/dyana.errors.pipeline.html#dyana.errors.pipeline.PipelineError">[1]</a>
 </li>
+      <li><a href="api/generated/dyana.pipeline.html#dyana.pipeline.PipelineStep">PipelineStep (class in dyana.pipeline)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.types.html#dyana.pipeline.types.PipelineStep">(class in dyana.pipeline.types)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.errors.html#dyana.errors.ErrorReporter.print_summary">print_summary() (dyana.errors.ErrorReporter method)</a>
 
       <ul>
@@ -1461,6 +1819,8 @@
       <li><a href="api/generated/dyana.eval.metrics.html#dyana.eval.metrics.rapid_alternations">rapid_alternations() (in module dyana.eval.metrics)</a>
 </li>
       <li><a href="api/generated/dyana.eval.scorecard.html#dyana.eval.scorecard.read_scorecard">read_scorecard() (in module dyana.eval.scorecard)</a>
+</li>
+      <li><a href="api/generated/dyana.pipeline.registry.html#dyana.pipeline.registry.register_step">register_step() (in module dyana.pipeline.registry)</a>
 </li>
       <li><a href="api/generated/dyana.errors.html#dyana.errors.ErrorReporter.render_summary">render_summary() (dyana.errors.ErrorReporter method)</a>
 
@@ -1490,22 +1850,32 @@
         <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.resample_to">(dyana.evidence.EvidenceTrack method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/dyana.decode.constraints.html#dyana.decode.constraints.resolve_min_durations">resolve_min_durations() (in module dyana.decode.constraints)</a>
+</li>
       <li><a href="api/generated/dyana.errors.config.html#dyana.errors.config.resolve_out_dir">resolve_out_dir() (in module dyana.errors.config)</a>
 </li>
       <li><a href="api/generated/dyana.decode.params.html#dyana.decode.params.DecodeTuningParams.resolved_ovl_costs">resolved_ovl_costs() (dyana.decode.params.DecodeTuningParams method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/dyana.errors.config.html#dyana.errors.config.ErrorHandlingConfig.resolved_run_id">resolved_run_id() (dyana.errors.config.ErrorHandlingConfig method)</a>
 
       <ul>
         <li><a href="api/generated/dyana.errors.html#dyana.errors.ErrorHandlingConfig.resolved_run_id">(dyana.errors.ErrorHandlingConfig method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/dyana.pipeline.html#dyana.pipeline.PipelineStep.run">run (dyana.pipeline.PipelineStep attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.types.html#dyana.pipeline.types.PipelineStep.run">(dyana.pipeline.types.PipelineStep attribute)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.errors.html#dyana.errors.Pipeline.run">run() (dyana.errors.Pipeline method)</a>
 
       <ul>
         <li><a href="api/generated/dyana.errors.pipeline.html#dyana.errors.pipeline.Pipeline.run">(dyana.errors.pipeline.Pipeline method)</a>
+</li>
+        <li><a href="api/generated/dyana.cli.commands.asr_setup.html#dyana.cli.commands.asr_setup.run">(in module dyana.cli.commands.asr_setup)</a>
 </li>
         <li><a href="api/generated/dyana.cli.commands.decode.html#dyana.cli.commands.decode.run">(in module dyana.cli.commands.decode)</a>
 </li>
@@ -1520,6 +1890,12 @@
         <li><a href="api/generated/dyana.cli.commands.tune.html#dyana.cli.commands.tune.run">(in module dyana.cli.commands.tune)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/dyana.pipeline.html#dyana.pipeline.run_annotation_pipeline">run_annotation_pipeline() (in module dyana.pipeline)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.run.html#dyana.pipeline.run.run_annotation_pipeline">(in module dyana.pipeline.run)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.errors.config.html#dyana.errors.config.ErrorHandlingConfig.run_id">run_id (dyana.errors.config.ErrorHandlingConfig attribute)</a>
 
       <ul>
@@ -1531,18 +1907,40 @@
 </li>
       </ul></li>
       <li><a href="api/generated/dyana.pipeline.run_pipeline.html#dyana.pipeline.run_pipeline.run_pipeline">run_pipeline() (in module dyana.pipeline.run_pipeline)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.runner.html#dyana.pipeline.runner.run_pipeline">(in module dyana.pipeline.runner)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/dyana.core.contracts.audio.html#dyana.core.contracts.audio.AudioInput.sample_rate">sample_rate (dyana.core.contracts.audio.AudioInput attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.AudioInput.sample_rate">(dyana.core.contracts.AudioInput attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.save_alignment">save_alignment() (in module dyana.io.artifacts)</a>
+</li>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.save_diagnostics">save_diagnostics() (in module dyana.io.artifacts)</a>
+</li>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.save_evidence">save_evidence() (in module dyana.io.artifacts)</a>
+</li>
       <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.save_evidence_track">save_evidence_track() (in module dyana.io.artifacts)</a>
+</li>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.save_ipus">save_ipus() (in module dyana.io.artifacts)</a>
 </li>
       <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.save_json">save_json() (in module dyana.io.artifacts)</a>
 </li>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.save_run_metadata">save_run_metadata() (in module dyana.io.artifacts)</a>
+</li>
       <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.save_states">save_states() (in module dyana.io.artifacts)</a>
+</li>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.save_transcript">save_transcript() (in module dyana.io.artifacts)</a>
 </li>
       <li><a href="api/generated/dyana.decode.decoder.html#dyana.decode.decoder.scripted_block_scores">scripted_block_scores() (in module dyana.decode.decoder)</a>
 </li>
@@ -1556,6 +1954,8 @@
         <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.semantics">(dyana.evidence.EvidenceTrack attribute)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/dyana.decode.params.html#dyana.decode.params.DecodeTuningParams.silence_bias">silence_bias (dyana.decode.params.DecodeTuningParams attribute)</a>
+</li>
       <li><a href="api/generated/dyana.errors.types.html#dyana.errors.types.StepStatus.SKIPPED">SKIPPED (dyana.errors.types.StepStatus attribute)</a>
 </li>
       <li><a href="api/generated/dyana.errors.html#dyana.errors.ErrorReporter.skipped">skipped() (dyana.errors.ErrorReporter method)</a>
@@ -1564,20 +1964,76 @@
         <li><a href="api/generated/dyana.errors.reporter.html#dyana.errors.reporter.ErrorReporter.skipped">(dyana.errors.reporter.ErrorReporter method)</a>
 </li>
       </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.alignment.html#dyana.core.contracts.alignment.WordInterval.speaker">speaker (dyana.core.contracts.alignment.WordInterval attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.IPUInterval.speaker">(dyana.core.contracts.decoder.IPUInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.IPUInterval.speaker">(dyana.core.contracts.IPUInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.Token.speaker">(dyana.core.contracts.Token attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.transcript.html#dyana.core.contracts.transcript.Token.speaker">(dyana.core.contracts.transcript.Token attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.WordInterval.speaker">(dyana.core.contracts.WordInterval attribute)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.decode.params.html#dyana.decode.params.DecodeTuningParams.speaker_switch_penalty">speaker_switch_penalty (dyana.decode.params.DecodeTuningParams attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/dyana.eval.metrics.html#dyana.eval.metrics.speaker_switches_per_min">speaker_switches_per_min() (in module dyana.eval.metrics)</a>
 </li>
-      <li><a href="api/generated/dyana.decode.ipu.html#dyana.decode.ipu.Segment.start_time">start_time (dyana.decode.ipu.Segment attribute)</a>
+      <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.DecoderInput.speakers">speakers (dyana.core.contracts.decoder.DecoderInput attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.DecoderInput.speakers">(dyana.core.contracts.DecoderInput attribute)</a>
 </li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/dyana.core.contracts.alignment.html#dyana.core.contracts.alignment.PhonemeInterval.start">start (dyana.core.contracts.alignment.PhonemeInterval attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.alignment.html#dyana.core.contracts.alignment.WordInterval.start">(dyana.core.contracts.alignment.WordInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.IPUInterval.start">(dyana.core.contracts.decoder.IPUInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.StateInterval.start">(dyana.core.contracts.decoder.StateInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.IPUInterval.start">(dyana.core.contracts.IPUInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.PhonemeInterval.start">(dyana.core.contracts.PhonemeInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.StateInterval.start">(dyana.core.contracts.StateInterval attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.WordInterval.start">(dyana.core.contracts.WordInterval attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.evidence.html#dyana.core.contracts.evidence.EvidenceTrack.start_time">start_time (dyana.core.contracts.evidence.EvidenceTrack attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.EvidenceTrack.start_time">(dyana.core.contracts.EvidenceTrack attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.decode.ipu.html#dyana.decode.ipu.Segment.start_time">(dyana.decode.ipu.Segment attribute)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.eval.harness.html#dyana.eval.harness.state_boundaries">state_boundaries() (in module dyana.eval.harness)</a>
 </li>
       <li><a href="api/generated/dyana.decode.state_space.html#dyana.decode.state_space.state_index">state_index() (in module dyana.decode.state_space)</a>
 </li>
       <li><a href="api/generated/dyana.decode.state_space.html#dyana.decode.state_space.state_name">state_name() (in module dyana.decode.state_space)</a>
 </li>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.StateInterval">StateInterval (class in dyana.core.contracts)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.StateInterval">(class in dyana.core.contracts.decoder)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.decoder.html#dyana.core.contracts.decoder.DecodeResult.states">states (dyana.core.contracts.decoder.DecodeResult attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.DecodeResult.states">(dyana.core.contracts.DecodeResult attribute)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.errors.types.html#dyana.errors.types.FailureRecord.status">status (dyana.errors.types.FailureRecord attribute)</a>
 </li>
       <li><a href="api/generated/dyana.errors.html#dyana.errors.ErrorReporter.status">status() (dyana.errors.ErrorReporter method)</a>
@@ -1596,6 +2052,18 @@
 </li>
       <li><a href="api/generated/dyana.errors.types.html#dyana.errors.types.StepStatus">StepStatus (class in dyana.errors.types)</a>
 </li>
+      <li><a href="api/generated/dyana.pipeline.html#dyana.pipeline.summarize_run">summarize_run() (in module dyana.pipeline)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.pipeline.runner.html#dyana.pipeline.runner.summarize_run">(in module dyana.pipeline.runner)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.alignment.html#dyana.core.contracts.alignment.PhonemeInterval.symbol">symbol (dyana.core.contracts.alignment.PhonemeInterval attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.PhonemeInterval.symbol">(dyana.core.contracts.PhonemeInterval attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -1606,6 +2074,16 @@
 
       <ul>
         <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.T">(dyana.evidence.EvidenceTrack property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.alignment.html#dyana.core.contracts.alignment.WordInterval.text">text (dyana.core.contracts.alignment.WordInterval attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.Token.text">(dyana.core.contracts.Token attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.transcript.html#dyana.core.contracts.transcript.Token.text">(dyana.core.contracts.transcript.Token attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.WordInterval.text">(dyana.core.contracts.WordInterval attribute)</a>
 </li>
       </ul></li>
       <li><a href="api/generated/dyana.core.timebase.html#dyana.core.timebase.TimeBase.time_to_frame">time_to_frame() (dyana.core.timebase.TimeBase method)</a>
@@ -1630,14 +2108,14 @@
       </ul></li>
       <li><a href="api/generated/dyana.core.resample.html#dyana.core.resample.to_canonical_grid">to_canonical_grid() (in module dyana.core.resample)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/dyana.evidence.bundle.html#dyana.evidence.bundle.EvidenceBundle.to_directory">to_directory() (dyana.evidence.bundle.EvidenceBundle method)</a>
 
       <ul>
         <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceBundle.to_directory">(dyana.evidence.EvidenceBundle method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/dyana.evidence.base.html#dyana.evidence.base.EvidenceTrack.to_manifest">to_manifest() (dyana.evidence.base.EvidenceTrack method)</a>
 
       <ul>
@@ -1650,12 +2128,34 @@
         <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.to_npz">(dyana.evidence.EvidenceTrack method)</a>
 </li>
       </ul></li>
-      <li><a href="api/generated/dyana.errors.types.html#dyana.errors.types.FailureRecord.traceback">traceback (dyana.errors.types.FailureRecord attribute)</a>
-</li>
-      <li><a href="api/generated/dyana.evidence.bundle.html#dyana.evidence.bundle.EvidenceBundle.tracks">tracks (dyana.evidence.bundle.EvidenceBundle attribute)</a>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.Token">Token (class in dyana.core.contracts)</a>
 
       <ul>
+        <li><a href="api/generated/dyana.core.contracts.transcript.html#dyana.core.contracts.transcript.Token">(class in dyana.core.contracts.transcript)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.transcript.html#dyana.core.contracts.transcript.TranscriptBundle.tokens">tokens (dyana.core.contracts.transcript.TranscriptBundle attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.TranscriptBundle.tokens">(dyana.core.contracts.TranscriptBundle attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.errors.types.html#dyana.errors.types.FailureRecord.traceback">traceback (dyana.errors.types.FailureRecord attribute)</a>
+</li>
+      <li><a href="api/generated/dyana.core.contracts.evidence.html#dyana.core.contracts.evidence.EvidenceBundle.tracks">tracks (dyana.core.contracts.evidence.EvidenceBundle attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.EvidenceBundle.tracks">(dyana.core.contracts.EvidenceBundle attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.evidence.bundle.html#dyana.evidence.bundle.EvidenceBundle.tracks">(dyana.evidence.bundle.EvidenceBundle attribute)</a>
+</li>
         <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceBundle.tracks">(dyana.evidence.EvidenceBundle attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.TranscriptBundle">TranscriptBundle (class in dyana.core.contracts)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.transcript.html#dyana.core.contracts.transcript.TranscriptBundle">(class in dyana.core.contracts.transcript)</a>
 </li>
       </ul></li>
       <li><a href="api/generated/dyana.errors.config.html#dyana.errors.config.ErrorHandlingConfig.treat_warnings_as_errors">treat_warnings_as_errors (dyana.errors.config.ErrorHandlingConfig attribute)</a>
@@ -1678,9 +2178,13 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/generated/dyana.evidence.base.html#dyana.evidence.base.EvidenceTrack.values">values (dyana.evidence.base.EvidenceTrack attribute)</a>
+      <li><a href="api/generated/dyana.core.contracts.evidence.html#dyana.core.contracts.evidence.EvidenceTrack.values">values (dyana.core.contracts.evidence.EvidenceTrack attribute)</a>
 
       <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.EvidenceTrack.values">(dyana.core.contracts.EvidenceTrack attribute)</a>
+</li>
+        <li><a href="api/generated/dyana.evidence.base.html#dyana.evidence.base.EvidenceTrack.values">(dyana.evidence.base.EvidenceTrack attribute)</a>
+</li>
         <li><a href="api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.values">(dyana.evidence.EvidenceTrack attribute)</a>
 </li>
       </ul></li>
@@ -1694,12 +2198,32 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/dyana.core.contracts.audio.html#dyana.core.contracts.audio.AudioInput.waveform">waveform (dyana.core.contracts.audio.AudioInput attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.AudioInput.waveform">(dyana.core.contracts.AudioInput attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.WordInterval">WordInterval (class in dyana.core.contracts)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.alignment.html#dyana.core.contracts.alignment.WordInterval">(class in dyana.core.contracts.alignment)</a>
+</li>
+      </ul></li>
+      <li><a href="api/generated/dyana.core.contracts.alignment.html#dyana.core.contracts.alignment.AlignmentBundle.words">words (dyana.core.contracts.alignment.AlignmentBundle attribute)</a>
+
+      <ul>
+        <li><a href="api/generated/dyana.core.contracts.html#dyana.core.contracts.AlignmentBundle.words">(dyana.core.contracts.AlignmentBundle attribute)</a>
+</li>
+      </ul></li>
       <li><a href="api/generated/dyana.errors.html#dyana.errors.JsonlEventLogger.write">write() (dyana.errors.JsonlEventLogger method)</a>
 
       <ul>
         <li><a href="api/generated/dyana.errors.logging.html#dyana.errors.logging.JsonlEventLogger.write">(dyana.errors.logging.JsonlEventLogger method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generated/dyana.eval.tuning.html#dyana.eval.tuning.write_delta_report">write_delta_report() (in module dyana.eval.tuning)</a>
 </li>
       <li><a href="api/generated/dyana.errors.config.html#dyana.errors.config.ErrorHandlingConfig.write_jsonl">write_jsonl (dyana.errors.config.ErrorHandlingConfig attribute)</a>
@@ -1708,8 +2232,8 @@
         <li><a href="api/generated/dyana.errors.html#dyana.errors.ErrorHandlingConfig.write_jsonl">(dyana.errors.ErrorHandlingConfig attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/generated/dyana.io.artifacts.html#dyana.io.artifacts.write_run_artifacts">write_run_artifacts() (in module dyana.io.artifacts)</a>
+</li>
       <li><a href="api/generated/dyana.eval.scorecard.html#dyana.eval.scorecard.write_scorecard">write_scorecard() (in module dyana.eval.scorecard)</a>
 </li>
       <li><a href="api/generated/dyana.eval.scorecard.html#dyana.eval.scorecard.write_scorecard_to_dir">write_scorecard_to_dir() (in module dyana.eval.scorecard)</a>

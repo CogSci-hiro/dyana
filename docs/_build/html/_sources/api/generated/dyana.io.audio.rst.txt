@@ -8,5 +8,7 @@ dyana.io.audio
 
    .. autosummary::
    
+      detect_channel_similarity
       load_audio_mono
+      load_audio_stereo
    

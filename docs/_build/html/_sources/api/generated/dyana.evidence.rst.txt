@@ -19,5 +19,6 @@
    mic_priors
    prosody
    separation
+   stereo
    synthetic
    vad
