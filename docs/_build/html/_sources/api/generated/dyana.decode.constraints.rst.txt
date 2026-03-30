@@ -1,4 +1,4 @@
-﻿dyana.decode.constraints
+dyana.decode.constraints
 ========================
 
 .. automodule:: dyana.decode.constraints

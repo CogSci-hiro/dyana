@@ -1,4 +1,4 @@
-﻿dyana.cli.commands
+dyana.cli.commands
 ==================
 
 .. automodule:: dyana.cli.commands

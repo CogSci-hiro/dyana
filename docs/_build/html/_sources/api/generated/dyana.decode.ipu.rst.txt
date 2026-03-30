@@ -1,4 +1,4 @@
-﻿dyana.decode.ipu
+dyana.decode.ipu
 ================
 
 .. automodule:: dyana.decode.ipu

@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=862bf139" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=57443357" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,7 +49,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.0.0" />
-    <meta name="docbuild:last-update" content="Mar 29, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 30, 2026"/>
   </head>
   
   
@@ -148,13 +148,6 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../architecture.html">
     Architecture
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../project_notes.html">
-    Project Notes
   </a>
 </li>
 
@@ -269,13 +262,6 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../architecture.html">
     Architecture
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../project_notes.html">
-    Project Notes
   </a>
 </li>
 
@@ -398,7 +384,7 @@
 
 
 <div class="viewcode-block" id="EvidenceTrack">
-<a class="viewcode-back" href="../../../api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/dyana.evidence.base.html#dyana.evidence.EvidenceTrack">[docs]</a>
 <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">EvidenceTrack</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -516,7 +502,7 @@
         <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
 <div class="viewcode-block" id="EvidenceTrack.to_canonical">
-<a class="viewcode-back" href="../../../api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.to_canonical">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/dyana.evidence.base.html#dyana.evidence.EvidenceTrack.to_canonical">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_canonical</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">target_timebase</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TimeBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -588,7 +574,7 @@
 
 
 <div class="viewcode-block" id="EvidenceTrack.resample_to">
-<a class="viewcode-back" href="../../../api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.resample_to">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/dyana.evidence.base.html#dyana.evidence.EvidenceTrack.resample_to">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">resample_to</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">target_timebase</span><span class="p">:</span> <span class="n">TimeBase</span><span class="p">,</span>
@@ -648,7 +634,7 @@
 
 
 <div class="viewcode-block" id="EvidenceTrack.to_npz">
-<a class="viewcode-back" href="../../../api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.to_npz">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/dyana.evidence.base.html#dyana.evidence.EvidenceTrack.to_npz">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_npz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Serialize the track arrays to NPZ.</span>
@@ -680,7 +666,7 @@
 
 
 <div class="viewcode-block" id="EvidenceTrack.to_manifest">
-<a class="viewcode-back" href="../../../api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.to_manifest">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/dyana.evidence.base.html#dyana.evidence.EvidenceTrack.to_manifest">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a JSON-serializable manifest entry for this track.&quot;&quot;&quot;</span>
 
@@ -694,7 +680,7 @@
 
 
 <div class="viewcode-block" id="EvidenceTrack.from_npz">
-<a class="viewcode-back" href="../../../api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.from_npz">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/dyana.evidence.base.html#dyana.evidence.EvidenceTrack.from_npz">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_npz</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;EvidenceTrack&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load an EvidenceTrack serialized with :meth:`to_npz`.&quot;&quot;&quot;</span>
@@ -720,7 +706,7 @@
 
 
 <div class="viewcode-block" id="EvidenceTrack.from_files">
-<a class="viewcode-back" href="../../../api/generated/dyana.evidence.html#dyana.evidence.EvidenceTrack.from_files">[docs]</a>
+<a class="viewcode-back" href="../../../api/generated/dyana.evidence.base.html#dyana.evidence.EvidenceTrack.from_files">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">from_files</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">npz_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">manifest_entry</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;EvidenceTrack&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load an EvidenceTrack from NPZ + manifest entry.&quot;&quot;&quot;</span>

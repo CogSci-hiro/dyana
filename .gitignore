@@ -1,4 +1,15 @@
 project_snapshot.md
+docs/CONCEPT.md
+docs/axis1_modules.md
+docs/axis2_decoder.md
+docs/axis3_iteration.md
+docs/eval_runs.md
+docs/DYANA_ROADMAP.md
+docs/DYANA_WEEK1_PLAN.md
+docs/DYANA_WEEK2_PLAN.md
+docs/DYANA_WEEK2_DAY_BY_DAY_PLAN.md
+docs/dyana_week_1_day_by_day_roadmap.md
+docs/TODO.md
 __pycache__/
 *.py[cod]
 .pytest_cache/

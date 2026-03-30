@@ -58,5 +58,4 @@
    quickstart
    cli
    architecture
-   project_notes
    api/index
