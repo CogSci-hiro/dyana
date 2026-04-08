@@ -103,6 +103,7 @@ def configure_logging(*, cfg: ErrorHandlingConfig) -> tuple[logging.Logger, Opti
     logger = logging.getLogger("app")
     logger.setLevel(logging.DEBUG)
     logger.handlers.clear()
+    logger.filters.clear()
     logger.propagate = False
 
     logger.addFilter(_RunContextFilter(run_id=run_id))

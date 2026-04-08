@@ -1,14 +1,23 @@
+import importlib.util
 import json
 from pathlib import Path
 
 import numpy as np
-import soundfile as sf
 import pytest
-
-webrtcvad = pytest.importorskip("webrtcvad")
 
 from dyana.eval.harness import evaluate_manifest
 from dyana.eval.scorecard import aggregate, write_scorecard
+
+
+if importlib.util.find_spec("soundfile") is not None:
+    import soundfile as sf
+else:
+    sf = None
+
+pytestmark = pytest.mark.skipif(
+    sf is None or importlib.util.find_spec("webrtcvad") is None,
+    reason="soundfile and webrtcvad are required for this test module",
+)
 
 
 def _make_audio(path: Path) -> None:

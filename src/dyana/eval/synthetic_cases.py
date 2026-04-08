@@ -6,11 +6,21 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 import numpy as np
-import soundfile as sf
 
 
 SAMPLE_RATE: int = 16000
 LEAKAGE_STRESS_ID: str = "leakage_stress"
+
+
+def _soundfile():
+    try:
+        import soundfile as sf
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "DYANA requires the 'soundfile' package to materialize synthetic evaluation audio. "
+            "Install runtime dependencies with `pip install -e .`."
+        ) from exc
+    return sf
 
 
 def _tone(freq_hz: float, frames: int, amplitude: float = 0.06) -> np.ndarray:
@@ -60,6 +70,7 @@ def materialize_synthetic_case(
     ref_path = out_dir / f"{stem}_ref.npy"
 
     stereo, ref_states = _build_leakage_stress_audio()
+    sf = _soundfile()
     sf.write(audio_path, stereo, SAMPLE_RATE)
     np.save(ref_path, np.array(ref_states, dtype=object))
 

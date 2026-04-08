@@ -1,11 +1,20 @@
 import importlib.util
 import numpy as np
-import soundfile as sf
 from pathlib import Path
 import pytest
 
-pytest.importorskip("webrtcvad")
 from dyana.evidence.vad import compute_webrtc_vad_soft_track
+
+
+if importlib.util.find_spec("soundfile") is not None:
+    import soundfile as sf
+else:
+    sf = None
+
+pytestmark = pytest.mark.skipif(
+    sf is None or importlib.util.find_spec("webrtcvad") is None,
+    reason="soundfile and webrtcvad are required for this test module",
+)
 
 
 def _write_wav(path: Path, data: np.ndarray, sr: int = 16000) -> None:

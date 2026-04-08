@@ -6,7 +6,7 @@ import argparse
 from pathlib import Path
 from typing import List
 
-from dyana.errors import ConfigError
+from dyana.errors import ConfigError, ErrorHandlingConfig, ErrorReporter, Pipeline, configure_logging
 from dyana.errors.config import load_config, resolve_out_dir
 
 
@@ -59,6 +59,11 @@ def add_subparser(subparsers: argparse._SubParsersAction) -> None:
         default=None,
         help="Whisper language code such as 'fr', 'de', or 'en'. Defaults to auto-detect.",
     )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Fail fast with traceback instead of continuing in run mode.",
+    )
     parser.set_defaults(command="run")
 
 
@@ -84,27 +89,74 @@ def run(args: argparse.Namespace) -> None:
     else:
         files = [audio_path]
 
-    for f in files:
-        summary = run_pipeline(
-            f,
-            out_dir=out_dir / f.stem,
-            cache_dir=cache_dir,
-            channel=args.channel,
-            vad_mode=args.vad_mode,
-            smooth_ms=args.smooth_ms,
-            min_ipu_s=args.min_ipu_s,
-            min_sil_s=args.min_sil_s,
-            ipu_detection_mode=args.ipu_mode,
-            silence_bias=args.silence_bias,
-            enable_asr=args.enable_asr,
-            asr_model=args.asr_model,
-            asr_model_path=Path(args.asr_model_path) if args.asr_model_path else None,
-            asr_model_dir=Path(args.asr_model_dir) if args.asr_model_dir else None,
-            asr_language=args.asr_language,
-            seed=0,
+    cfg = ErrorHandlingConfig.from_env(
+        default=ErrorHandlingConfig(
+            mode="debug" if getattr(args, "debug", False) else "run",
+            log_dir=out_dir / "logs",
+            run_id=f"run_{audio_path.stem}",
+            env_prefix="DYANA_",
         )
-        print(
-            f"{f.name}: frames={summary['n_frames']} ipus A/B/OVL/LEAK="
-            f"{summary['ipus']['A']}/{summary['ipus']['B']}/{summary['ipus']['OVL']}/{summary['ipus']['LEAK']} "
-            f"out={summary['out_dir']}"
+    )
+    logger, event_logger = configure_logging(cfg=cfg)
+    reporter = ErrorReporter(cfg=cfg, logger=logger, event_logger=event_logger)
+
+    for index, f in enumerate(files):
+        state: dict[str, object] = {}
+        step_prefix = f"run:{index}:{f.name}"
+        pipeline = Pipeline(reporter)
+
+        def _validate_input() -> Path:
+            if not f.exists():
+                raise FileNotFoundError(f"Audio input not found: {f}")
+            state["audio_path"] = f
+            return f
+
+        def _run_pipeline_step() -> dict[str, object]:
+            summary = run_pipeline(
+                f,
+                out_dir=out_dir / f.stem,
+                cache_dir=cache_dir,
+                channel=args.channel,
+                vad_mode=args.vad_mode,
+                smooth_ms=args.smooth_ms,
+                min_ipu_s=args.min_ipu_s,
+                min_sil_s=args.min_sil_s,
+                ipu_detection_mode=args.ipu_mode,
+                silence_bias=args.silence_bias,
+                enable_asr=args.enable_asr,
+                asr_model=args.asr_model,
+                asr_model_path=Path(args.asr_model_path) if args.asr_model_path else None,
+                asr_model_dir=Path(args.asr_model_dir) if args.asr_model_dir else None,
+                asr_language=args.asr_language,
+                seed=0,
+            )
+            state["summary"] = summary
+            return summary
+
+        def _print_summary() -> None:
+            summary = state["summary"]
+            assert isinstance(summary, dict)
+            print(
+                f"{f.name}: frames={summary['n_frames']} ipus A/B/OVL/LEAK="
+                f"{summary['ipus']['A']}/{summary['ipus']['B']}/{summary['ipus']['OVL']}/{summary['ipus']['LEAK']} "
+                f"out={summary['out_dir']}"
+            )
+
+        pipeline.add(f"{step_prefix}.validate_input", _validate_input, context={"audio": str(f)})
+        pipeline.add(
+            f"{step_prefix}.run_pipeline",
+            _run_pipeline_step,
+            deps=[f"{step_prefix}.validate_input"],
+            context={"audio": str(f)},
         )
+        pipeline.add(
+            f"{step_prefix}.print_summary",
+            _print_summary,
+            deps=[f"{step_prefix}.run_pipeline"],
+            context={"audio": str(f)},
+        )
+        pipeline.run()
+
+    if reporter.has_failures():
+        reporter.print_summary()
+        raise SystemExit(reporter.exit_code())

@@ -1,11 +1,12 @@
 from pathlib import Path
 
 import numpy as np
-import soundfile as sf
-
 import pytest
 
 from dyana.io.audio import detect_channel_similarity, load_audio_mono
+
+
+sf = pytest.importorskip("soundfile")
 
 
 def test_load_multichannel_mixes_down(tmp_path: Path) -> None:

@@ -8,9 +8,6 @@ from pathlib import Path
 from dyana.decode.params import DecodeTuningParams
 from dyana.errors import ConfigError
 from dyana.errors.config import load_config, resolve_out_dir
-from dyana.eval.harness import evaluate_manifest
-from dyana.eval.scorecard import aggregate, write_scorecard
-from dyana.eval.suite import load_suite_items, write_manifest
 
 
 def add_subparser(subparsers: argparse._SubParsersAction) -> None:
@@ -25,6 +22,10 @@ def add_subparser(subparsers: argparse._SubParsersAction) -> None:
 
 
 def run(args: argparse.Namespace) -> None:
+    from dyana.eval.harness import evaluate_manifest
+    from dyana.eval.scorecard import aggregate, write_scorecard
+    from dyana.eval.suite import load_suite_items, write_manifest
+
     manifest_raw = getattr(args, "manifest", None)
     suite_raw = getattr(args, "suite", None)
     if not manifest_raw and not suite_raw:

@@ -36,3 +36,5 @@ ENV/
 htmlcov/
 artifacts/**/out/
 !artifacts/eval_demo/out/
+docs/_build/
+docs/api/generated/

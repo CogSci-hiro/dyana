@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Tuple
 
 import numpy as np
-import soundfile as sf
 
 from dyana.core.cache import cache_get, cache_put, make_cache_key
 from dyana.core.timebase import CANONICAL_HOP_SECONDS, TimeBase
@@ -19,7 +18,19 @@ DEFAULT_WIN_MS: float = 25.0
 EPS: float = 1e-8
 
 
+def _soundfile():
+    try:
+        import soundfile as sf
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "DYANA requires the 'soundfile' package for leakage evidence. "
+            "Install runtime dependencies with `pip install -e .`."
+        ) from exc
+    return sf
+
+
 def _load_stereo_first_two(audio_path: Path) -> Tuple[np.ndarray, int]:
+    sf = _soundfile()
     data, sample_rate = sf.read(audio_path, always_2d=True)
     if data.shape[1] == 1:
         raise ValueError("compute_leakage_likelihood requires stereo input (2 channels), got mono.")

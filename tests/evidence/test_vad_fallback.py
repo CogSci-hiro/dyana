@@ -1,11 +1,14 @@
 from pathlib import Path
 
 import numpy as np
-import soundfile as sf
+import pytest
 
 import dyana.evidence.vad as vad_module
 from dyana.evidence.prosody import compute_voiced_soft_track
 from dyana.evidence.vad import compute_webrtc_vad_soft_track
+
+
+sf = pytest.importorskip("soundfile")
 
 
 def _write_wav(path: Path, data: np.ndarray, sr: int = 16000) -> None:

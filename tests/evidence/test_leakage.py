@@ -2,13 +2,15 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-import soundfile as sf
 
-from dyana.core.timebase import CANONICAL_HOP_SECONDS, TimeBase
+from dyana.core.timebase import CANONICAL_HOP_SECONDS
 from dyana.decode import decoder, fusion
 from dyana.evidence.bundle import EvidenceBundle
 from dyana.evidence.leakage import compute_leakage_likelihood
 from dyana.evidence.synthetic import make_timebase, make_vad_track
+
+
+sf = pytest.importorskip("soundfile")
 
 
 def _write_audio(path: Path, data: np.ndarray, sample_rate: int = 16000) -> None:

@@ -1,12 +1,16 @@
-import numpy as np
-import soundfile as sf
 from pathlib import Path
+
+import numpy as np
+import pytest
 
 from dyana.evidence.energy import (
     compute_energy_rms_track,
     compute_energy_smooth_track,
     compute_energy_slope_track,
 )
+
+
+sf = pytest.importorskip("soundfile")
 
 
 def _write_wav(path: Path, data: np.ndarray, sr: int = 16000) -> None:

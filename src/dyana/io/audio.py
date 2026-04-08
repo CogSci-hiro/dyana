@@ -9,7 +9,14 @@ import numpy as np
 
 
 def _soundfile():
-    import soundfile as sf
+    try:
+        import soundfile as sf
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "DYANA requires the 'soundfile' package for audio I/O. "
+            "Install runtime dependencies with `pip install -e .` or test dependencies with "
+            "`pip install -e '.[test]'`."
+        ) from exc
 
     return sf
 
