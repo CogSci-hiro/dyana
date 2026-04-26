@@ -7,7 +7,7 @@ Package layout
 The codebase is organized into a few coherent layers:
 
 - ``dyana.core`` provides shared data types, timebase handling, caching, and resampling utilities.
-- ``dyana.evidence`` computes aligned evidence tracks such as VAD, prosody, energy, leakage, and synthetic helpers.
+- ``dyana.evidence`` computes aligned evidence tracks such as energy, prosody, WebRTC VAD, optional pyannote proposals, leakage, and synthetic helpers.
 - ``dyana.decode`` contains the constrained decoder, state space definitions, transition logic, and IPU extraction.
 - ``dyana.pipeline`` assembles the end-to-end workflow from audio input to exported artifacts.
 - ``dyana.eval`` and ``dyana.iterate`` support scorecards, tuning, uncertainty analysis, and iterative improvement loops.
@@ -25,6 +25,15 @@ Processing flow
      -> constrained state path
      -> IPU segments + diagnostics
      -> persisted artifacts
+
+Phase 1 evidence strategy
+-------------------------
+
+- The canonical 10 ms grid remains the common alignment target for all evidence.
+- Pyannote is an optional high-recall backend that contributes coarse speech and anonymous speaker proposal tracks.
+- WebRTC VAD is now treated as optional baseline evidence rather than the sole speech anchor.
+- The recall-first profile increases the influence of pyannote and energy, and makes ``SIL`` less attractive when multiple cues indicate speech.
+- Final channel-to-speaker mapping and robust ``OVL`` / ``LEAK`` redesign are explicitly deferred to Phase 2.
 
 Representative entrypoint
 -------------------------

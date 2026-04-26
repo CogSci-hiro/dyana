@@ -35,3 +35,12 @@ def test_higher_speaker_switch_penalty_reduces_switches() -> None:
         return count
 
     assert switches(path_hi) <= switches(path_lo)
+
+
+def test_recall_first_profile_changes_speech_weights() -> None:
+    params = DecodeTuningParams.for_profile("recall-first")
+
+    assert params.profile == "recall_first"
+    assert params.ipu_detection_mode == "high_recall"
+    assert params.speech_weight_pyannote > params.speech_weight_vad
+    assert params.none_when_speech_penalty > 1.0

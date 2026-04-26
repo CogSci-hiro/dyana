@@ -29,12 +29,31 @@ Use the top-level CLI to run the default end-to-end workflow on an input audio f
 
    dyana run INPUT.wav --out-dir artifacts/run_001
 
+When you want higher recall before ASR, enable the recall-first profile and optional pyannote proposals:
+
+.. code-block:: bash
+
+   dyana run INPUT.wav --out-dir artifacts/run_001 --profile recall-first --pyannote --vad-backend all
+
+Pyannote is optional. It is only imported when explicitly enabled, and token lookup follows this order:
+
+- ``--pyannote-token``
+- ``HF_TOKEN``
+- ``HUGGINGFACE_TOKEN``
+
 The pipeline writes:
 
 - evidence tracks under ``artifacts/run_001/evidence/``
 - decoded states and IPU summaries under ``artifacts/run_001/decode/``
 - a ``.TextGrid`` export at the run root
 - diagnostics JSON alongside the decode outputs
+
+Phase 1 notes
+-------------
+
+- WebRTC VAD is now baseline / optional evidence rather than a required core cue.
+- Pyannote proposal tracks are coarse speech and anonymous-speaker hints on DYANA's 10 ms grid.
+- DYANA still owns stereo reasoning, final A/B mapping, and robust ``OVL`` / ``LEAK`` handling.
 
 Explore next
 ------------

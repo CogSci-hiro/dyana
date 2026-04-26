@@ -10,6 +10,9 @@ from dyana.evidence.bundle import EvidenceBundle
 __all__ = [
     "EvidenceTrack",
     "EvidenceBundle",
+    "PyannoteEvidenceConfig",
+    "PyannoteEvidenceResult",
+    "compute_pyannote_evidence",
     "synthetic",
     "compute_leakage_likelihood",
     "compute_overlap_proxy_tracker",
@@ -32,4 +35,17 @@ def __getattr__(name: str):
         from dyana.evidence.stereo import compute_stereo_evidence
 
         return compute_stereo_evidence
+    if name in {"PyannoteEvidenceConfig", "PyannoteEvidenceResult", "compute_pyannote_evidence"}:
+        from dyana.evidence.pyannote import (
+            PyannoteEvidenceConfig,
+            PyannoteEvidenceResult,
+            compute_pyannote_evidence,
+        )
+
+        mapping = {
+            "PyannoteEvidenceConfig": PyannoteEvidenceConfig,
+            "PyannoteEvidenceResult": PyannoteEvidenceResult,
+            "compute_pyannote_evidence": compute_pyannote_evidence,
+        }
+        return mapping[name]
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

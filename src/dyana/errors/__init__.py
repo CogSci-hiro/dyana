@@ -16,6 +16,13 @@ from .logging import configure_logging, JsonlEventLogger
 from .reporter import ErrorReporter
 from .guards import step, guard
 from .pipeline import Pipeline, PipelineError
+from .types import (
+    BackendConfigurationError,
+    EvidenceTrackAlignmentError,
+    FailureRecord,
+    OptionalBackendUnavailableError,
+    StepStatus,
+)
 
 __all__ = [
     "ConfigError",
@@ -27,4 +34,9 @@ __all__ = [
     "guard",
     "Pipeline",
     "PipelineError",
+    "OptionalBackendUnavailableError",
+    "BackendConfigurationError",
+    "EvidenceTrackAlignmentError",
+    "FailureRecord",
+    "StepStatus",
 ]

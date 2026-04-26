@@ -6,6 +6,9 @@ from dataclasses import dataclass
 from typing import Literal, Tuple
 
 
+ProfileName = Literal["default", "recall_first"]
+
+
 @dataclass(frozen=True)
 class DecodeTuningParams:
     """
@@ -32,6 +35,42 @@ class DecodeTuningParams:
     ipu_detection_mode: Literal["balanced", "high_recall"] = "balanced"
     silence_bias: float = 0.0
     merge_silence_gap_ms: float = 400.0
+    speech_weight_vad: float = 1.0
+    speech_weight_pyannote: float = 0.0
+    speech_weight_energy: float = 0.35
+    speech_weight_voiced: float = 0.25
+    none_when_speech_penalty: float = 1.2
+    speech_exists_to_single_speaker_bonus: float = 0.15
+    speech_evidence_threshold: float = 0.6
+    profile: ProfileName = "default"
+
+    @classmethod
+    def for_profile(cls, profile: str) -> "DecodeTuningParams":
+        """Construct a tuning bundle for a named profile.
+
+        Usage example
+        -------------
+        >>> params = DecodeTuningParams.for_profile("recall-first")
+        """
+
+        normalized = profile.replace("-", "_").strip().lower()
+        if normalized in ("default", "balanced"):
+            return cls(profile="default")
+        if normalized == "recall_first":
+            return cls(
+                ipu_detection_mode="high_recall",
+                silence_bias=-0.35,
+                merge_silence_gap_ms=500.0,
+                speech_weight_vad=0.05,
+                speech_weight_pyannote=1.35,
+                speech_weight_energy=0.95,
+                speech_weight_voiced=0.45,
+                none_when_speech_penalty=2.4,
+                speech_exists_to_single_speaker_bonus=0.25,
+                speech_evidence_threshold=0.55,
+                profile="recall_first",
+            )
+        raise ValueError(f"Unknown decode profile '{profile}'.")
 
     def resolved_ovl_costs(self) -> Tuple[float, float, float, float]:
         """Return explicit OVL transition costs in A->OVL, B->OVL, OVL->A, OVL->B order."""

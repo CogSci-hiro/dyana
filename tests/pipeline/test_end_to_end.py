@@ -1,10 +1,13 @@
 from pathlib import Path
+import json
 
 import numpy as np
 import pytest
 from _pytest.monkeypatch import MonkeyPatch
 
 from dyana.asr.transcript import Transcript, TranscriptSegment, WordTimestamp
+from dyana.decode.ipu import Segment
+from dyana.io.praat_textgrid import write_textgrid
 from dyana.pipeline.run_pipeline import run_pipeline
 
 
@@ -197,3 +200,106 @@ def test_pipeline_routes_ipu_asr_to_stereo_speaker_channels(
 
     assert 0 in captured_channels
     assert 1 in captured_channels
+
+
+def test_pipeline_can_reuse_corrected_ipus_for_asr(
+    tmp_path: Path,
+    monkeypatch: MonkeyPatch,
+) -> None:
+    audio = tmp_path / "manual_ipus.wav"
+    _make_audio(audio)
+    out_dir = tmp_path / "manual_ipus_out"
+    corrected_ipus = [
+        {"start_time": 0.0, "end_time": 0.4, "label": "A"},
+        {"start_time": 0.5, "end_time": 0.9, "label": "B"},
+    ]
+    ipus_path = tmp_path / "corrected_ipus.json"
+    ipus_path.write_text(json.dumps(corrected_ipus))
+
+    def _fake_transcribe_chunks(self, audio_path: Path, chunks: list[object]) -> Transcript:
+        del self, audio_path, chunks
+        return Transcript(
+            segments=[
+                TranscriptSegment(
+                    start_time=0.0,
+                    end_time=1.0,
+                    text="hello",
+                    words=[WordTimestamp(word="hello", start_time=0.0, end_time=1.0, confidence=0.9)],
+                )
+            ]
+        )
+
+    monkeypatch.setattr(
+        "dyana.pipeline.run_pipeline.WhisperBackend.transcribe_chunks",
+        _fake_transcribe_chunks,
+    )
+
+    summary = run_pipeline(
+        audio,
+        out_dir=out_dir,
+        enable_asr=True,
+        ipus_path=ipus_path,
+    )
+
+    transcript_payload = json.loads((out_dir / "transcript.json").read_text())
+    effective_ipus = json.loads((out_dir / "decode" / "manual_ipus_ipus.json").read_text())
+
+    assert summary["ipus_source"] == "external"
+    assert summary["ipus"] == {"A": 1, "B": 1, "OVL": 0, "LEAK": 0}
+    assert [segment["start_time"] for segment in transcript_payload["segments"]] == [0.0, 0.5]
+    assert [segment["end_time"] for segment in transcript_payload["segments"]] == [0.4, 0.9]
+    assert effective_ipus == corrected_ipus
+
+
+def test_pipeline_can_reuse_corrected_textgrid_for_asr(
+    tmp_path: Path,
+    monkeypatch: MonkeyPatch,
+) -> None:
+    audio = tmp_path / "manual_textgrid.wav"
+    _make_audio(audio)
+    out_dir = tmp_path / "manual_textgrid_out"
+    textgrid_path = tmp_path / "corrected.TextGrid"
+    write_textgrid(
+        textgrid_path,
+        speaker_a=[Segment(start_time=0.0, end_time=0.4, label="A")],
+        speaker_b=[Segment(start_time=0.5, end_time=0.9, label="B")],
+        overlap=[],
+        leak=[],
+    )
+
+    def _fake_transcribe_chunks(self, audio_path: Path, chunks: list[object]) -> Transcript:
+        del self, audio_path, chunks
+        return Transcript(
+            segments=[
+                TranscriptSegment(
+                    start_time=0.0,
+                    end_time=1.0,
+                    text="hello",
+                    words=[WordTimestamp(word="hello", start_time=0.0, end_time=1.0, confidence=0.9)],
+                )
+            ]
+        )
+
+    monkeypatch.setattr(
+        "dyana.pipeline.run_pipeline.WhisperBackend.transcribe_chunks",
+        _fake_transcribe_chunks,
+    )
+
+    summary = run_pipeline(
+        audio,
+        out_dir=out_dir,
+        enable_asr=True,
+        ipus_path=textgrid_path,
+    )
+
+    transcript_payload = json.loads((out_dir / "transcript.json").read_text())
+    effective_ipus = json.loads((out_dir / "decode" / "manual_textgrid_ipus.json").read_text())
+
+    assert summary["ipus_source"] == "external"
+    assert summary["ipus"] == {"A": 1, "B": 1, "OVL": 0, "LEAK": 0}
+    assert [segment["start_time"] for segment in transcript_payload["segments"]] == [0.0, 0.5]
+    assert [segment["end_time"] for segment in transcript_payload["segments"]] == [0.4, 0.9]
+    assert effective_ipus == [
+        {"start_time": 0.0, "end_time": 0.4, "label": "A"},
+        {"start_time": 0.5, "end_time": 0.9, "label": "B"},
+    ]

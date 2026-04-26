@@ -41,3 +41,15 @@ class FailureRecord:
             traceback=tb,
             context=context,
         )
+
+
+class OptionalBackendUnavailableError(RuntimeError):
+    """Raised when an optional backend was explicitly requested but is unavailable."""
+
+
+class BackendConfigurationError(ValueError):
+    """Raised when an optional backend is enabled but missing required configuration."""
+
+
+class EvidenceTrackAlignmentError(ValueError):
+    """Raised when external evidence cannot be aligned to DYANA's canonical frame grid."""

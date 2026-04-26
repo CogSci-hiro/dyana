@@ -58,6 +58,7 @@ Optional extras:
 - Tests: `pip install -e '.[test]'`
 - Development tooling and docs: `pip install -e '.[dev,docs]'`
 - Whisper ASR support: `pip install -e '.[asr]'`
+- Optional speech backends (`webrtcvad` baseline + pyannote proposals): `pip install -e '.[speech]'`
 
 ## Quickstart
 
@@ -89,6 +90,21 @@ For fail-fast debugging with a traceback:
 ```bash
 dyana run path/to/sample.wav --out-dir out --debug
 ```
+
+To run the new recall-first evidence profile with optional pyannote proposals:
+
+```bash
+dyana run path/to/sample.wav --out-dir out --profile recall-first --pyannote --pyannote-token "$HF_TOKEN" --vad-backend all
+```
+
+Notes:
+
+- Pyannote is optional and loaded lazily. Normal runs still work without it.
+- Hugging Face auth can come from `--pyannote-token`, `HF_TOKEN`, or `HUGGINGFACE_TOKEN`.
+- WebRTC VAD is now baseline/optional evidence rather than a required speech cue.
+- The recall-first profile is intended to reduce false `SIL` / “speech exists but decoded as none” failures before ASR.
+- Pyannote proposals are coarse; DYANA still refines boundaries on the canonical 10 ms grid.
+- Phase 1 does not solve final A/B channel mapping or robust `OVL` / `LEAK` inference yet.
 
 ## CLI surface
 

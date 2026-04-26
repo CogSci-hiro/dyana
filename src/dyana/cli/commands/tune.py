@@ -11,6 +11,11 @@ from dyana.decode.params import DecodeTuningParams
 from dyana.errors import ConfigError, PipelineError
 from dyana.errors.config import load_config, resolve_out_dir
 
+from dyana.eval.harness import evaluate_manifest
+from dyana.eval.scorecard import aggregate, read_scorecard, write_scorecard
+from dyana.eval.suite import load_suite_items, write_manifest
+from dyana.eval.tuning import compute_delta_report, write_delta_report
+
 
 def add_subparser(subparsers: argparse._SubParsersAction) -> None:
     parser = subparsers.add_parser("tune", help="Run evaluation with decode tuning params and compare to baseline.")
@@ -135,11 +140,6 @@ def _write_leaderboard(leaderboard_rows: list[dict], out_dir: Path) -> None:
 
 
 def run(args: argparse.Namespace) -> None:
-    from dyana.eval.harness import evaluate_manifest
-    from dyana.eval.scorecard import aggregate, read_scorecard, write_scorecard
-    from dyana.eval.suite import load_suite_items, write_manifest
-    from dyana.eval.tuning import compute_delta_report, write_delta_report
-
     manifest_raw = getattr(args, "manifest", None)
     suite_raw = getattr(args, "suite", None)
     baseline_raw = getattr(args, "baseline", None)

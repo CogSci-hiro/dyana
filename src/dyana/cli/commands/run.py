@@ -6,6 +6,7 @@ import argparse
 from pathlib import Path
 from typing import List
 
+from dyana.evidence.pyannote import PyannoteEvidenceConfig
 from dyana.errors import ConfigError, ErrorHandlingConfig, ErrorReporter, Pipeline, configure_logging
 from dyana.errors.config import load_config, resolve_out_dir
 
@@ -22,17 +23,33 @@ def add_subparser(subparsers: argparse._SubParsersAction) -> None:
     parser.add_argument("--out-dir", required=False, help="Output directory.")
     parser.add_argument("--cache-dir", help="Cache directory.", default=None)
     parser.add_argument(
+        "--ipus-path",
+        default=None,
+        help="Path to a manually corrected DYANA TextGrid or decode-style IPU JSON file to reuse for ASR/TextGrid output.",
+    )
+    parser.add_argument(
         "--channel",
         type=int,
         default=None,
         help="Channel index for multi-channel audio.",
     )
     parser.add_argument("--vad-mode", type=int, default=2)
+    parser.add_argument("--vad-backend", choices=("none", "webrtc", "pyannote", "all"), default="webrtc")
     parser.add_argument("--smooth-ms", type=float, default=80.0)
     parser.add_argument("--min-ipu-s", type=float, default=0.2)
     parser.add_argument("--min-sil-s", type=float, default=0.1)
     parser.add_argument("--ipu-mode", choices=("balanced", "high_recall"), default="balanced")
+    parser.add_argument("--profile", choices=("default", "recall-first"), default="default")
     parser.add_argument("--silence-bias", type=float, default=0.0)
+    parser.add_argument("--pyannote", action="store_true", help="Enable optional pyannote proposal evidence.")
+    parser.add_argument("--no-pyannote", action="store_true", help="Disable optional pyannote proposal evidence.")
+    parser.add_argument("--pyannote-model", default="pyannote/speaker-diarization-3.1")
+    parser.add_argument("--pyannote-token", default=None)
+    parser.add_argument("--pyannote-device", default=None)
+    parser.add_argument("--pyannote-num-speakers", type=int, default=2)
+    parser.add_argument("--pyannote-min-speakers", type=int, default=None)
+    parser.add_argument("--pyannote-max-speakers", type=int, default=2)
+    parser.add_argument("--pyannote-pad-seconds", type=float, default=0.25)
     parser.add_argument(
         "--enable-asr",
         action="store_true",
@@ -112,17 +129,34 @@ def run(args: argparse.Namespace) -> None:
             return f
 
         def _run_pipeline_step() -> dict[str, object]:
+            pyannote_enabled = bool(args.pyannote or args.vad_backend == "pyannote")
+            if args.no_pyannote:
+                pyannote_enabled = False
             summary = run_pipeline(
                 f,
                 out_dir=out_dir / f.stem,
                 cache_dir=cache_dir,
                 channel=args.channel,
                 vad_mode=args.vad_mode,
+                vad_backend=args.vad_backend,
                 smooth_ms=args.smooth_ms,
                 min_ipu_s=args.min_ipu_s,
                 min_sil_s=args.min_sil_s,
                 ipu_detection_mode=args.ipu_mode,
+                profile=args.profile,
                 silence_bias=args.silence_bias,
+                pyannote_config=PyannoteEvidenceConfig(
+                    enabled=pyannote_enabled,
+                    model_name=args.pyannote_model,
+                    hf_token=args.pyannote_token,
+                    device=args.pyannote_device,
+                    num_speakers=args.pyannote_num_speakers,
+                    min_speakers=args.pyannote_min_speakers,
+                    max_speakers=args.pyannote_max_speakers,
+                    pad_seconds=args.pyannote_pad_seconds,
+                ),
+                error_mode=cfg.mode,
+                ipus_path=Path(args.ipus_path) if getattr(args, "ipus_path", None) else None,
                 enable_asr=args.enable_asr,
                 asr_model=args.asr_model,
                 asr_model_path=Path(args.asr_model_path) if args.asr_model_path else None,
@@ -141,6 +175,20 @@ def run(args: argparse.Namespace) -> None:
                 f"{summary['ipus']['A']}/{summary['ipus']['B']}/{summary['ipus']['OVL']}/{summary['ipus']['LEAK']} "
                 f"out={summary['out_dir']}"
             )
+            pyannote_status = str(summary.get("pyannote_status", "unknown"))
+            pyannote_message = summary.get("pyannote_message")
+            pyannote_line = f"pyannote={pyannote_status}"
+            if pyannote_message:
+                pyannote_line += f" ({pyannote_message})"
+            print(pyannote_line)
+            if summary.get("pyannote_enabled") and summary.get("pyannote_status") not in {"ok", "cached"}:
+                pyannote_warning = pyannote_message or "No additional detail provided."
+                print(
+                    "WARNING: pyannote was requested but is not being used "
+                    f"(status={summary.get('pyannote_status')}). {pyannote_warning}"
+                )
+            for warning in summary.get("pyannote_warnings", []):
+                print(f"WARNING: {warning}")
 
         pipeline.add(f"{step_prefix}.validate_input", _validate_input, context={"audio": str(f)})
         pipeline.add(

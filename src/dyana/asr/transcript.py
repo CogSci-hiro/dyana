@@ -27,13 +27,20 @@ True
 
 from __future__ import annotations
 
+import re
 from dataclasses import asdict, dataclass, replace
 from pathlib import Path
-from typing import Any, Mapping, Protocol
+from typing import Mapping, Protocol, Sequence
 
 
 WORD_JOINER = " "
 WORD_TIME_TOLERANCE_SECONDS = 1e-3
+DEFAULT_SILENCE_SYMBOL = "#"
+_APOSTROPHE_PATTERN = re.compile(r"[`´‘’ʼ]")
+_DASH_PATTERN = re.compile(r"[‐‑‒–—―]")
+_DISALLOWED_SYMBOL_PATTERN = re.compile(r"[^\w\s'-]", flags=re.UNICODE)
+_SPACE_BEFORE_JOINER_PATTERN = re.compile(r"\s+(['-])")
+_SPACE_AFTER_APOSTROPHE_PATTERN = re.compile(r"('\s+)")
 
 
 # Transcript dataclasses
@@ -248,6 +255,7 @@ def align_transcript_to_ipus(
             for word in unique_words
             if _word_belongs_to_ipu(word, ipu)
         ]
+        ipu_words = [_normalize_word(word) for word in ipu_words if word is not None]
         ipu_words = [word for word in ipu_words if word is not None]
         if not ipu_words:
             continue
@@ -256,7 +264,7 @@ def align_transcript_to_ipus(
             TranscriptSegment(
                 start_time=ipu.start_time,
                 end_time=ipu.end_time,
-                text=WORD_JOINER.join(word.word for word in ipu_words),
+                text=_join_words(word.word for word in ipu_words),
                 words=ipu_words,
                 speaker=speaker or ipu.label,
             )
@@ -264,7 +272,7 @@ def align_transcript_to_ipus(
     return Transcript(segments=aligned_segments)
 
 
-def write_textgrid(transcript: Transcript, path: Path) -> None:
+def write_textgrid(transcript: Transcript, path: Path, *, silence_symbol: str = DEFAULT_SILENCE_SYMBOL) -> None:
     """Write a transcript TextGrid with segment and word tiers.
 
     Parameters
@@ -275,7 +283,7 @@ def write_textgrid(transcript: Transcript, path: Path) -> None:
         Destination TextGrid path.
     """
 
-    interval_payload = _build_textgrid_payload(transcript)
+    interval_payload = _build_textgrid_payload(transcript, silence_symbol=silence_symbol)
     xmax = interval_payload["xmax"]
     tiers = interval_payload["tiers"]
     header = [
@@ -350,7 +358,7 @@ def _clip_word_to_interval(
     )
 
 
-def _build_textgrid_payload(transcript: Transcript) -> dict[str, Any]:
+def _build_textgrid_payload(transcript: Transcript, *, silence_symbol: str) -> dict[str, Any]:
     """Build TextGrid tiers for transcript segments and words."""
 
     speaker_labels = sorted(
@@ -373,7 +381,7 @@ def _build_textgrid_payload(transcript: Transcript) -> dict[str, Any]:
 
     tiers: list[list[str]]
     if speaker_labels:
-        tiers = _build_speaker_tiers(transcript, speaker_labels, xmax=xmax)
+        tiers = _build_speaker_tiers(transcript, speaker_labels, xmax=xmax, silence_symbol=silence_symbol)
     else:
         segment_intervals = [
             (segment.start_time, segment.end_time, segment.text)
@@ -387,8 +395,8 @@ def _build_textgrid_payload(transcript: Transcript) -> dict[str, Any]:
             if word.end_time > word.start_time
         ]
         tiers = [
-            _tier_block(1, "segments", segment_intervals, xmax=xmax),
-            _tier_block(2, "words", word_intervals, xmax=xmax),
+            _tier_block(1, "segments", segment_intervals, xmax=xmax, silence_symbol=silence_symbol),
+            _tier_block(2, "words", word_intervals, xmax=xmax, silence_symbol=silence_symbol),
         ]
     return {"xmax": xmax, "tiers": tiers}
 
@@ -398,6 +406,7 @@ def _build_speaker_tiers(
     speaker_labels: list[str],
     *,
     xmax: float,
+    silence_symbol: str,
 ) -> list[list[str]]:
     """Build one segment tier and one word tier per speaker."""
 
@@ -416,17 +425,40 @@ def _build_speaker_tiers(
             for word in segment.words
             if word.end_time > word.start_time
         ]
-        tiers.append(_tier_block(tier_index, f"segments_{speaker}", speaker_segments, xmax=xmax))
+        tiers.append(
+            _tier_block(
+                tier_index,
+                f"segments_{speaker}",
+                speaker_segments,
+                xmax=xmax,
+                silence_symbol=silence_symbol,
+            )
+        )
         tier_index += 1
-        tiers.append(_tier_block(tier_index, f"words_{speaker}", speaker_words, xmax=xmax))
+        tiers.append(
+            _tier_block(
+                tier_index,
+                f"words_{speaker}",
+                speaker_words,
+                xmax=xmax,
+                silence_symbol=silence_symbol,
+            )
+        )
         tier_index += 1
     return tiers
 
 
-def _tier_block(index: int, name: str, intervals: list[tuple[float, float, str]], *, xmax: float) -> list[str]:
+def _tier_block(
+    index: int,
+    name: str,
+    intervals: list[tuple[float, float, str]],
+    *,
+    xmax: float,
+    silence_symbol: str,
+) -> list[str]:
     """Create a single Praat interval tier."""
 
-    filled_intervals = _fill_gaps(intervals, xmax=xmax)
+    filled_intervals = _fill_gaps(intervals, xmax=xmax, silence_symbol=silence_symbol)
     lines = [
         f"    item [{index}]:",
         '        class = "IntervalTier"',
@@ -447,11 +479,16 @@ def _tier_block(index: int, name: str, intervals: list[tuple[float, float, str]]
     return lines
 
 
-def _fill_gaps(intervals: list[tuple[float, float, str]], *, xmax: float) -> list[tuple[float, float, str]]:
+def _fill_gaps(
+    intervals: list[tuple[float, float, str]],
+    *,
+    xmax: float,
+    silence_symbol: str,
+) -> list[tuple[float, float, str]]:
     """Fill gaps in interval tiers with empty labels."""
 
     if not intervals:
-        return [(0.0, xmax, "")]
+        return [(0.0, xmax, silence_symbol)]
 
     ordered_intervals = sorted(
         [
@@ -462,21 +499,57 @@ def _fill_gaps(intervals: list[tuple[float, float, str]], *, xmax: float) -> lis
         key=lambda item: (item[0], item[1], item[2]),
     )
     if not ordered_intervals:
-        return [(0.0, xmax, "")]
+        return [(0.0, xmax, silence_symbol)]
 
     filled_intervals: list[tuple[float, float, str]] = []
     cursor = 0.0
     for start, end, label in ordered_intervals:
         if start > cursor:
-            filled_intervals.append((cursor, start, ""))
+            filled_intervals.append((cursor, start, silence_symbol))
         normalized_start = max(cursor, start)
         if end <= normalized_start:
             continue
         filled_intervals.append((normalized_start, end, label))
         cursor = end
     if cursor < xmax:
-        filled_intervals.append((cursor, xmax, ""))
+        filled_intervals.append((cursor, xmax, silence_symbol))
     return filled_intervals
+
+
+def _normalize_word(word: WordTimestamp) -> WordTimestamp | None:
+    normalized_text = _normalize_token(word.word)
+    if not normalized_text:
+        return None
+    return replace(word, word=normalized_text)
+
+
+def _normalize_token(text: str) -> str:
+    normalized = text.strip().lower()
+    normalized = _APOSTROPHE_PATTERN.sub("'", normalized)
+    normalized = _DASH_PATTERN.sub("-", normalized)
+    normalized = _DISALLOWED_SYMBOL_PATTERN.sub("", normalized)
+    normalized = _SPACE_BEFORE_JOINER_PATTERN.sub(r"\1", normalized)
+    normalized = _SPACE_AFTER_APOSTROPHE_PATTERN.sub("'", normalized)
+    normalized = " ".join(normalized.split()).strip()
+    if not normalized:
+        return ""
+    if not any(character.isalnum() for character in normalized):
+        return normalized if normalized in {"'", "-"} else ""
+    return normalized.replace("_", "")
+
+
+def _join_words(words: Sequence[str]) -> str:
+    tokens = [word for word in words if word]
+    if not tokens:
+        return ""
+
+    joined = tokens[0]
+    for token in tokens[1:]:
+        if token.startswith("'") or token.startswith("-") or joined.endswith("'") or joined.endswith("-"):
+            joined += token
+            continue
+        joined += WORD_JOINER + token
+    return joined
 
 
 def _format_number(value: float) -> str:

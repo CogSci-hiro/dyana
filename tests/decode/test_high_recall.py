@@ -1,7 +1,7 @@
 import numpy as np
 
 from dyana.core.timebase import TimeBase
-from dyana.decode import decoder, fusion
+from dyana.decode import decoder, fusion, state_space
 from dyana.decode.ipu import Segment, extract_ipus, merge_ipus_across_short_silence
 from dyana.decode.params import DecodeTuningParams
 from dyana.evidence.base import EvidenceTrack
@@ -48,21 +48,17 @@ def _count_runs(states: list[str], label: str, start: int, end: int) -> int:
 
 def test_high_recall_mode_produces_fewer_silence_segments() -> None:
     vad_values = np.full(80, 0.05, dtype=np.float32)
-    vad_values[10:70] = 0.70
-    vad_values[30:33] = 0.20
-    vad_values[50:53] = 0.20
+    vad_values[10:70] = 0.34
+    vad_values[30:33] = 0.16
+    vad_values[50:53] = 0.16
     bundle = _bundle_with_vad_and_diar(vad_values)
 
-    balanced_states = decoder.decode_with_constraints(
-        fusion.fuse_bundle_to_scores(bundle, tuning_params=DecodeTuningParams())
-    )
+    balanced_scores = fusion.fuse_bundle_to_scores(bundle, tuning_params=DecodeTuningParams())
     high_recall_params = DecodeTuningParams(ipu_detection_mode="high_recall")
-    high_recall_states = decoder.decode_with_constraints(
-        fusion.fuse_bundle_to_scores(bundle, tuning_params=high_recall_params),
-        tuning_params=high_recall_params,
-    )
+    high_recall_scores = fusion.fuse_bundle_to_scores(bundle, tuning_params=high_recall_params)
 
-    assert _count_runs(high_recall_states, "SIL", 10, 70) < _count_runs(balanced_states, "SIL", 10, 70)
+    sil_index = state_space.state_index("SIL")
+    assert float(high_recall_scores[20, sil_index]) < float(balanced_scores[20, sil_index])
 
 
 def test_ipu_count_decreases_after_gap_merging() -> None:
@@ -101,3 +97,25 @@ def test_quiet_speech_dips_remain_one_ipu_in_high_recall_mode() -> None:
     assert len(merged) == 1
     assert merged[0].start_time <= tb.frame_to_time(10)
     assert merged[0].end_time >= tb.frame_to_time(80)
+
+
+def test_pyannote_plus_energy_reduces_none_frames_relative_to_default_profile() -> None:
+    tb = TimeBase.canonical(n_frames=80)
+    bundle = EvidenceBundle(timebase=tb)
+    energy = np.zeros(80, dtype=np.float32)
+    energy[10:70] = 0.0
+    pyannote = np.zeros(80, dtype=np.float32)
+    pyannote[10:70] = 0.5
+    bundle.add_track("energy_smooth", EvidenceTrack("energy_smooth", tb, energy, "score"))
+    bundle.add_track("pyannote_speech", EvidenceTrack("pyannote_speech", tb, pyannote, "probability"))
+
+    default_states = decoder.decode_with_constraints(fusion.fuse_bundle_to_scores(bundle))
+    recall_params = DecodeTuningParams.for_profile("recall-first")
+    recall_states = decoder.decode_with_constraints(
+        fusion.fuse_bundle_to_scores(bundle, tuning_params=recall_params),
+        tuning_params=recall_params,
+    )
+
+    default_none = sum(1 for state in default_states[10:70] if state == "SIL")
+    recall_none = sum(1 for state in recall_states[10:70] if state == "SIL")
+    assert recall_none < default_none
